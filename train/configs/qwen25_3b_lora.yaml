@@ -2,7 +2,11 @@
 # Used by train/train_lora.py. All paths can be overridden on the CLI.
 
 # ----- model & data -----
-base_model: Qwen/Qwen2.5-3B-Instruct  # resolved via local HF cache (HF_ENDPOINT=hf-mirror)
+# Resolved via local HF cache. The "Qwen/Qwen2.5-3B-Instruct" repo-id form
+# triggers a hub HEAD-call that flakes intermittently against hf-mirror.com,
+# so on the remote we pass the absolute snapshot path instead and the
+# script never touches the network. Override on the CLI for other hosts.
+base_model: /data2/lrrelevant/hf_offline/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/aa8e72537993ba99e69dfaafa59ed015b17504d1
 output_dir: checkpoints/qwen25_3b_lora_v1
 data_dir: data/training        # produced by train/prepare_dataset.py
 
