@@ -24,6 +24,7 @@ rsync -avz --partial --progress \
   --exclude 'scheduler.pt' \
   --exclude 'training_args.bin' \
   --exclude 'global_step*/' \
+  --exclude 'checkpoint-*/' \
   --exclude 'rng_state*.pth' \
   "$REMOTE:$REMOTE_ROOT/checkpoints/$NAME/" "$LOCAL_DIR/"
 echo "[pull] OK — adapter at $LOCAL_DIR"
