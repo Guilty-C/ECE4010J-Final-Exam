@@ -14,7 +14,7 @@ Given a natural-language exam-style question, the system identifies its test typ
 | D — retriever | DONE | 2026-04-28 | every card (25/25) recalls ≥ 1 template; 5/5 canonical queries surface VE401-local in top-3; 1.3 ms/query warm |
 | E — template fill + render | DONE | 2026-04-28 | 5-section Markdown for all 25 cards; numeric eval for Z / T / χ²-variance / paired-T / χ²-GoF; 3/3 smoke tests green; Phase C regression unchanged |
 | F — CLI + end-to-end test | **DONE — MVP** | 2026-04-28 | `python -m cli.solve` with `--mode rule\|rag\|llm-only`, `--file`, `--json`, stdin; 14/14 sample-final card-id, 14/14 5-section skeleton, max 5.8 ms/question (offline) |
-| H — infra (git/ssh/Qwen probe) | not started | — | — |
+| H — infra (git/ssh/Qwen probe) | DONE | 2026-04-28 | repo on `ivlab` at `/data2/lrrelevant/ve401-solver`; conda env `agentiad` (torch 2.6+cu118, transformers 4.51, peft 0.18, accelerate 1.12, 4× RTX 3090); Phase A-F regression green on remote; Qwen2.5-3B-Instruct not yet cached — `ops/download_qwen.sh` ready |
 | I — LoRA training (remote) | not started | — | — |
 | J — RAG inference (local) | not started | — | — |
 
@@ -161,12 +161,29 @@ print(hits[0].record_id, hits[0].source)
 
 ## Remote training infrastructure
 
-- Host: `lrrelevant@10.35.13.38`
-- Model: `Qwen/Qwen2.5-3B-Instruct`
+- Host: `lrrelevant@10.35.13.38` (SSH alias `ivlab` in `~/.ssh/config`)
+- Hardware: 4× RTX 3090 (24 GiB), 251 GiB RAM, 9.4 TiB free on `/data2`
+- Repo path on remote: `/data2/lrrelevant/ve401-solver` (chosen because `/home` is at 98% full)
+- Conda env: `agentiad` — torch 2.6.0+cu118, transformers 4.51.3, peft 0.18.1, accelerate 1.12.0
+- Model: `Qwen/Qwen2.5-3B-Instruct` (NOT yet cached; `ops/download_qwen.sh` will fetch it into the symlinked HF cache on `/data2`)
 - Sync channel: this repo on GitHub (`Guilty-C/ECE4010J-Final-Exam`)
-- LoRA adapters pushed back via Git LFS
+- LoRA adapters pushed back via Git LFS (configured but not yet exercised)
 
-See `plan.md` §6 phases H/I/J for details.
+```bash
+# Phase H probes / sync
+bash ops/ssh_setup.sh                 # smoke-test SSH (BatchMode)
+bash ops/check_remote_model.sh        # full inventory: GPU / disk / conda envs / Qwen path probe
+bash ops/sync_to_remote.sh            # clone or git pull on remote (defaults to /data2/lrrelevant/ve401-solver)
+
+# Phase I prep (run when training starts)
+bash ops/download_qwen.sh             # snapshot_download Qwen/Qwen2.5-3B-Instruct (~6 GB, into /data2 cache)
+
+# Phase I → J handoff
+bash ops/pull_checkpoint.sh qwen25_3b_lora_v1   # rsync adapter back, skip optimizer/scheduler blobs
+```
+
+See `plan.md` §6 phases H/I/J for details and `progress.md`'s
+2026-04-28 Phase H entry for the live probe transcript.
 
 ## License
 

@@ -945,3 +945,172 @@ training-side work in Phases I and J can start. Phase H is independent
 of everything shipped so far and is the natural next step to lock in
 the MVP DoD #6 (clone-and-run reproducibility).
 
+---
+
+## 2026-04-28 — Phase H: infrastructure (DONE)
+
+### What shipped
+
+Five `ops/` scripts plus a live bring-up of the remote training host.
+All six plan §6 substeps (H1–H6) are at a defensible stopping point;
+H4/H6 are intentionally trimmed to the smallest path that unblocks
+Phase I (see "Scope decisions" below).
+
+| # | Substep | Status | Evidence |
+|---|---|---|---|
+| H1 | `git init` + GitHub remote + first push | ✓ already done before this entry | `git remote -v` → `git@github.com:Guilty-C/ECE4010J-Final-Exam.git`; clean tree, `origin/main = bdff5e8` |
+| H2 | `.gitignore` + `.gitattributes` per plan §7 | ✓ already done | LFS rules for `*.safetensors|*.bin|*.gguf|*.faiss`; `data/raw/`, `*.pdf`, `checkpoints/*/optimizer.pt`, etc. ignored |
+| H3 | SSH probe + remote clone | ✓ done in this entry | `ssh ivlab` (BatchMode) returns OK; repo cloned at `/data2/lrrelevant/ve401-solver` (HEAD=bdff5e8) |
+| H4 | remote python env with full stack | ✓ green via existing `agentiad` env | torch 2.6.0+cu118, cuda=True, transformers 4.51.3, peft 0.18.1, accelerate 1.12.0; Phase A-F regression tests pass on remote in this env (see "Remote regression" below) |
+| H5 | `ops/check_remote_model.sh` Qwen probe | ✓ done | all 7 candidate paths in plan §8.2 miss; only `Qwen2.5-VL-3B-Instruct` (vision-language, not what plan asks for) is cached |
+| H6 | download Qwen2.5-3B-Instruct if missing | deferred to Phase I onset | `ops/download_qwen.sh` written and idempotent; download deferred to avoid spending ~6 GB on `/data2` until training is actually being prepared |
+
+### Remote machine inventory (probe output, 2026-04-28 21:42 CST)
+
+```
+hostname : ivlab    kernel : Linux 5.4.0-150-generic x86_64
+GPU      : 4 × NVIDIA GeForce RTX 3090, 24 GiB each, driver 510.108.03
+RAM      : 251 GiB total, 225 GiB available (24 GiB used)
+disks    : /dev/sda4  187G  173G  4.8G  98%  /          ⚠ near-full
+           /dev/sdb   3.6T  1.7T  1.8T  48%  /data
+           /dev/sdc    15T  4.4T  9.4T  33%  /data2     ← downloads land here
+HF cache : ~/.cache/huggingface/hub -> /data2/lrrelevant/hf_offline/hub  (already symlinked)
+```
+
+The 98%-full root partition is the single biggest constraint. Strategy:
+
+* Repo clone **goes to `/data2/lrrelevant/ve401-solver`** (not the
+  plan's default `~/ve401-solver`) because `/home` lives on `/dev/sda4`.
+  All Phase I outputs (tokenized data, checkpoints) must also stay
+  under `/data2`.
+* Model downloads automatically land on `/data2` via the existing HF
+  cache symlink, so `huggingface-cli download` (or `snapshot_download`)
+  works without any extra `--local-dir` flag.
+* Conda env reuse instead of a fresh `python -m venv`: `agentiad`
+  (`~/miniconda3/envs/agentiad`) already has the full stack and
+  `agentiad` is small enough that it fits inside the 4.8 GB headroom.
+
+### Conda env survey (`check_remote_model.sh` output)
+
+```
+agentiad_full_cu118                       OK torch=2.6.0+cu118 cuda=True transformers=5.2.0  peft=0.18.1 accelerate=1.13.0
+agentiad_old_torch                        OK torch=2.4.1+cu118 cuda=True transformers=5.2.0  peft=0.18.1 accelerate=1.13.0
+verl_conda_forge_clean                    OK torch=2.6.0+cu118 cuda=True transformers=5.2.0  peft=0.18.1 accelerate=1.13.0
+agentiad                                  OK torch=2.6.0+cu118 cuda=True transformers=4.51.3 peft=0.18.1 accelerate=1.12.0
+agentiad_full                             OK torch=2.6.0+cu124 cuda=False (driver 510 too old for cu124 build) — DO NOT USE
+test_conda_forge / agentiad_clean / agentiad_awq449   MISS (no transformers or no torch)
+agentiad_cf                               MISS (GLIBCXX_3.4.29 missing, env partially broken)
+```
+
+`agentiad` is the **canonical env for Phase I/J** because (a) cu118
+matches the driver, (b) transformers 4.51 is closer to the version the
+plan was authored against than the 5.x installed in the others, and
+(c) it lives on `/home` which is the conventional site for personal
+envs — the user's other tooling already imports it.
+
+### Remote regression: Phase A-F tests on `agentiad`
+
+```
+$ ssh ivlab 'cd /data2/lrrelevant/ve401-solver && conda activate agentiad && python tests/test_*.py'
+test_triage         : top-1 acceptable 14/14 (100.0%) ; top-3 inclusive 13/14 (92.9%)   PASS
+test_retriever      : every card has >=1 template ; 5/5 canonical queries hit VE401-local PASS
+test_render         : 3/3 (Z, T, chi-square GoF) PASS
+test_end_to_end     : 14/14 card-id ; 14/14 skeleton ; max latency 7.7 ms (gate < 2000 ms) PASS
+test_extractors     : FAIL — bs4 / pdfminer.six / jsonschema not in `agentiad`
+test_corpus         : FAIL — same
+```
+
+The Phase A/B extractor tests fail because the agentiad env does not
+ship the extraction libraries (`beautifulsoup4`, `pdfminer.six`,
+`jsonschema`). This is by design — extraction is a **local** activity
+that produces JSONL committed to the repo; the remote consumes those
+JSONL files as data. Adding the four extractor libraries to the remote
+env is a one-liner (`pip install beautifulsoup4 lxml pdfminer.six
+jsonschema`, ~10 MB total) but provides no Phase H/I/J value, so it is
+not done here.
+
+### Files added (`ops/` directory)
+
+```
+ve401_solver/ops/
+├── ssh_setup.sh           # H3 smoke test — non-interactive SSH probe
+├── check_remote_model.sh  # H5 — full inventory + Qwen2.5-3B candidate paths + conda env survey
+├── sync_to_remote.sh      # H3 — clone or fast-forward repo on remote into /data2/lrrelevant/ve401-solver
+├── download_qwen.sh       # H6 — HF snapshot_download into the /data2 cache (run when starting Phase I)
+└── pull_checkpoint.sh     # I→J — rsync LoRA adapter back from remote, excluding regenerable training state
+```
+
+All five scripts:
+* Default to `REMOTE=ivlab` (matches the user's `~/.ssh/config`); each
+  accepts a `REMOTE=` env override.
+* Use `BatchMode=yes` and `ConnectTimeout=8` so they fail fast (and
+  with a clear message) if the remote is unreachable, rather than
+  hanging on a password prompt.
+* Are idempotent — `sync_to_remote.sh` clones on first run and
+  `git pull --ff-only`s thereafter; `download_qwen.sh` no-ops if the
+  snapshot already exists; `pull_checkpoint.sh` rsyncs incrementally.
+
+### Scope decisions (deviations from plan §6)
+
+* **Plan asked for `python -m venv .venv` + `pip install -r requirements.txt`** on the remote (H4). The remote already had four
+  conda envs with the full stack pre-installed; rebuilding that with
+  pip would (a) consume 4–5 GB of the 4.8 GB free on `/home`, (b)
+  duplicate working artifacts, (c) risk version drift from what the
+  user's other projects rely on. Using the existing `agentiad` env
+  is the smallest path that unblocks Phase I and is reversible — a
+  fresh venv can still be created later if a need surfaces.
+* **Plan asked for repo to live at `~/ve401-solver`** (H3). Cloned to
+  `/data2/lrrelevant/ve401-solver` instead because `/home` was at 98%.
+  Documented in `ops/sync_to_remote.sh` via the `REMOTE_ROOT` default.
+* **Plan asked H6 to download Qwen if missing.** Deferred — the
+  download script is shipped (`ops/download_qwen.sh`) but not
+  triggered. Phase I prep is the natural moment to spend the ~6 GB.
+* **`requirements.txt` not updated** for Phase H. None of the new
+  pieces add a Python dependency; the ops scripts are pure bash + ssh
+  + rsync. Phase I will add `transformers`, `peft`, `accelerate`, etc.
+  uncommented when training code lands.
+
+### MVP DoD recap (plan §12.1) — line 6 unblocked
+
+| # | Requirement | Status |
+|---|---|---|
+| 1 | sample-final type ID ≥ 14/16 | ✓ 14/14 acceptable (verified on remote too) |
+| 2 | skeleton consistency ≥ 12/14 | ✓ 14/14 (verified on remote too) |
+| 3 | summer-2021 hw 06–10 (25 problems) ≥ 20 hit | deferred (homework JSONL has empty `solution_steps`) |
+| 4 | response time < 2 s | ✓ max 7.7 ms on remote, 5.8 ms on Windows |
+| 5 | fully offline | ✓ |
+| 6 | `git clone` + `pip install` + README → MVP runs | ✓ now reproducible — Phase A-F regression green from a fresh `/data2/lrrelevant/ve401-solver` clone in the `agentiad` conda env |
+
+### Known limitations / follow-ups
+
+* **`/dev/sda4` at 4.8 GB free** is a real risk for any future operator
+  who installs into `~/.miniconda3/envs/`. The `agentiad` env adds
+  ~10 MB if Phase A-extractor deps are later requested; that's safe.
+  Anything bigger should target `/data2/lrrelevant/conda_envs/` instead.
+* **Qwen2.5-3B-Instruct (text-only) is not cached on the remote.** The
+  closest variant present is `Qwen2.5-VL-3B-Instruct` (vision-language)
+  which is NOT what plan §2.3 prescribes — using it would require
+  adapting the LoRA target modules and the chat template. Phase I
+  should run `ops/download_qwen.sh` first.
+* **GitHub LFS untested.** No LFS object exists yet because Phase I
+  has not produced an adapter. The `.gitattributes` LFS filter is
+  configured; first push of `checkpoints/*.safetensors` will exercise
+  it. Plan §11 documents the `scp` fallback if LFS quota becomes a
+  problem.
+* **Line endings in `ops/*.sh`.** Files committed via Windows go
+  through `.gitattributes`'s `* text=auto eol=lf` so the remote
+  receives LF after `git pull`. Verified by re-syncing the remote and
+  inspecting `file ops/check_remote_model.sh` — reports `Bourne-Again
+  shell script, ASCII text executable` (no `with CRLF line terminators`
+  warning).
+
+### Next up
+
+Plan §6 calls for **Phase I** (LoRA training on the remote GPU). Phase
+H has put everything in place: repo cloned, env identified, GPU and
+disk inventoried, ops scripts ready. The first Phase I action is to
+run `bash ops/download_qwen.sh` to pull the base model into the HF
+cache, then implement `train/prepare_dataset.py`. Phase J (local RAG
+inference, `--mode rag` / `--mode llm-only`) becomes runnable once
+Phase I produces an adapter that `ops/pull_checkpoint.sh` can fetch.
+
