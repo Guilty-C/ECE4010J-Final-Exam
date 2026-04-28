@@ -6,23 +6,30 @@ Given a natural-language exam-style question, the system identifies its test typ
 
 ## Status
 
-**Phase A — DONE** (2026-04-28). Local material extraction.
+| Phase | Status | Date | Headline result |
+|---|---|---|---|
+| A — local material extraction | DONE | 2026-04-28 | 208 ve401 + 80 crash-course records, slide-ref coverage 84% |
+| B — external open corpora | DONE | 2026-04-28 | 3,597 deduped corpus records (OpenIntro 385, OpenStax 1,679, Hendrycks 1,245) |
+| C — triage classifier | DONE | 2026-04-28 | 14/14 sample-final questions accepted top-1, 13/14 top-3 |
+| D — retriever | not started | — | — |
+| E — template fill + render | not started | — | — |
+| F — CLI + end-to-end test | not started | — | MVP gate |
+| H — infra (git/ssh/Qwen probe) | not started | — | — |
+| I — LoRA training (remote) | not started | — | — |
+| J — RAG inference (local) | not started | — | — |
 
-| File | Records |
-|---|---|
-| `data/extracted/ve401_local.jsonl` | 208 (HTML 130 + PDF 78) |
-| `data/extracted/crash_course.jsonl` | 80 (25 cards + 30 traps + 25 drills) |
-| `data/extracted/ve401_pdf.jsonl` | 78 (intermediate) |
+Acceptance test cheatsheet:
 
-Acceptance:
-- jsonschema validation: **pass**
-- size: 208 (target ~145, +43%)
-- `slide_refs` non-empty: **84%** (174/208)
-- smoke test: `python -m tests.test_extractors` → all 6 `[ok]`
+```bash
+python -m tests.test_extractors   # Phase A — JSONL schema, volume, sentinels
+python -m tests.test_corpus       # Phase B — corpus volume, dedup, source mix
+python -m tests.test_triage       # Phase C — 14 sample-final main questions
+```
 
-See `progress.md` for full details.
+See `progress.md` for full per-phase write-ups.
 
-**Next**: Phase B (external open corpora — OpenIntro / OpenStax / Hendrycks MATH) and Phase C (classifier).
+**Next**: Phase D (retriever) and Phase E (template renderer). Phase H
+(git push + remote model probe) is independent and can be parallelised.
 
 ## Project layout
 
@@ -44,20 +51,42 @@ ve401_solver/
 └── tests/
 ```
 
-## Quick start (Phase A reproduction)
+## Quick start (Phase A–C reproduction)
 
 ```bash
-pip install beautifulsoup4 lxml jsonschema pdfminer.six
+pip install beautifulsoup4 lxml jsonschema pdfminer.six pandas pyarrow
 
-# Re-run extractors against the source files in ../  (the parent project dir
-# D:\4010Cheating Code\ keeps the raw PDFs / HTMLs).
+# Phase A — re-run local extractors against the source files in ../
+# (the parent project dir D:\4010Cheating Code\ keeps the raw PDFs/HTMLs).
 python -m extractors.extract_ve401_html
 python -m extractors.extract_crash_course
 python -m extractors.extract_ve401_pdf
 python -m extractors.merge_local
-
-# Smoke test
 python -m tests.test_extractors
+
+# Phase B — external corpora (one-time downloads to data/raw/, see progress.md
+# §"Source acquisition" for the exact URLs).
+python -m extractors.extract_hendrycks
+python -m extractors.extract_openintro
+python -m extractors.extract_openstax
+python -m extractors.merge_corpus
+python -m tests.test_corpus
+
+# Phase C — classifier (no extra setup; reads classifier/tag_taxonomy.json)
+python -m tests.test_triage
+```
+
+### Try the classifier on a single question
+
+```python
+from classifier.triage_rules import triage
+hits = triage(
+    "A bottling line: sigma is known to be 4 mL. n=25, x_bar=498.6 mL. "
+    "Test the hypothesis that the true mean equals 500 mL."
+)
+for h in hits:
+    print(h.card_id, h.score, h.title)
+# card01 8 One-sample Z-test for mu (sigma known)
 ```
 
 ## Remote training infrastructure

@@ -1,0 +1,354 @@
+{
+  "version": "1.0",
+  "doc": "VE401 25-card taxonomy. Each card carries a set of weighted regex triggers. Decision tree sums matched weights. All patterns are matched case-insensitively against the question text and any additional context (e.g. parent question for sub-parts). Negative weights are anti-triggers.",
+  "cards": [
+    {
+      "id": "card01",
+      "title": "One-sample Z-test for mu (sigma known)",
+      "chapter": "19",
+      "tags": ["one-sample-Z", "sigma-known", "test"],
+      "slide_refs": [436],
+      "patterns": [
+        {"rx": "known\\s+to\\s+have\\s+(?:a\\s+)?(?:standard\\s+deviation|variance|sigma|σ)", "w": 6, "label": "known to have stddev"},
+        {"rx": "(?:standard\\s+deviation|variance|sigma|σ)\\s+is\\s+known", "w": 6, "label": "stddev is known"},
+        {"rx": "known\\s+(?:standard\\s+deviation|variance|sigma|σ)\\s*(?:of|=|is)?\\s*\\d", "w": 5, "label": "known stddev numeric"},
+        {"rx": "(?:long\\s+experience|past\\s+records|previous\\s+studies?).{0,80}(?:variability|standard\\s+deviation|variance|sigma).{0,40}(?:stable|known|fixed|constant)", "w": 4, "label": "stable variability"},
+        {"rx": "test\\s+(?:the\\s+)?(?:hypothesis|null\\s+hypothesis|claim).{0,80}(?:mean|μ|average)", "w": 2, "label": "test mean"},
+        {"rx": "true\\s+mean\\s+\\w+\\s+(?:equals|is|differs|exceeds)", "w": 2, "label": "true mean tested"},
+        {"rx": "two[\\s-]+(?:samples?|formulations?|catalysts?|types?|groups|specimens?|populations?)", "w": -5, "label": "two-sample context"},
+        {"rx": "paired|matched\\s+pairs?", "w": -4, "label": "paired context"},
+        {"rx": "(?:linear|quadratic)\\s+regression|ANOVA|goodness[\\s-]of[\\s-]fit|contingency", "w": -6, "label": "wrong family"},
+        {"rx": "sample\\s+standard\\s+deviation\\s*(?:of|=)?\\s*\\d", "w": -3, "label": "sample SD given"},
+        {"rx": "wilcoxon|sign\\s+test|rank[\\s-]?sum|mann[\\s-]?whitney", "w": -4, "label": "non-parametric context"}
+      ]
+    },
+    {
+      "id": "card02",
+      "title": "One-sample T-test for mu (sigma unknown)",
+      "chapter": "19",
+      "tags": ["one-sample-T", "sigma-unknown", "test"],
+      "slide_refs": [445],
+      "patterns": [
+        {"rx": "sample\\s+standard\\s+deviation\\s*(?:of|=)?\\s*\\d", "w": 5, "label": "sample SD numeric"},
+        {"rx": "\\bs\\s*=\\s*\\d", "w": 2, "label": "s = numeric"},
+        {"rx": "(?:T|t)[\\s-]?test|student'?s?\\s*t", "w": 3, "label": "T-test mention"},
+        {"rx": "test.*(?:mean|μ|average)", "w": 1, "label": "mean test"},
+        {"rx": "(?:standard\\s+deviation|variance|sigma|σ)\\s+is\\s+known|known\\s+to\\s+have\\s+(?:a\\s+)?(?:standard\\s+deviation|variance|sigma|σ)", "w": -6, "label": "sigma known anti"},
+        {"rx": "two[\\s-]+(?:samples?|formulations?|catalysts?|types?|groups|specimens?|populations?)", "w": -5, "label": "two-sample context"},
+        {"rx": "paired|matched\\s+pairs?", "w": -4, "label": "paired context"},
+        {"rx": "(?:linear|quadratic)\\s+regression|ANOVA|goodness[\\s-]of[\\s-]fit|contingency", "w": -6, "label": "wrong family"}
+      ]
+    },
+    {
+      "id": "card03",
+      "title": "Chi-square test for one variance",
+      "chapter": "19",
+      "tags": ["one-sample-chi2-variance", "test"],
+      "slide_refs": [451],
+      "patterns": [
+        {"rx": "claims?\\s+(?:that\\s+)?(?:the\\s+)?(?:standard\\s+deviation|variance|sigma|σ).{0,40}(?:not\\s+more\\s+than|equal|less\\s+than|exceed|greater\\s+than|at\\s+most|at\\s+least|is)", "w": 8, "label": "claim about stddev/variance"},
+        {"rx": "test.*(?:standard\\s+deviation|variance|σ\\^?2|sigma\\^?2)\\b", "w": 5, "label": "test on variance/std"},
+        {"rx": "(?:standard\\s+deviation|variance).*(?:not\\s+more\\s+than|equals?|less|exceed)\\s*\\d", "w": 5, "label": "stddev numeric claim"},
+        {"rx": "chi[\\s-]?squared?\\s+test.{0,30}(?:variance|standard\\s+deviation|σ\\^?2)", "w": 6, "label": "chi-square one variance"},
+        {"rx": "two\\s+(?:samples?|variances?|populations?)|F[\\s-]?test", "w": -5, "label": "two-sample context anti"},
+        {"rx": "goodness[\\s-]of[\\s-]fit|contingency|independence|homogeneity", "w": -6, "label": "wrong chi-square"},
+        {"rx": "regression|ANOVA", "w": -6, "label": "wrong family"}
+      ]
+    },
+    {
+      "id": "card04",
+      "title": "Sign test for the median",
+      "chapter": "20",
+      "tags": ["sign-test", "non-parametric", "test"],
+      "slide_refs": [468],
+      "patterns": [
+        {"rx": "sign\\s+test", "w": 7, "label": "sign test"},
+        {"rx": "test.*median\\b", "w": 5, "label": "test on median"},
+        {"rx": "median\\s+(?:differs|equals|is|exceeds|is\\s+less)", "w": 4, "label": "median tested"}
+      ]
+    },
+    {
+      "id": "card05",
+      "title": "Wilcoxon signed-rank test",
+      "chapter": "20",
+      "tags": ["wilcoxon-signed-rank", "non-parametric", "test"],
+      "slide_refs": [476],
+      "patterns": [
+        {"rx": "wilcoxon\\s+signed[\\s-]?rank", "w": 8, "label": "wilcoxon signed-rank"},
+        {"rx": "signed[\\s-]rank", "w": 6, "label": "signed-rank"},
+        {"rx": "rank[\\s-]?sum|mann[\\s-]?whitney", "w": -5, "label": "rank-sum anti"}
+      ]
+    },
+    {
+      "id": "card06",
+      "title": "One-sample proportion Z-test",
+      "chapter": "21",
+      "tags": ["one-sample-prop-Z", "test"],
+      "slide_refs": [490],
+      "patterns": [
+        {"rx": "proportion\\s+of|proportion\\s+(?:is|equals|differs)", "w": 4, "label": "proportion test"},
+        {"rx": "p_?0\\b|p\\s*=\\s*0\\.\\d+", "w": 3, "label": "p_0 numeric"},
+        {"rx": "fraction\\s+(?:of|defective|conforming)", "w": 3, "label": "fraction"},
+        {"rx": "(?:binomial|n\\s*=\\s*\\d+\\s+trials)", "w": 2, "label": "binomial setup"},
+        {"rx": "two\\s+(?:samples?|proportions?|groups|populations?)", "w": -5, "label": "two-sample anti"}
+      ]
+    },
+    {
+      "id": "card07",
+      "title": "Two-sample proportion Z-test",
+      "chapter": "21",
+      "tags": ["two-sample-prop-Z", "test"],
+      "slide_refs": [498],
+      "patterns": [
+        {"rx": "two\\s+proportions?", "w": 7, "label": "two proportions"},
+        {"rx": "compare.*proportions?", "w": 5, "label": "compare proportions"},
+        {"rx": "(?:p1|p_1|p2|p_2|p_a|p_b).*proportions?", "w": 4, "label": "p1/p2 proportions"},
+        {"rx": "difference\\s+in\\s+proportions?|p_?1\\s*-\\s*p_?2", "w": 5, "label": "p1-p2"}
+      ]
+    },
+    {
+      "id": "card08",
+      "title": "F-test for two variances",
+      "chapter": "22",
+      "tags": ["F-test-variances", "test"],
+      "slide_refs": [521],
+      "patterns": [
+        {"rx": "F[\\s-]?test.*variances?", "w": 6, "label": "F-test variances"},
+        {"rx": "(?:test|compare|equal|equality).*two\\s+variances?", "w": 7, "label": "compare two variances"},
+        {"rx": "ratio\\s+of\\s+(?:two\\s+)?variances?", "w": 5, "label": "ratio of variances"},
+        {"rx": "(?:σ_?1\\^?2|σ_?2\\^?2|sigma_?1|sigma_?2|s_?1\\^?2|s_?2\\^?2).*(?:equal|test|ratio|compare)", "w": 4, "label": "var1/var2"}
+      ]
+    },
+    {
+      "id": "card09",
+      "title": "Two-sample Z-test (sigma1, sigma2 known)",
+      "chapter": "23",
+      "tags": ["two-sample-Z", "sigma-known", "test"],
+      "slide_refs": [532],
+      "patterns": [
+        {"rx": "two[\\s-]+(?:samples?|formulations?|types?|catalysts?|groups|populations?)", "w": 5, "label": "two-sample context"},
+        {"rx": "(?:σ_?1|sigma_?1|σ_?2|sigma_?2).{0,40}(?:known|=)", "w": 6, "label": "sigma1/sigma2 known"},
+        {"rx": "(?:long\\s+experience|past\\s+records|previously).{0,120}(?:variability|standard\\s+deviation|variance).{0,40}(?:stable|known|fixed|constant)", "w": 8, "label": "stable variability two-sample"},
+        {"rx": "variability\\s+(?:in\\s+the\\s+\\w+\\s+)?is\\s+(?:fairly\\s+)?(?:stable|known|fixed|constant)", "w": 4, "label": "variability is stable"},
+        {"rx": "two[\\s-]?sample\\s+Z[\\s-]?test", "w": 7, "label": "two-sample Z explicit"},
+        {"rx": "(?:from\\s+experience|it\\s+is\\s+known\\s+that).{0,80}(?:standard\\s+deviation|variance|σ).{0,30}(?:is|=|are)\\s*\\d", "w": 6, "label": "experience-based known sigma two-sample"},
+        {"rx": "(?:catalyst|formulation|method|treatment|type|drug|machine|process)\\s+A\\b.{0,400}(?:catalyst|formulation|method|treatment|type|drug|machine|process)\\s+B\\b", "w": 5, "label": "A vs B comparison"},
+        {"rx": "paired|matched\\s+pairs?", "w": -3, "label": "paired anti"},
+        {"rx": "regression|ANOVA|contingency", "w": -6, "label": "wrong family"}
+      ]
+    },
+    {
+      "id": "card10",
+      "title": "Pooled (Student) T-test",
+      "chapter": "23",
+      "tags": ["pooled-T", "two-sample-T", "test"],
+      "slide_refs": [540],
+      "patterns": [
+        {"rx": "pooled\\s+(?:T|t)[\\s-]?test|pooled[\\s-]?T", "w": 7, "label": "pooled T explicit"},
+        {"rx": "common\\s+variance|equal\\s+variances?\\s+(?:assumed|assumption)", "w": 4, "label": "equal variances"},
+        {"rx": "two[\\s-]?sample\\s+T[\\s-]?test", "w": 4, "label": "two-sample T"},
+        {"rx": "Welch|Satterthwaite|unequal\\s+variances?", "w": -3, "label": "Welch anti"}
+      ]
+    },
+    {
+      "id": "card11",
+      "title": "Welch / Satterthwaite T-test",
+      "chapter": "23",
+      "tags": ["welch-T", "two-sample-T", "test"],
+      "slide_refs": [546],
+      "patterns": [
+        {"rx": "welch|satterthwaite", "w": 7, "label": "Welch/Satterthwaite"},
+        {"rx": "unequal\\s+variances?", "w": 6, "label": "unequal variances"},
+        {"rx": "approximate.*degrees?\\s+of\\s+freedom", "w": 4, "label": "approximate df"}
+      ]
+    },
+    {
+      "id": "card12",
+      "title": "Paired T-test",
+      "chapter": "24",
+      "tags": ["paired-T", "two-sample-T", "test"],
+      "slide_refs": [554],
+      "patterns": [
+        {"rx": "paired\\s+T[\\s\\-]*test", "w": 8, "label": "paired T-test"},
+        {"rx": "paired\\s+(?:samples|data|comparison|differences|design|observations)", "w": 6, "label": "paired data"},
+        {"rx": "matched\\s+pairs?", "w": 6, "label": "matched pairs"},
+        {"rx": "before\\s+and\\s+after|each\\s+(?:subject|worker|specimen|patient|unit)\\s+(?:received|was|underwent)", "w": 4, "label": "before/after"},
+        {"rx": "select(?:s|ed)\\s+\\w+\\s+(?:workers?|subjects?|specimens?|patients?|units?|people).{0,80}(?:each|both)\\s+(?:of\\s+)?(?:the\\s+)?(?:\\w+\\s+){0,3}?(?:procedures?|methods?|treatments?|formulations?|conditions?|assembly\\s+lines?|machines?)", "w": 7, "label": "each subject both treatments"},
+        {"rx": "same\\s+(?:subjects?|specimens?|units?|workers?).{0,30}(?:both|each)", "w": 5, "label": "same subjects both"}
+      ]
+    },
+    {
+      "id": "card13",
+      "title": "Wilcoxon rank-sum / Mann-Whitney U",
+      "chapter": "24",
+      "tags": ["wilcoxon-rank-sum", "mann-whitney", "non-parametric", "test"],
+      "slide_refs": [562],
+      "patterns": [
+        {"rx": "wilcoxon\\s+rank[\\s-]?sum", "w": 8, "label": "Wilcoxon rank-sum"},
+        {"rx": "mann[\\s-]?whitney", "w": 8, "label": "Mann-Whitney"},
+        {"rx": "rank[\\s-]?sum\\s+test", "w": 6, "label": "rank-sum"},
+        {"rx": "signed[\\s-]?rank", "w": -5, "label": "signed-rank anti"}
+      ]
+    },
+    {
+      "id": "card14",
+      "title": "Inferences on correlation rho",
+      "chapter": "24",
+      "tags": ["correlation-rho", "test"],
+      "slide_refs": [578],
+      "patterns": [
+        {"rx": "correlation\\s+coefficient|pearson\\s+correlation", "w": 6, "label": "correlation coefficient"},
+        {"rx": "\\bρ\\b|\\brho\\b", "w": 4, "label": "rho symbol"},
+        {"rx": "fisher\\s+z[\\s-]?transformation", "w": 7, "label": "Fisher z"},
+        {"rx": "test\\s+(?:that\\s+)?ρ\\s*=", "w": 6, "label": "test rho equals"}
+      ]
+    },
+    {
+      "id": "card15",
+      "title": "Pearson chi-square goodness-of-fit",
+      "chapter": "25",
+      "tags": ["chi2-gof", "test"],
+      "slide_refs": [598],
+      "patterns": [
+        {"rx": "goodness[\\s-]of[\\s-]fit", "w": 8, "label": "goodness-of-fit"},
+        {"rx": "chi[\\s-]?squared?\\s+goodness", "w": 8, "label": "chi-square GoF"},
+        {"rx": "follows?\\s+a.{0,30}distribution", "w": 5, "label": "follows distribution"},
+        {"rx": "(?:fits|fit)\\s+(?:the|a)\\s+\\w+\\s+distribution", "w": 5, "label": "fit distribution"},
+        {"rx": "test.*(?:poisson|normal|chi[\\s-]?squared|exponential|uniform|binomial|geometric)\\s+distribution", "w": 5, "label": "test named distribution"}
+      ]
+    },
+    {
+      "id": "card16",
+      "title": "Chi-square test of independence (rxc)",
+      "chapter": "25",
+      "tags": ["chi2-independence", "test"],
+      "slide_refs": [610],
+      "patterns": [
+        {"rx": "test.*independence|independence\\s+(?:between|of)", "w": 8, "label": "test independence"},
+        {"rx": "contingency\\s+table", "w": 6, "label": "contingency table"},
+        {"rx": "(?:two|several)\\s+categorical\\s+variables", "w": 4, "label": "categorical vars"},
+        {"rx": "(?:rows?|columns?)\\s+and\\s+(?:rows?|columns?).{0,50}chi", "w": 4, "label": "rxc chi-square"}
+      ]
+    },
+    {
+      "id": "card17",
+      "title": "Chi-square test of homogeneity",
+      "chapter": "25",
+      "tags": ["chi2-homogeneity", "test"],
+      "slide_refs": [620],
+      "patterns": [
+        {"rx": "homogeneity", "w": 8, "label": "homogeneity"},
+        {"rx": "(?:same|identical).{0,30}distributions?\\s+across\\s+(?:populations|groups)", "w": 6, "label": "same distribution across populations"}
+      ]
+    },
+    {
+      "id": "card18",
+      "title": "Simple linear regression: fitting and inference",
+      "chapter": "26",
+      "tags": ["SLR", "regression", "fit", "inference"],
+      "slide_refs": [619],
+      "patterns": [
+        {"rx": "(?:simple\\s+)?linear\\s+regression", "w": 6, "label": "linear regression"},
+        {"rx": "fit\\s+(?:a\\s+)?linear\\s+regression|fitted\\s+linear", "w": 6, "label": "fit linear"},
+        {"rx": "μ_?Y\\s*\\|\\s*x\\s*=\\s*(?:β_?0|fi_?0|beta_?0)\\s*\\+\\s*(?:β_?1|fi_?1|beta_?1)\\s*x\\b", "w": 7, "label": "muY|x=b0+b1x"},
+        {"rx": "least[\\s-]squares", "w": 3, "label": "least squares"},
+        {"rx": "(?:slope|intercept).{0,40}(?:CI|confidence\\s+interval|test|estimate)", "w": 4, "label": "slope/intercept inference"},
+        {"rx": "regression\\s+(?:line|equation)", "w": 3, "label": "regression line"},
+        {"rx": "ANOVA|goodness[\\s-]of[\\s-]fit|contingency", "w": -6, "label": "wrong family"}
+      ]
+    },
+    {
+      "id": "card19",
+      "title": "SLR prediction & diagnosis",
+      "chapter": "27",
+      "tags": ["SLR-PI", "lack-of-fit", "regression"],
+      "slide_refs": [630],
+      "patterns": [
+        {"rx": "prediction\\s+interval", "w": 8, "label": "prediction interval"},
+        {"rx": "lack[\\s-]of[\\s-]fit", "w": 7, "label": "lack of fit"},
+        {"rx": "SSE[\\s,_]?(?:pe|lf)|pure\\s+error", "w": 6, "label": "SSE_pe / pure error"},
+        {"rx": "residual\\s+(?:analysis|plot)|standardized\\s+residuals?", "w": 4, "label": "residual analysis"},
+        {"rx": "confidence\\s+interval\\s+for\\s+(?:the\\s+)?mean\\s+(?:response|yield|value)", "w": 5, "label": "CI for mean response"}
+      ]
+    },
+    {
+      "id": "card20",
+      "title": "Multiple linear regression: estimation",
+      "chapter": "28",
+      "tags": ["MLR", "regression", "fit"],
+      "slide_refs": [659],
+      "patterns": [
+        {"rx": "multiple\\s+(?:linear\\s+)?regression", "w": 7, "label": "multiple regression"},
+        {"rx": "quadratic\\s+(?:model|regression)", "w": 6, "label": "quadratic regression"},
+        {"rx": "μ_?Y\\s*\\|\\s*x\\s*=\\s*(?:β_?0|fi_?0|beta_?0).{0,30}(?:β_?2|fi_?2|beta_?2).*x\\s*\\^?\\s*2", "w": 7, "label": "quadratic model formula"},
+        {"rx": "fi_?0\\s*\\+\\s*fi_?1\\s*x\\s*\\+\\s*fi_?2\\s*x\\s*\\^?\\s*2|β_?0\\s*\\+\\s*β_?1\\s*x\\s*\\+\\s*β_?2\\s*x\\s*\\^?\\s*2", "w": 6, "label": "polynomial b0+b1x+b2x^2"},
+        {"rx": "\\(X\\^?T\\s*X\\)\\s*\\^?\\s*-\\s*1|design\\s+matrix", "w": 5, "label": "(X'X)^{-1}"},
+        {"rx": "fit\\s+(?:the\\s+)?(?:model|regression).*β_?\\d|fit\\s+a\\s+model\\s+of\\s+the\\s+form", "w": 4, "label": "fit MLR"}
+      ]
+    },
+    {
+      "id": "card21",
+      "title": "MLR inference: three F's and a T",
+      "chapter": "29",
+      "tags": ["MLR", "regression", "F-test", "T-test", "inference"],
+      "slide_refs": [676],
+      "patterns": [
+        {"rx": "(?:partial|full|reduced|nested)\\s+F[\\s-]?test", "w": 7, "label": "partial/nested F"},
+        {"rx": "is\\s+the\\s+regression\\s+significant", "w": 6, "label": "regression significance"},
+        {"rx": "F[\\s-]?test.{0,40}(?:linear|reduced|full|nested|sufficient)", "w": 6, "label": "F-test linear vs full"},
+        {"rx": "test\\s+whether\\s+(?:the\\s+)?(?:regression\\s+is\\s+significant|model\\s+is\\s+adequate)", "w": 5, "label": "test reg significance"},
+        {"rx": "R\\s*\\^?\\s*2\\s*=\\s*0\\.\\d+.{0,40}significant", "w": 6, "label": "R^2 significance"},
+        {"rx": "test.*(?:individual|each)\\s+(?:coefficient|slope|β_?\\d)", "w": 5, "label": "test individual coefs"},
+        {"rx": "SSE_?(?:full|reduced)", "w": 5, "label": "SSE full/reduced"}
+      ]
+    },
+    {
+      "id": "card22",
+      "title": "Model selection (PRESS, adj-R^2, AIC)",
+      "chapter": "30",
+      "tags": ["model-selection", "regression"],
+      "slide_refs": [702],
+      "patterns": [
+        {"rx": "PRESS", "w": 8, "label": "PRESS"},
+        {"rx": "model\\s+selection|adjusted\\s+R\\s*\\^?\\s*2|R[\\s_-]?adj\\b", "w": 6, "label": "model selection / adj R^2"},
+        {"rx": "AIC|BIC|mallows?\\s+(?:c[_p]|cp)", "w": 7, "label": "AIC/BIC/Mallows Cp"},
+        {"rx": "(?:forward|backward|stepwise)\\s+(?:selection|elimination|regression)", "w": 6, "label": "stepwise"}
+      ]
+    },
+    {
+      "id": "card23",
+      "title": "One-way ANOVA F-test",
+      "chapter": "31",
+      "tags": ["one-way-ANOVA", "test"],
+      "slide_refs": [724],
+      "patterns": [
+        {"rx": "(?:one[\\s-]way\\s+)?ANOVA", "w": 7, "label": "ANOVA"},
+        {"rx": "(?:k|several|three\\s+or\\s+more|multiple)\\s+(?:groups?|treatments?|levels?)", "w": 4, "label": "k groups"},
+        {"rx": "treatment\\s+sum\\s+of\\s+squares|SST", "w": 5, "label": "SST"},
+        {"rx": "compare\\s+(?:the\\s+)?means?\\s+of\\s+(?:k|several|\\d+)", "w": 4, "label": "compare k means"}
+      ]
+    },
+    {
+      "id": "card24",
+      "title": "Bartlett's test for equal variances",
+      "chapter": "32",
+      "tags": ["bartlett", "test"],
+      "slide_refs": [758],
+      "patterns": [
+        {"rx": "bartlett", "w": 8, "label": "Bartlett"}
+      ]
+    },
+    {
+      "id": "card25",
+      "title": "Post-hoc multiple comparisons",
+      "chapter": "32",
+      "tags": ["posthoc-tukey", "posthoc-bonferroni", "test"],
+      "slide_refs": [762],
+      "patterns": [
+        {"rx": "post[\\s-]?hoc|tukey|bonferroni|scheff[eé]|HSD", "w": 8, "label": "post-hoc"},
+        {"rx": "multiple\\s+comparisons?", "w": 5, "label": "multiple comparisons"},
+        {"rx": "pairwise\\s+(?:differences?|comparisons?)", "w": 5, "label": "pairwise"}
+      ]
+    }
+  ]
+}
