@@ -1,0 +1,46 @@
+# LoRA fine-tune config for Qwen2.5-3B-Instruct on the VE401 corpus.
+# Used by train/train_lora.py. All paths can be overridden on the CLI.
+
+# ----- model & data -----
+base_model: Qwen/Qwen2.5-3B-Instruct  # resolved via local HF cache (HF_ENDPOINT=hf-mirror)
+output_dir: checkpoints/qwen25_3b_lora_v1
+data_dir: data/training        # produced by train/prepare_dataset.py
+
+# ----- LoRA -----
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+
+# ----- training -----
+max_seq_length: 2048
+learning_rate: 2.0e-4
+num_train_epochs: 2
+per_device_train_batch_size: 2
+per_device_eval_batch_size: 2
+gradient_accumulation_steps: 8     # effective batch 16
+warmup_ratio: 0.03
+lr_scheduler_type: cosine
+weight_decay: 0.01
+gradient_checkpointing: true
+
+# ----- precision (3090 supports bf16 natively) -----
+bf16: true
+fp16: false
+
+# ----- evaluation / saving -----
+eval_strategy: epoch
+save_strategy: epoch
+save_total_limit: 2
+logging_steps: 20
+report_to: []
+
+# ----- runtime -----
+seed: 4010

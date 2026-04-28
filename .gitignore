@@ -18,13 +18,15 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Tokenized / training artifacts (regenerable)
+# Tokenized / training artifacts (regenerable from data/corpus.jsonl)
 data/tokenized/
+data/training/
 checkpoints/*/optimizer.pt
 checkpoints/*/scheduler.pt
 checkpoints/*/training_args.bin
 checkpoints/*/global_step*/
 checkpoints/*/rng_state*.pth
+checkpoints/*/checkpoint-*/
 
 # Model base weights — never check in
 checkpoints/base/

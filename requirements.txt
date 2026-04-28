@@ -18,8 +18,8 @@ jsonschema>=4.20
 # peft>=0.10
 # accelerate>=0.30
 # datasets>=2.18
-# trl>=0.8
-# bitsandbytes>=0.43
+# bitsandbytes>=0.43       # optional QLoRA only
+pyyaml>=6.0                # train/configs/*.yaml loader
 
 # Tooling
 pytest>=8.0
