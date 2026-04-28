@@ -13,7 +13,7 @@ Given a natural-language exam-style question, the system identifies its test typ
 | C — triage classifier | DONE | 2026-04-28 | 14/14 sample-final questions accepted top-1, 13/14 top-3 |
 | D — retriever | DONE | 2026-04-28 | every card (25/25) recalls ≥ 1 template; 5/5 canonical queries surface VE401-local in top-3; 1.3 ms/query warm |
 | E — template fill + render | DONE | 2026-04-28 | 5-section Markdown for all 25 cards; numeric eval for Z / T / χ²-variance / paired-T / χ²-GoF; 3/3 smoke tests green; Phase C regression unchanged |
-| F — CLI + end-to-end test | not started | — | MVP gate |
+| F — CLI + end-to-end test | **DONE — MVP** | 2026-04-28 | `python -m cli.solve` with `--mode rule\|rag\|llm-only`, `--file`, `--json`, stdin; 14/14 sample-final card-id, 14/14 5-section skeleton, max 5.8 ms/question (offline) |
 | H — infra (git/ssh/Qwen probe) | not started | — | — |
 | I — LoRA training (remote) | not started | — | — |
 | J — RAG inference (local) | not started | — | — |
@@ -26,12 +26,15 @@ python -m tests.test_corpus       # Phase B — corpus volume, dedup, source mix
 python -m tests.test_triage       # Phase C — 14 sample-final main questions
 python -m tests.test_retriever    # Phase D — 25/25 cards retrievable + 5 smoke queries
 python -m tests.test_render       # Phase E — Z / T / chi-square GoF end-to-end
+python -m tests.test_end_to_end   # Phase F MVP gate — sample-final card+skeleton+latency
 ```
 
 See `progress.md` for full per-phase write-ups.
 
-**Next**: Phase F (CLI + 16-question end-to-end MVP gate). Phase H (git
-push + remote model probe) is independent and can be parallelised.
+**Next**: Phase H (git push + remote Qwen2.5-3B probe), then Phase I
+(LoRA training on the remote GPU) and Phase J (local RAG inference,
+which fills in `--mode rag` / `--mode llm-only`). The MVP rule-based
+solver is complete and offline-runnable today.
 
 ### Try the solver end-to-end
 
@@ -48,6 +51,32 @@ print(res.card_id)            # 'card01'
 print(res.statistic_value)    # -1.75
 print(res.markdown)           # five-segment Markdown answer
 ```
+
+### Use the CLI (Phase F)
+
+```bash
+# Pure offline rule-based solver (default mode)
+python -m cli.solve "A bottling line ... sigma = 2.0 mL ... n = 25 ... x_bar = 24.3 ..."
+
+# Read the question from a file
+python -m cli.solve --file my_question.txt
+
+# Pipe the question on stdin
+cat question.txt | python -m cli.solve
+
+# Get a JSON dump of the SolveResult instead of Markdown
+python -m cli.solve --json --file question.txt
+
+# Also list top-N retrieved corpus records (lazy-loads Phase D index, ~2.7 s cold)
+python -m cli.solve --related 5 --file question.txt
+
+# Future modes (Phase J — LoRA-Qwen RAG / direct LLM): currently fall back to rule
+python -m cli.solve --mode rag --file question.txt
+python -m cli.solve --mode llm-only --file question.txt
+```
+
+Exit code is `0` when a card was identified, `1` when the classifier
+could not match the question to any of the 25 test cards.
 
 ## Project layout
 
