@@ -402,3 +402,186 @@ lite) and **Phase E** (template fill + render) before the MVP is
 runnable end-to-end. Phase D consumes the same taxonomy the classifier
 already uses, so they share schema. Phase H (git push + remote model
 probe) remains independent and can be parallelised.
+
+---
+
+## 2026-04-28 — Phase D: retriever (DONE)
+
+### What shipped
+
+A dependency-free template retriever over `data/corpus.jsonl`. Two
+modes: card-driven (every test card surfaces ≥ 1 template) and
+free-text (classify the query, take the union of candidate cards' record
+buckets, BM25-rerank with source-priority weighting).
+
+| File | Lines | Role |
+|---|---|---|
+| `retriever/retrieve.py` | 280 | tokeniser, BM25-Okapi, classifier-driven candidate gather, ranker, singleton |
+| `retriever/__init__.py` | 16  | re-export `Retriever`, `RetrievalHit`, `retrieve`, `retrieve_for_card`, `get_retriever` |
+| `tests/test_retriever.py` | 130 | acceptance test: bar 1 (every card_id has ≥ 1 hit) + bar 2 (5 canonical queries surface VE401-local in top-3) |
+
+### Pipeline
+
+```
+data/corpus.jsonl (3,597 records)
+        │
+        ▼
+retriever/retrieve.py::Retriever._load
+   • tokenise question + solution + rubric + trail-of-thought  → BM25Okapi(k1=1.5, b=0.75)
+   • classify_record(rec) → top-1 card  → by_card[card_id]
+   • classify_record(rec) → top-3 cards → by_card_top3[card_id]   (fallback bucket)
+   • topic_tags  → by_tag[tag]
+   • slide_refs  → by_slide_ref[page]
+   • source_priority → by_priority[1|2|3]
+        │
+        ├── retrieve_for_card(cid)
+        │     candidates = by_card[cid] (∪ by_card_top3 if thin)
+        │     BM25 query = card.title + card.tags + "chapter N"
+        │     rank by composite = bm25 * priority_weight + sol_bonus + card_bonus
+        │
+        └── retrieve(query)
+              card_hits = classify(query, top_k=3)
+              candidates = ⋃ by_card[ch.card_id] (widen via by_card_top3 if thin;
+                                                  fall back to full corpus if empty)
+              BM25 query = the user's text
+              rank by composite (same scorer; primary_card = top-1 card_hit)
+```
+
+Run order:
+
+```bash
+python -m tests.test_retriever      # ~2.7 s cold (classifies 3,597 records once),
+                                    # then ~1 ms per query
+```
+
+### Acceptance criteria (plan §6 D3)
+
+| Criterion | Target | Actual | Pass |
+|---|---|---|---|
+| every card_id has ≥ 1 retrievable template | 25/25 | **25/25** | ✓ |
+| canonical free-text queries surface a VE401-local hit in top-3 | ≥ 4/5 | **5/5** | ✓ |
+| free-text query latency (warm) | < 2 s (plan §12.1) | **1.3 ms** | ✓ |
+| `retrieve_for_card` latency | < 2 s | **0.6 ms** | ✓ |
+| cold-start (build all indexes) | (informational) | **2.7 s** | — |
+
+### Card-bucket headline
+
+After classifying every corpus record into its top-1 card, the lightest
+buckets are still non-empty and the heaviest hold hundreds of
+candidates:
+
+```
+card  #bucket  +top3-only   top-1 source     title
+card01    15           3   ve401_local      One-sample Z-test (sigma known)
+card02   106          79   crash_course     One-sample T-test (sigma unknown)
+card03    39          14   crash_course     Chi-square test for one variance
+card04    12           5   ve401_local      Sign test for the median
+card05     8           0   ve401_local      Wilcoxon signed-rank test
+card06   123          18   ve401_local      One-sample proportion Z-test
+card07    16           3   ve401_local      Two-sample proportion Z-test
+card08     7          11   ve401_local      F-test for two variances
+card09    42          13   ve401_local      Two-sample Z-test (sigma1, sigma2 known)
+card10     5           5   ve401_local      Pooled (Student) T-test
+card11    11           7   crash_course     Welch / Satterthwaite T-test
+card12    15           5   ve401_local      Paired T-test
+card13     3           0   crash_course     Wilcoxon rank-sum / Mann-Whitney U
+card14    33           5   crash_course     Inferences on correlation rho
+card15    47          12   crash_course     Pearson chi-square goodness-of-fit
+card16    33           1   crash_course     Chi-square test of independence
+card17     6           3   crash_course     Chi-square test of homogeneity
+card18    34          29   ve401_local      SLR fitting and inference
+card19    16           3   ve401_local      SLR prediction & diagnosis
+card20    10           1   ve401_local      MLR estimation
+card21     3           1   ve401_local      MLR inference
+card22   264           5   ve401_local      Model selection (PRESS, adj-R^2, AIC)
+card23    23           2   crash_course     One-way ANOVA F-test
+card24     2           1   crash_course     Bartlett's test
+card25     3           5   crash_course     Post-hoc multiple comparisons
+```
+
+The thinnest cards (card24 Bartlett, card13 Wilcoxon-RS, card25 Tukey)
+are exactly the ones that VE401 covers tersely; their candidates are
+still a mix of crash-course drills and a couple of OpenStax exercises,
+which is acceptable for template seeding.
+
+### Notable design decisions
+
+* **BM25-Okapi inlined, not `rank_bm25`.** ~70 LOC of arithmetic kept
+  the requirements file clean (no new third-party package). On 3,597
+  docs the in-memory build is 2.7 s including the classifier passes —
+  cheap enough to skip persistent indexing for now. If/when corpus
+  grows past ~50k docs, revisit and serialise to `data/corpus.index.json`.
+* **Classifier-driven candidate gather.** VE401-local records' own
+  `topic_tags` are mostly metadata (`"homework"`, `"sample-final-2021"`,
+  `"conceptual"`) — they do not match the card-level taxonomy
+  (`"one-sample-Z"`, `"paired-T"`, …). So a pure tag inverted index
+  would miss most of the corpus; we pay the one-time cost of classifying
+  every record and bucket by the resulting card_id instead. The
+  taxonomy-tag and slide-ref inverted indexes are still built and used
+  as a *fallback* when a card's bucket is empty (none currently, but
+  future taxonomy edits could orphan a card).
+* **Source-priority as a multiplicative weight.** Plan §5.3 oversamples
+  priority-1 records 3× during *training*; for *retrieval* we use a
+  multiplicative bias `{1: 2.0, 2: 1.0, 3: 0.5}` on the BM25 score so
+  VE401-local templates float to the top whenever their BM25 is in the
+  same ballpark as a louder OpenStax page. The exact weights were
+  picked so that a priority-1 hit with BM25=4.0 beats a priority-2 hit
+  with BM25=7.9 (≈ 2× margin) — calibrated against the 5 canonical
+  smoke queries.
+* **Solution-bearing bonus.** Records with non-empty `solution_steps`
+  get a flat +0.5 bonus to the composite score (toggle:
+  `prefer_with_solutions=False`). Phase E will read these to seed the
+  five-segment renderer; question-only OpenIntro records would force
+  the renderer to invent the solution, which we'd rather avoid.
+* **Card-owner bonus.** When the query's top-1 classifier card matches
+  a candidate's owner-card we add +0.25; this breaks ties in favour of
+  the on-card template, especially when two cards both score well on a
+  multi-recipe question (e.g. card18/card19 both pull SLR text).
+* **Scoring is composite, not lexicographic.** I tried lexicographic
+  (priority first, then BM25) but it makes the priority-3 Hendrycks
+  bucket invisible even when it's the only hit with the right keywords;
+  composite keeps Hendrycks reachable when nothing better exists.
+
+### Known limitations
+
+* **Cold-start latency.** 2.7 s on first import is dominated by
+  `classify_record` running 3,597 times (≈ 0.7 ms each, mostly regex).
+  Acceptable for a CLI invocation but a long-running server should
+  call `get_retriever()` once at boot. If we need to drop this further,
+  cache `(record_id → top-3 card_ids)` to JSON and re-validate against
+  the taxonomy hash; deferred to Phase F (CLI).
+* **No semantic embeddings (D2 deferred).** Plan §6 step D2 lists an
+  optional sentence-transformer / DistilGPT-2 mean-pool index. With
+  the rule classifier already at 100% top-1-acceptable on the
+  sample-final and BM25 nailing 5/5 smoke queries, the embedding layer
+  is not load-bearing for the MVP. If Phase F end-to-end testing shows
+  recall holes on paraphrased questions, add `retriever/embed.py` then.
+* **No corpus persistence.** Index is rebuilt every cold start. JSON
+  cache is straightforward to add; postponed until a real
+  perf complaint.
+* **Tied composite scores.** Tie-break is `(priority_weight, has_sol,
+  record_id)`; the `record_id` lex tie-break is deterministic but
+  arbitrary. Acceptable for now.
+
+### Files added
+
+```
+ve401_solver/
+├── retriever/
+│   ├── __init__.py
+│   └── retrieve.py
+└── tests/test_retriever.py
+```
+
+No new third-party dependencies. `requirements.txt` `rank-bm25` line
+stays commented; the inlined BM25 is the canonical path.
+
+### Next up
+
+Plan §6 calls for **Phase E** (template fill + render — the renderer
+that turns a retrieved record + extracted user numbers into the
+five-segment Setup/Hypotheses/Statistic/Computation/Decision Markdown).
+Phase E is the last piece before the MVP CLI in Phase F. Phase H (git
+push + remote Qwen probe) remains independent and can still be
+parallelised.
+

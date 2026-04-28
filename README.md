@@ -11,7 +11,7 @@ Given a natural-language exam-style question, the system identifies its test typ
 | A — local material extraction | DONE | 2026-04-28 | 208 ve401 + 80 crash-course records, slide-ref coverage 84% |
 | B — external open corpora | DONE | 2026-04-28 | 3,597 deduped corpus records (OpenIntro 385, OpenStax 1,679, Hendrycks 1,245) |
 | C — triage classifier | DONE | 2026-04-28 | 14/14 sample-final questions accepted top-1, 13/14 top-3 |
-| D — retriever | not started | — | — |
+| D — retriever | DONE | 2026-04-28 | every card (25/25) recalls ≥ 1 template; 5/5 canonical queries surface VE401-local in top-3; 1.3 ms/query warm |
 | E — template fill + render | not started | — | — |
 | F — CLI + end-to-end test | not started | — | MVP gate |
 | H — infra (git/ssh/Qwen probe) | not started | — | — |
@@ -24,12 +24,13 @@ Acceptance test cheatsheet:
 python -m tests.test_extractors   # Phase A — JSONL schema, volume, sentinels
 python -m tests.test_corpus       # Phase B — corpus volume, dedup, source mix
 python -m tests.test_triage       # Phase C — 14 sample-final main questions
+python -m tests.test_retriever    # Phase D — 25/25 cards retrievable + 5 smoke queries
 ```
 
 See `progress.md` for full per-phase write-ups.
 
-**Next**: Phase D (retriever) and Phase E (template renderer). Phase H
-(git push + remote model probe) is independent and can be parallelised.
+**Next**: Phase E (template renderer). Phase H (git push + remote model
+probe) is independent and can be parallelised.
 
 ## Project layout
 
@@ -42,7 +43,7 @@ ve401_solver/
 │   └── extracted/                # JSONL corpora (in repo)
 ├── extractors/                   # PDF / HTML / TeX → JSONL
 ├── classifier/                   # (Phase C) tag taxonomy + decision tree
-├── retriever/                    # (Phase D) tag + keyword search
+├── retriever/                    # (Phase D) BM25 + classifier-driven candidate gather
 ├── solver/                       # (Phase E) template fill + render
 ├── infer/                        # (Phase J) Qwen2.5-3B local inference
 ├── train/                        # (Phase I) LoRA fine-tune (runs on remote GPU)
@@ -74,6 +75,9 @@ python -m tests.test_corpus
 
 # Phase C — classifier (no extra setup; reads classifier/tag_taxonomy.json)
 python -m tests.test_triage
+
+# Phase D — retriever (BM25 + classifier-driven candidate gather; no extra deps)
+python -m tests.test_retriever
 ```
 
 ### Try the classifier on a single question
@@ -87,6 +91,26 @@ hits = triage(
 for h in hits:
     print(h.card_id, h.score, h.title)
 # card01 8 One-sample Z-test for mu (sigma known)
+```
+
+### Try the retriever
+
+```python
+from retriever import retrieve, retrieve_for_card
+
+# free-text query → top-3 templates
+for h in retrieve(
+    "A geneticist counts 90 yellow, 35 green, 25 white seeds and asks "
+    "whether the data fit the predicted 9:3:4 ratio.",
+    top_k=3,
+):
+    print(h.rank, h.card_id, h.source, round(h.score, 2), h.record_id)
+# 1 card15 ve401_local 32.85 ve401_local_ch25_q1
+# 2 card15 ve401_local 28.30 ...
+
+# every card has at least one template
+hits = retrieve_for_card("card12", top_k=5)   # paired-T
+print(hits[0].record_id, hits[0].source)
 ```
 
 ## Remote training infrastructure
