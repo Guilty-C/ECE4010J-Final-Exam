@@ -14,8 +14,8 @@ Given a natural-language exam-style question, the system identifies its test typ
 | D — retriever | DONE | 2026-04-28 | every card (25/25) recalls ≥ 1 template; 5/5 canonical queries surface VE401-local in top-3; 1.3 ms/query warm |
 | E — template fill + render | DONE | 2026-04-28 | 5-section Markdown for all 25 cards; numeric eval for Z / T / χ²-variance / paired-T / χ²-GoF; 3/3 smoke tests green; Phase C regression unchanged |
 | F — CLI + end-to-end test | **DONE — MVP** | 2026-04-28 | `python -m cli.solve` with `--mode rule\|rag\|llm-only`, `--file`, `--json`, stdin; 14/14 sample-final card-id, 14/14 5-section skeleton, max 5.8 ms/question (offline) |
-| H — infra (git/ssh/Qwen probe) | DONE | 2026-04-28 | repo on `ivlab` at `/data2/lrrelevant/ve401-solver`; conda env `agentiad` (torch 2.6+cu118, transformers 4.51, peft 0.18, accelerate 1.12, 4× RTX 3090); Phase A-F regression green on remote; Qwen2.5-3B-Instruct not yet cached — `ops/download_qwen.sh` ready |
-| I — LoRA training (remote) | not started | — | — |
+| H — infra (git/ssh/Qwen probe) | DONE | 2026-04-28 | repo on `ivlab` at `/data2/lrrelevant/ve401-solver`; conda env `agentiad` (torch 2.6+cu118, transformers 4.51, peft 0.18, accelerate 1.12, 4× RTX 3090); Qwen2.5-3B-Instruct (5.8 GB) cached on `/data2` via `hf-mirror.com`; Phase A-F regression green on remote |
+| I — LoRA training (remote) | DONE (adapter underperforms) | 2026-04-28 | full pipeline ran — 28.8 min on 1× RTX 3090 — train 0.706, eval 0.871; 14-question card-id eval: rule 13/14, base Qwen 11/14, **LoRA Qwen 5/14** (regression). Adapter at `checkpoints/qwen25_3b_lora_v1/` (119.8 MB, LFS); failure modes: greedy-decode loops + PDF-artifact mimicry. MVP path stays on `--mode rule`. |
 | J — RAG inference (local) | not started | — | — |
 
 Acceptance test cheatsheet:
@@ -31,10 +31,14 @@ python -m tests.test_end_to_end   # Phase F MVP gate — sample-final card+skele
 
 See `progress.md` for full per-phase write-ups.
 
-**Next**: Phase H (git push + remote Qwen2.5-3B probe), then Phase I
-(LoRA training on the remote GPU) and Phase J (local RAG inference,
-which fills in `--mode rag` / `--mode llm-only`). The MVP rule-based
-solver is complete and offline-runnable today.
+**Next**: Phase J (local RAG inference, which fills in `--mode rag` /
+`--mode llm-only`). The MVP rule-based solver is complete and
+offline-runnable today; Phase I produced a LoRA adapter that
+**regressed** sample-final card-id vs the base model (5/14 vs 11/14)
+due to greedy-decode loops and PDF-artifact mimicry, so Phase J should
+default to base-Qwen-plus-retrieval rather than the v1 adapter — see
+the Phase I entry in `progress.md` for the failure-mode analysis and
+the v2 retraining ideas.
 
 ### Try the solver end-to-end
 

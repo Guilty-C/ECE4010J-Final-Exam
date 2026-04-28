@@ -1114,3 +1114,244 @@ cache, then implement `train/prepare_dataset.py`. Phase J (local RAG
 inference, `--mode rag` / `--mode llm-only`) becomes runnable once
 Phase I produces an adapter that `ops/pull_checkpoint.sh` can fetch.
 
+---
+
+## 2026-04-28 — Phase I: LoRA training on Qwen2.5-3B-Instruct (DONE — adapter underperforms the rule baseline)
+
+### TL;DR
+
+The full Phase I pipeline runs end-to-end on the remote GPU. The
+trained adapter, however, **underperforms the base Qwen2.5-3B-Instruct
+on the 14-question sample-final card-id eval** (5/14 vs 11/14 base vs
+13/14 rule), so the MVP path stays on the rule classifier. The adapter
+ships to `checkpoints/qwen25_3b_lora_v1/` (LFS) for ablation in Phase
+J, but the default Phase J mode should remain `rule`.
+
+### What shipped
+
+| File | Lines | Role |
+|---|---|---|
+| `train/prepare_dataset.py` | 421 | corpus → chat-formatted JSONL with priority-weighted oversample + 90/5/5 stratified split |
+| `train/configs/qwen25_3b_lora.yaml` | 46 | r=16, alpha=32, 7 target modules, lr 2e-4 cosine, 2 epochs, bs 2x8, bf16 |
+| `train/train_lora.py` | 355 | PEFT-LoRA fine-tune via transformers.Trainer; assistant-only loss masking via prefix tokenisation |
+| `train/eval_on_samplefinal.py` | 349 | 14-question regression: card-id consistency vs rule baseline + decision-word match |
+| `ops/download_qwen.sh` | (edit) | route HF Hub through `HF_ENDPOINT=https://hf-mirror.com` (huggingface.co is DNS-blocked from `ivlab`) |
+| `ops/pull_checkpoint.sh` | (edit) | also exclude HF Trainer `checkpoint-*/` per-epoch dirs from the rsync |
+| `requirements.txt` | (edit) | add `pyyaml`; uncomment Phase I/J dependency comment block |
+| `.gitignore` | (edit) | drop `data/training/` and `checkpoints/*/checkpoint-*/` |
+
+### Pipeline
+
+```
+data/corpus.jsonl (3,597 records — 65% have solutions)
+        |
+        v
+train/prepare_dataset.py
+        |  filter to non-empty solutions  -> 2,323 records
+        |  stratified split by source     -> 2,090 train / 115 val / 118 test
+        |  priority-weighted oversample   -> 2,915 train / 115 val / 118 test
+        v
+data/training/{train,val,test}.jsonl   (gitignored — regenerable)
+        |
+        v
+train/train_lora.py  (CUDA_VISIBLE_DEVICES=1 on RTX 3090 24 GiB)
+        |  Qwen2.5-3B-Instruct + LoRA(r=16, all 7 proj-modules)
+        |  29.9M / 3.12B trainable (0.961%)
+        |  2 epochs x 182 optimizer steps = 364 steps
+        v
+checkpoints/qwen25_3b_lora_v1/
+        |  adapter_model.safetensors  119.8 MB  (LFS)
+        |  adapter_config.json       1.1 KB
+        |  + tokenizer files (so adapter is self-loadable)
+        |  train_metrics.json         training-curve summary
+        v
+train/eval_on_samplefinal.py
+        |  generate one answer per sample-final qid
+        |  classify generated text -> recovered card_id
+        |  diff against rule_top1, gold decision word
+        v
+checkpoints/qwen25_3b_lora_v1/
+           eval_report.md            14 x card-id + decision table (LoRA run)
+           eval_report_base.md       same eval, no adapter (base-only baseline)
+```
+
+Run order:
+
+```bash
+# remote (one-time)
+bash ops/download_qwen.sh                    # 5.8 GB Qwen -> /data2/lrrelevant/hf_offline/hub via hf-mirror
+
+# remote (per training cycle)
+ssh ivlab 'cd /data2/lrrelevant/ve401-solver && conda activate agentiad && \
+    python -m train.prepare_dataset && \
+    CUDA_VISIBLE_DEVICES=1 python -m train.train_lora'
+ssh ivlab 'cd /data2/lrrelevant/ve401-solver && conda activate agentiad && \
+    QPATH=/data2/lrrelevant/hf_offline/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/aa8e72537993ba99e69dfaafa59ed015b17504d1; \
+    CUDA_VISIBLE_DEVICES=1 python -m train.eval_on_samplefinal --base "$QPATH"'
+
+# local
+bash ops/pull_checkpoint.sh qwen25_3b_lora_v1   # rsync; Windows host falls back to scp
+```
+
+### Acceptance vs. plan §I criteria
+
+| Criterion | Target | Actual | Pass |
+|---|---|---|---|
+| training loss monotone-decreasing | yes | 0.804 (ep 1 mean) -> 0.541 (ep 2 mean) | yes |
+| val loss not significantly up by ep 2 | within ~0.05 | 0.830 (ep 1) -> 0.871 (ep 2) — +0.04 | yes |
+| sample-final card-id >= rule + 5 pp | rule 13/14, target ~ 14/14 | **5/14** (rule = 13/14, base = 11/14) | NO |
+| decision-word consistency | >= 80% | **1/9 = 11%** | NO |
+| adapter saved + pulled back | yes | 119.8 MB at `checkpoints/qwen25_3b_lora_v1/` | yes |
+
+### Headline numbers
+
+```
+=== train (2 epochs, 28.8 min on 1x RTX 3090, bf16) ===
+train_runtime    1728.5 s
+train_loss       0.7061  (ep 1 mean ~ 0.804, ep 2 mean ~ 0.541)
+eval_loss        0.8296 (ep 1) -> 0.8711 (ep 2)   +0.04, within tolerance
+
+=== eval (14 sample-final main questions, greedy decode, max_new_tokens=768) ===
+                     card-id acceptable    decision-match    avg gen time
+rule baseline             13/14                  -                <1 ms
+Qwen2.5-3B base           11/14                 0/9               24 s
+Qwen2.5-3B + LoRA v1       5/14                 1/9               38 s     <- regression
+```
+
+### Per-question card-id (LoRA — see `eval_report.md` for the full table)
+
+```
+qid    rule    base    lora    gold-set     time-lora   notes
+q2     card03  card03  card03  {card03}     29 s        all three correct
+q3     card01  card01  card02  {card01}     50 s        LoRA picks T-test on a Z-test prompt
+q4     card12  card05  card05  {12,5,4}     13 s        both Qwens pick the median path; both ok
+q5     card05  card05  card10  {10,5,12,13} 50 s        LoRA hallucinates pooled-T despite the "unequal variances" anti-trigger
+q6     card09  card09  card15  {card09}     50 s        token-level repetition loop "10 10 10 10 ..."
+q7     card09  card10  None    {card09}     50 s        slide-ref enumeration loop "slide 544, slide 545, ..."
+q8     card15  card15  None    {card15}     50 s        truncated stem-and-leaf wall, no card keywords
+q9     card16  card16  card02  {card16}     49 s        repeats-comma loop ", , , , , , ,"
+q10    card19  card18  card19  {18,19}      24 s        LoRA correct
+q11    card18  card19  None    {18,19}      49 s        empty card signal
+q12    card20  card20  card20  {20,21}      13 s        LoRA correct
+q13    card21  card21  card19  {card21}     49 s        miss; gold dec=fail-to-reject, LoRA dec=fail-to-reject (the 1/9)
+q14    card20  card23  None    {card20}     49 s        LoRA cannot tag; base picks ANOVA — both wrong
+q16    None    card15  None    {card19}     4  s        rule classifier itself misses; both Qwens off
+```
+
+### What went wrong — failure-mode analysis
+
+Three concrete pathologies surface in the LoRA generations (excerpts in
+`checkpoints/qwen25_3b_lora_v1/eval_report.md`):
+
+1. **Catastrophic decode repetition.** q6 / q7 / q9 produce token-level
+   loops: `"10 10 10 10 ... 10 10"`, `"*Slide refs:* slide 544, slide
+   545, ..., slide 700, ..."`, `", , , , , , , , , , , , , ..."`. Each
+   eats the full 768-token budget (hence the 49–50 s per-question time
+   for these rows). Greedy decoding with no repetition penalty makes
+   the model fall off the cliff once the adapter drifts even slightly.
+
+2. **PDF-artifact mimicry.** q3 LoRA output reads
+   `"H0 : mu = 0:255 H1 : mu 6= 0:255 ... ~ N (0; 1):"`. The corpus
+   inherited PDF colon-vs-period confusion and broken `!=`-glyph
+   rendering from OpenStax / Hendrycks records; LoRA at lr 2e-4 over 2
+   epochs appears to have memorised the broken surface form, including
+   the extracted `0:00002`-style decimals.
+
+3. **Card-keyword erosion.** q8 / q11 / q14 / q16 produce text that
+   the rule classifier cannot tag at all (`gen=None`). The model talks
+   around the procedure but does not emit "Z-test" / "T-test" /
+   "chi-square" / "regression" in the same density as the base model.
+   Plausibly a training-mix artifact: only ~10% of train rows are the
+   canonical VE401 templates that begin with crisp test-name
+   sentences; the bulk (OpenStax / Hendrycks) is more discursive.
+
+The eval-loss curve (0.83 -> 0.87 across epoch 2) is consistent with a
+mild overfit to *surface form* rather than to *semantics* — the model
+got better at predicting next-tokens in the training distribution but
+did not generalise the test-classification signal.
+
+### What this means for Phase J
+
+The MVP rule pipeline (Phase F) already passes the §12.1 DoD bars at
+14/14, so Phase I's failure to beat it does not break the project — it
+only fails the *§I aspirational* bar of "rule + 5 pp". Concretely:
+
+* Phase J should keep `--mode rule` as the default and the only mode
+  used in the headline DoD.
+* `--mode rag` / `--mode llm-only` will run against the base
+  Qwen2.5-3B-Instruct (not the v1 adapter) until a v2 adapter beats
+  the base on this benchmark.
+* The v1 adapter ships anyway so future iterations can do an
+  apples-to-apples comparison.
+
+### Things to try in a Phase I-v2 iteration (NOT done in v1)
+
+* **Lower learning rate / fewer epochs.** 2 epochs at 2e-4 visibly
+  overshot; try 1 epoch at 1e-4 or 5e-5.
+* **Repetition penalty / no-repeat-ngram at decode time.** Adding
+  `repetition_penalty=1.1` and `no_repeat_ngram_size=8` would have
+  killed the q6/q7/q9 loops without retraining.
+* **Data-hygiene pass before tokenising.** A regex sweep for
+  `(\d):(\d{2,})` -> `\1.\2` and `6=` -> `!=` on the OpenStax /
+  Hendrycks rows would remove the strongest PDF-artifact signal.
+* **Up-weight VE401 templates further.** Bump priority-1 to 5x (was
+  3x) and drop priority-3 to 0.5x so the canonical card-keyword
+  density is higher in the train mix.
+* **Smarter eval.** The card-recovery heuristic (run the rule
+  classifier on the generated text) is a noisy signal — a generated
+  answer that *correctly solves* a problem in slightly different words
+  can still get `gen=None`. A semantic recovery (e.g. embed both the
+  question and the generated answer and pick the closest of 25 card
+  prototypes) would give a fairer LoRA-vs-base read.
+
+### Files added / modified
+
+```
+ve401_solver/
+- train/
+  - __init__.py                     # NEW
+  - configs/qwen25_3b_lora.yaml     # NEW
+  - prepare_dataset.py              # NEW
+  - train_lora.py                   # NEW
+  - eval_on_samplefinal.py          # NEW
+- checkpoints/qwen25_3b_lora_v1/    # NEW (LFS for safetensors)
+  - adapter_model.safetensors       # 119.8 MB
+  - adapter_config.json
+  - (tokenizer + special_tokens, vocab.json, merges.txt)
+  - train_metrics.json
+  - eval_report.md                  # LoRA eval
+  - eval_report_base.md             # base eval (no adapter)
+- ops/
+  - download_qwen.sh                # HF_ENDPOINT=hf-mirror
+  - pull_checkpoint.sh              # exclude checkpoint-*/
+- requirements.txt                  # add pyyaml
+- .gitignore                        # data/training/, checkpoint-*/
+```
+
+Dependencies (remote `agentiad` env): torch 2.6.0+cu118, transformers
+4.51.3, peft 0.18.1, accelerate 1.12.0, datasets 4.5.0, pyyaml 6.0.2.
+No new third-party requirements were imposed on the local machine —
+the local pipeline still passes Phase A–F regression with the existing
+`requirements.txt`.
+
+### MVP DoD recap (plan §12.1) — line 6 still the only outstanding gate
+
+| # | Requirement | Status |
+|---|---|---|
+| 1 | sample-final type ID >= 14/16 | yes — 14/14 acceptable (rule, unchanged from Phase F) |
+| 2 | skeleton consistency >= 12/14 | yes — 14/14 (rule, unchanged from Phase F) |
+| 3 | summer-2021 hw 06–10 (25) >= 20 | deferred (homework rows lack solutions) |
+| 4 | response time < 2 s | yes — rule mode max 5.8 ms; LoRA mode 38 s avg, not in MVP path |
+| 5 | fully offline | yes — rule mode (`--mode rag` would need the 5.8 GB base on local) |
+| 6 | clone + pip install + README -> MVP runs | yes — green since Phase H |
+
+### Next up
+
+Plan §6 calls for **Phase J** (local Qwen RAG inference; `--mode rag`
+and `--mode llm-only`). The adapter is on disk and pullable; the
+base model will need to be cached locally if the user wants `--mode
+rag` on Windows (~6 GB into `D:\hf_offline\Qwen2.5-3B-Instruct\` per
+plan §2.3). Given this entry's findings, Phase J should default to
+**base Qwen + retrieval** rather than **LoRA Qwen + retrieval** —
+the v1 adapter is recorded but not on the critical path.
+

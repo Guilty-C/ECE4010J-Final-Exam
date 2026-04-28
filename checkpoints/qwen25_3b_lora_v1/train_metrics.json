@@ -1,0 +1,42 @@
+{
+  "train_runtime": 1728.4956,
+  "train_loss": 0.706101194515333,
+  "eval_loss": 0.8710898160934448,
+  "n_train": 2915,
+  "n_val": 115,
+  "config": {
+    "base_model": "/data2/lrrelevant/hf_offline/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/aa8e72537993ba99e69dfaafa59ed015b17504d1",
+    "output_dir": "checkpoints/qwen25_3b_lora_v1",
+    "data_dir": "data/training",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "max_seq_length": 2048,
+    "learning_rate": 0.0002,
+    "num_train_epochs": 2,
+    "per_device_train_batch_size": 2,
+    "per_device_eval_batch_size": 2,
+    "gradient_accumulation_steps": 8,
+    "warmup_ratio": 0.03,
+    "lr_scheduler_type": "cosine",
+    "weight_decay": 0.01,
+    "gradient_checkpointing": true,
+    "bf16": true,
+    "fp16": false,
+    "eval_strategy": "epoch",
+    "save_strategy": "epoch",
+    "save_total_limit": 2,
+    "logging_steps": 20,
+    "report_to": [],
+    "seed": 4010
+  }
+}
