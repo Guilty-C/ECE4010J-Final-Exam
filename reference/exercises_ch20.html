@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 20</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 20</h1>
+  <nav class="tabs">
+    <button class="active">Ch 20 &mdash; Non-Parametric Single Sample Tests for the Median</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch20" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 20 &mdash; Non-Parametric Single Sample Tests for the Median</h2>
+    <p>Topics covered: hypotheses about a population median, exact and approximate sign tests, Wilcoxon signed-rank tests, one-sided and two-sided alternatives, zero differences, tied absolute differences, symmetry assumptions, robustness against outliers and skewness, and final-style method selection. The main exam traps are testing the mean instead of the median, forgetting to discard zero differences, using Wilcoxon without a symmetry assumption, mishandling tied ranks, and applying a normal approximation when an exact small-sample calculation is expected.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch20')">Expand all solutions</button>
+    <button onclick="collapseAll('ch20')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 20 &mdash; Q1",
+    level:"easy",
+    tags:["Median hypotheses","Notation"],
+    src:"Original. Basic median-test setup.",
+    problem:String.raw`A manufacturer claims the median lifetime of a component is \(m_0=500\) hours. Write the null and alternative hypotheses for testing whether the true median lifetime is less than 500 hours. State the parameter clearly.`,
+    solution:String.raw`<p>Let \(m\) denote the population median lifetime. The hypotheses are \[H_0:m=500\quad\text{versus}\quad H_1:m<500.\]</p><p>Some courses write the null as \(H_0:m\ge500\) for a one-sided test. The test is calibrated on the boundary value \(m=500\), which is where the sign count has probability \(1/2\) above and below the hypothesized median.</p>`,
+    rubric:["Define the parameter as the population median, not the mean &mdash; <b>2 pts</b>","Use the hypothesized value \(500\) in the null &mdash; <b>1 pt</b>","Use the lower-tailed alternative \(m<500\) &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"Write \(m\) or \(\eta\) for the median. Do not silently switch to \(\mu\), which usually denotes a mean."
+  },
+  {
+    id:"Ch 20 &mdash; Q2",
+    level:"easy",
+    tags:["Sign test","Exact binomial"],
+    src:"Original. Direct exact sign-test calculation.",
+    problem:String.raw`In a sample of \(n=12\) observations, 10 are above the hypothesized median \(m_0\), 2 are below it, and none are equal to it. Test \(H_0:m=m_0\) against \(H_1:m\ne m_0\) at the 5% level using the exact sign test.`,
+    solution:String.raw`<p>Under \(H_0\), \(S_+=\#\{X_i>m_0\}\sim\operatorname{Bin}(12,1/2)\). The observed value is \(S_+=10\).</p><p>The two-sided exact p-value is \[2P(S_+\ge10)=2\frac{\binom{12}{10}+\binom{12}{11}+\binom{12}{12}}{2^{12}}=2\frac{66+12+1}{4096}=0.0386.\]</p><p>Since \(0.0386<0.05\), reject \(H_0\). There is evidence that the median differs from \(m_0\), with the data pointing upward.</p>`,
+    rubric:["Identify the binomial null distribution &mdash; <b>2 pts</b>","Use the more extreme tail for a two-sided exact p-value &mdash; <b>2 pts</b>","Compute \(0.0386\) or an equivalent exact fraction &mdash; <b>2 pts</b>","State the correct rejection decision &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"For a two-sided sign test, double the smaller binomial tail and cap the result at 1."
+  },
+  {
+    id:"Ch 20 &mdash; Q3",
+    level:"easy",
+    tags:["Sign test","One-sided"],
+    src:"Original. Lower-tailed exact test.",
+    problem:String.raw`Fourteen nonzero signs are obtained after comparing observations with \(m_0\). Only 2 observations are above \(m_0\). Use the sign test for \(H_0:m=m_0\) against \(H_1:m<m_0\).`,
+    solution:String.raw`<p>For the lower-tailed alternative, evidence comes from unusually few positive signs. Under \(H_0\), \(S_+\sim\operatorname{Bin}(14,1/2)\), and \(s_+=2\).</p><p>The p-value is \[P(S_+\le2)=\frac{\binom{14}{0}+\binom{14}{1}+\binom{14}{2}}{2^{14}}=\frac{1+14+91}{16384}=0.00647.\]</p><p>This is significant at the 5% level, so reject \(H_0\) in favor of \(m<m_0\).</p>`,
+    rubric:["Choose the lower binomial tail &mdash; <b>2 pts</b>","Use \(n=14\), not the original sample size if zeros were removed &mdash; <b>1 pt</b>","Compute the exact p-value &mdash; <b>2 pts</b>","Make the correct one-sided conclusion &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The direction of the alternative decides which tail to use. Few positives support \(m<m_0\); many positives support \(m>m_0\)."
+  },
+  {
+    id:"Ch 20 &mdash; Q4",
+    level:"easy",
+    tags:["Zero differences","Sign test"],
+    src:"Original. Handling observations equal to the hypothesized median.",
+    problem:String.raw`The differences \(X_i-m_0\) are \(2,0,-1,4,0,3,-2,5\). For a sign test of \(H_0:m=m_0\) against \(H_1:m>m_0\), find the effective sample size, the sign count, and the exact p-value.`,
+    solution:String.raw`<p>The two zero differences are discarded, so the effective sample size is \(n'=6\). Among the nonzero differences there are 4 positives and 2 negatives.</p><p>For \(H_1:m>m_0\), use the upper tail: \[P(S_+\ge4)=\frac{\binom{6}{4}+\binom{6}{5}+\binom{6}{6}}{2^6}=\frac{15+6+1}{64}=0.34375.\]</p><p>The data are not significant at common levels.</p>`,
+    rubric:["Discard the zero differences &mdash; <b>2 pts</b>","Report \(n'=6\) and \(s_+=4\) &mdash; <b>2 pts</b>","Use the upper binomial tail &mdash; <b>2 pts</b>","Give the correct p-value and conclusion &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Zeros are not positive and not negative. Keeping them in \(n\) makes the p-value too small or too large depending on the case."
+  },
+  {
+    id:"Ch 20 &mdash; Q5",
+    level:"easy",
+    tags:["Two-sided p-value","Exact binomial"],
+    src:"Original. Two-sided p-value convention.",
+    problem:String.raw`A sign test has \(n'=10\) nonzero observations and \(s_+=5\). Compute the two-sided exact p-value for \(H_1:m\ne m_0\).`,
+    solution:String.raw`<p>The observed sign count is exactly at the null center. The smaller tail is \(P(S_+\le5)=0.623\), so doubling it would exceed 1. The exact two-sided p-value is therefore capped at \(1\).</p><p>Equivalently, a perfectly balanced sign split gives no evidence against the hypothesized median.</p>`,
+    rubric:["Recognize the observed count is central, not extreme &mdash; <b>2 pts</b>","Use the two-sided cap at 1 &mdash; <b>2 pts</b>","State that there is no evidence against \(H_0\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"A p-value cannot exceed 1. If doubling a tail gives more than 1, report 1."
+  },
+  {
+    id:"Ch 20 &mdash; Q6",
+    level:"medium",
+    tags:["Sign test","Normal approximation"],
+    src:"Original. Large-sample sign-test approximation.",
+    problem:String.raw`For \(n'=50\) nonzero observations, \(s_+=34\). Test \(H_0:m=m_0\) against \(H_1:m>m_0\) using the normal approximation with continuity correction.`,
+    solution:String.raw`<p>Under \(H_0\), \(S_+\sim\operatorname{Bin}(50,1/2)\), so \(E[S_+]=25\) and \(\operatorname{sd}(S_+)=\sqrt{50(1/2)(1/2)}=\sqrt{12.5}=3.536\).</p><p>For the upper tail with continuity correction, \[z=\frac{33.5-25}{3.536}=2.40.\] Thus \(p\approx P(Z\ge2.40)=0.0082\).</p><p>Reject \(H_0\) at the 5% level.</p>`,
+    rubric:["Compute the binomial mean and standard deviation &mdash; <b>2 pts</b>","Use \(33.5\) for the upper-tail continuity correction &mdash; <b>2 pts</b>","Compute \(z\approx2.40\) and the p-value &mdash; <b>2 pts</b>","State the rejection decision &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"For \(P(S_+\ge s)\), the continuity-corrected cutoff is \(s-0.5\)."
+  },
+  {
+    id:"Ch 20 &mdash; Q7",
+    level:"medium",
+    tags:["Sign test","Critical region"],
+    src:"Original. Exact critical-region construction.",
+    problem:String.raw`For a two-sided sign test with \(n'=9\), find the largest symmetric 5% critical region of the form \(S_+\le c\) or \(S_+\ge9-c\).`,
+    solution:String.raw`<p>Check lower tails under \(S_+\sim\operatorname{Bin}(9,1/2)\). For \(c=1\), \[2P(S_+\le1)=2\frac{\binom90+\binom91}{2^9}=2\frac{10}{512}=0.0391.\]</p><p>For \(c=2\), \[2P(S_+\le2)=2\frac{1+9+36}{512}=0.1797,\] which is too large. Therefore the 5% critical region is \(S_+\le1\) or \(S_+\ge8\).</p>`,
+    rubric:["Use the binomial null distribution with \(n'=9\) &mdash; <b>1 pt</b>","Evaluate \(c=1\) and \(c=2\) or equivalent &mdash; <b>3 pts</b>","Choose the largest region whose size is at most 0.05 &mdash; <b>2 pts</b>","State both tails correctly &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Exact discrete tests usually cannot achieve exactly 5%; choose a critical region with size no larger than the target level."
+  },
+  {
+    id:"Ch 20 &mdash; Q8",
+    level:"easy",
+    tags:["Wilcoxon signed-rank","Statistic"],
+    src:"Original. Basic signed-rank statistic.",
+    problem:String.raw`For differences from \(m_0\) equal to \(1,2,3,4,-5,6,-7,8\), compute \(W_+\), \(W_-\), and \(T=\min(W_+,W_-)\) for the Wilcoxon signed-rank test.`,
+    solution:String.raw`<p>The absolute differences are already ranked \(1,\ldots,8\). Positive ranks are \(1,2,3,4,6,8\), so \[W_+=1+2+3+4+6+8=24.\]</p><p>Negative ranks are \(5,7\), so \(W_-=12\). The two-sided statistic often reported is \(T=\min(24,12)=12\).</p>`,
+    rubric:["Rank absolute differences correctly &mdash; <b>2 pts</b>","Sum positive ranks to get \(W_+=24\) &mdash; <b>2 pts</b>","Sum negative ranks to get \(W_-=12\) &mdash; <b>1 pt</b>","Report \(T=12\) for a two-sided statistic &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Wilcoxon uses ranks of magnitudes, then restores the signs. It is not a rank test on the raw signed values."
+  },
+  {
+    id:"Ch 20 &mdash; Q9",
+    level:"medium",
+    tags:["Wilcoxon signed-rank","Tied ranks"],
+    src:"Original. Zero and tied absolute differences.",
+    problem:String.raw`For the differences \(0,2,-2,3,-5,5,1,-1\), compute the Wilcoxon signed-rank sums using average ranks for tied absolute differences.`,
+    solution:String.raw`<p>Discard the zero difference. The nonzero absolute values are \(2,2,3,5,5,1,1\). The two 1s receive average rank \(1.5\), the two 2s receive average rank \(3.5\), the 3 receives rank \(5\), and the two 5s receive average rank \(6.5\).</p><p>Positive differences \(2,3,5,1\) have ranks \(3.5,5,6.5,1.5\), so \(W_+=16.5\). Negative differences \(-2,-5,-1\) have ranks \(3.5,6.5,1.5\), so \(W_-=11.5\).</p>`,
+    rubric:["Discard the zero before ranking &mdash; <b>2 pts</b>","Assign average ranks to ties &mdash; <b>3 pts</b>","Compute \(W_+=16.5\) &mdash; <b>1 pt</b>","Compute \(W_-=11.5\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Ties are tied absolute differences, not tied signed differences. Rank \(|X_i-m_0|\), then attach signs."
+  },
+  {
+    id:"Ch 20 &mdash; Q10",
+    level:"medium",
+    tags:["Wilcoxon signed-rank","Exact p-value"],
+    src:"Original. Small-sample exact signed-rank probability.",
+    problem:String.raw`Five nonzero differences all have positive signs. Use the Wilcoxon signed-rank test for \(H_0:m=m_0\) against \(H_1:m\ne m_0\). Compute the exact two-sided p-value by using the random-sign argument.`,
+    solution:String.raw`<p>With \(n'=5\), the total rank sum is \(1+2+3+4+5=15\). If all signs are positive, \(W_+=15\).</p><p>Under the continuous symmetric null, each of the \(2^5=32\) sign patterns is equally likely. The event \(W_+=15\) occurs only when all signs are positive, and the equally extreme lower event \(W_+=0\) occurs only when all signs are negative. Thus the two-sided p-value is \[2/32=0.0625.\]</p><p>This is not significant at the 5% level, although it is close.</p>`,
+    rubric:["Use the total rank sum 15 &mdash; <b>1 pt</b>","State the \(2^5\) equally likely sign patterns &mdash; <b>2 pts</b>","Identify the two extreme patterns &mdash; <b>2 pts</b>","Compute \(0.0625\) and conclude correctly &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Small Wilcoxon tests are discrete. Even all five differences in one direction is not enough for a two-sided 5% rejection."
+  },
+  {
+    id:"Ch 20 &mdash; Q11",
+    level:"medium",
+    tags:["Wilcoxon signed-rank","One-sided"],
+    src:"Original. Exact upper-tail signed-rank probability.",
+    problem:String.raw`Six nonzero differences have absolute-value ranks \(1,\ldots,6\), and only the rank-1 difference is negative. For \(H_1:m>m_0\), compute the exact Wilcoxon upper-tail p-value.`,
+    solution:String.raw`<p>The total rank sum is \(21\). Since only rank 1 is negative, \(W_+=20\).</p><p>Under the null, all \(2^6=64\) sign patterns are equally likely. To have \(W_+\ge20\), the positive ranks must sum to 20 or 21. Sum 21 occurs when all ranks are positive. Sum 20 occurs when only rank 1 is negative. Hence there are 2 favorable sign patterns.</p><p>The one-sided p-value is \(2/64=0.03125\), so the result is significant at the 5% level.</p>`,
+    rubric:["Compute \(W_+=20\) &mdash; <b>2 pts</b>","Use \(2^6=64\) sign patterns &mdash; <b>1 pt</b>","Count the rank sums 20 and 21 correctly &mdash; <b>3 pts</b>","Report the one-sided p-value and decision &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"For an upper-tailed Wilcoxon test, large \(W_+\) values are evidence for a larger median."
+  },
+  {
+    id:"Ch 20 &mdash; Q12",
+    level:"easy",
+    tags:["Assumptions","Symmetry"],
+    src:"Original. Conceptual comparison of assumptions.",
+    problem:String.raw`State the main distributional assumption difference between the sign test and the Wilcoxon signed-rank test for testing a median.`,
+    solution:String.raw`<p>The sign test only requires that, under \(H_0\), observations are equally likely to fall above or below the hypothesized median after removing zeros. It does not require symmetry of the distribution.</p><p>The Wilcoxon signed-rank test uses the magnitudes of the deviations, so its usual exact null distribution requires a continuous distribution symmetric about the hypothesized median. Without symmetry, it is not purely a median test in the same robust sense.</p>`,
+    rubric:["State the sign-test condition correctly &mdash; <b>2 pts</b>","State the Wilcoxon symmetry assumption &mdash; <b>2 pts</b>","Connect the assumption to using magnitudes/ranks &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"If the problem says skewed and asks for a median test, the sign test is usually the safer nonparametric answer."
+  },
+  {
+    id:"Ch 20 &mdash; Q13",
+    level:"medium",
+    tags:["Robustness","T test comparison"],
+    src:"Original. Robustness versus parametric tests.",
+    problem:String.raw`A sample of 15 repair times is strongly right-skewed with one huge outlier. The scientific question is whether the median repair time exceeds 2 hours. Compare the one-sample T test, sign test, and Wilcoxon signed-rank test for this situation.`,
+    solution:String.raw`<p>The one-sample T test targets the mean, not the median, and it is sensitive to the huge outlier. It is not the best match to the stated median question.</p><p>The sign test directly tests the median and is robust to the outlier because it only uses whether each repair time is above or below 2 hours.</p><p>The Wilcoxon signed-rank test is often more powerful than the sign test when the distribution of differences is symmetric, but strong right skewness violates the usual symmetry justification. Here the sign test is the safest course answer.</p>`,
+    rubric:["Identify that the T test targets the mean and is outlier-sensitive &mdash; <b>2 pts</b>","Identify the sign test as robust and median-targeted &mdash; <b>2 pts</b>","State the Wilcoxon symmetry concern &mdash; <b>2 pts</b>","Choose a defensible method for the stated question &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Nonparametric does not mean assumption-free. Wilcoxon has a stronger shape assumption than the sign test."
+  },
+  {
+    id:"Ch 20 &mdash; Q14",
+    level:"medium",
+    tags:["Paired data","Median difference"],
+    src:"Original. Method selection for paired differences.",
+    problem:String.raw`A study records blood pressure before and after a treatment for each patient. The analyst forms paired differences \(D_i=\text{after}_i-\text{before}_i\). The question is whether the median change is negative. What hypotheses and nonparametric test are appropriate if the distribution of \(D_i\) is skewed?`,
+    solution:String.raw`<p>Let \(m_D\) be the population median of the paired differences. The hypotheses are \[H_0:m_D=0\quad\text{versus}\quad H_1:m_D<0.\]</p><p>Because the differences are skewed and the target is the median change, use a lower-tailed sign test on \(D_i-0\). A Wilcoxon signed-rank test would need a symmetry assumption for the differences.</p>`,
+    rubric:["Define the parameter as the median paired difference &mdash; <b>2 pts</b>","Write the lower-tailed hypotheses correctly &mdash; <b>2 pts</b>","Choose the sign test under skewness &mdash; <b>2 pts</b>","Mention the Wilcoxon symmetry issue &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"For paired designs, the one-sample methods apply to the paired differences, not to the two raw columns separately."
+  },
+  {
+    id:"Ch 20 &mdash; Q15",
+    level:"medium",
+    tags:["One-sided vs two-sided","Sign test"],
+    src:"Original. Alternative-direction comparison.",
+    problem:String.raw`With \(n'=16\) nonzero observations, \(s_+=13\). Compute the one-sided p-value for \(H_1:m>m_0\) and the usual doubled two-sided p-value for \(H_1:m\ne m_0\).`,
+    solution:String.raw`<p>For the upper-tailed test, \[P(S_+\ge13)=\frac{\binom{16}{13}+\binom{16}{14}+\binom{16}{15}+\binom{16}{16}}{2^{16}}=\frac{560+120+16+1}{65536}=0.0106.\]</p><p>The doubled two-sided p-value is \(2(0.0106)=0.0213\). Both are significant at 5%, but the one-sided p-value is half the two-sided p-value in this symmetric-tail case.</p>`,
+    rubric:["Use the upper binomial tail for the one-sided alternative &mdash; <b>2 pts</b>","Compute \(0.0106\) &mdash; <b>2 pts</b>","Double the smaller tail for the two-sided p-value &mdash; <b>2 pts</b>","Interpret the difference between alternatives &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Choose the alternative before looking at the data. Do not switch from two-sided to one-sided because the observed direction is convenient."
+  },
+  {
+    id:"Ch 20 &mdash; Q16",
+    level:"easy",
+    tags:["Exact vs approximate","Small samples"],
+    src:"Original. Choosing exact calculations.",
+    problem:String.raw`For a sign test with \(n'=8\), a student uses a normal approximation to the binomial distribution. Explain why this is usually not preferred and what should be used instead.`,
+    solution:String.raw`<p>With \(n'=8\), the binomial distribution is very discrete and the normal approximation can be inaccurate, especially in the tails where rejection decisions are made.</p><p>The exact binomial sign test should be used: compute the relevant tail probability under \(S_+\sim\operatorname{Bin}(8,1/2)\).</p>`,
+    rubric:["Identify that \(n'=8\) is small &mdash; <b>1 pt</b>","Explain discreteness/tail inaccuracy &mdash; <b>2 pts</b>","Name the exact binomial sign test &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"Normal approximations are for large samples. If a small exact table or binomial formula is feasible, use it."
+  },
+  {
+    id:"Ch 20 &mdash; Q17",
+    level:"medium",
+    tags:["Zero differences","Interpretation"],
+    src:"Original. Conceptual treatment of zeros.",
+    problem:String.raw`In a sign test, 6 observations are exactly equal to \(m_0\), 8 are above \(m_0\), and 3 are below \(m_0\). A student uses \(n=17\) and \(s_+=14\), counting ties as supporting \(m>m_0\). Diagnose the error and give the correct sign-test inputs.`,
+    solution:String.raw`<p>Observations exactly equal to \(m_0\) are zero differences. They do not support either direction and are removed from the sign count.</p><p>The correct effective sample size is \(n'=8+3=11\), and the positive sign count is \(s_+=8\). The sign test should use \(S_+\sim\operatorname{Bin}(11,1/2)\), not \(n=17\) and not \(s_+=14\).</p>`,
+    rubric:["State that ties at \(m_0\) are discarded &mdash; <b>2 pts</b>","Give \(n'=11\) &mdash; <b>2 pts</b>","Give \(s_+=8\) &mdash; <b>1 pt</b>","Reject the student's counting rule &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"A value equal to the hypothesized median is compatible with the null, but the simple sign statistic has no sign for it."
+  },
+  {
+    id:"Ch 20 &mdash; Q18",
+    level:"medium",
+    tags:["Wilcoxon signed-rank","Normal approximation"],
+    src:"Original. Large-sample signed-rank approximation.",
+    problem:String.raw`A Wilcoxon signed-rank test has \(n'=20\) nonzero differences and observed \(W_+=170\). Use the normal approximation with continuity correction for \(H_1:m>m_0\), ignoring ties.`,
+    solution:String.raw`<p>Under the Wilcoxon null, \[E[W_+]=\frac{n(n+1)}4=\frac{20\cdot21}{4}=105,\] and \[\operatorname{Var}(W_+)=\frac{n(n+1)(2n+1)}{24}=\frac{20\cdot21\cdot41}{24}=717.5.\]</p><p>The standard deviation is \(\sqrt{717.5}=26.79\). For the upper tail, \[z=\frac{169.5-105}{26.79}=2.41.\] Thus \(p\approx P(Z\ge2.41)=0.0080\).</p><p>Reject \(H_0\) at the 5% level.</p>`,
+    rubric:["Compute the Wilcoxon mean &mdash; <b>2 pts</b>","Compute the Wilcoxon variance and standard deviation &mdash; <b>2 pts</b>","Use the upper-tail continuity correction \(169.5\) &mdash; <b>2 pts</b>","Give the approximate p-value and conclusion &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"The Wilcoxon null mean is half the total rank sum \(n(n+1)/2\)."
+  },
+  {
+    id:"Ch 20 &mdash; Q19",
+    level:"hard",
+    tags:["Wilcoxon signed-rank","Tie-adjusted variance"],
+    src:"Original. Midrank variance calculation.",
+    problem:String.raw`After discarding zeros, the absolute differences have midranks \(1.5,1.5,3,4,5\). Under the random-sign null, compute \(E[W_+]\) and \(\operatorname{Var}(W_+)\) directly from these ranks.`,
+    solution:String.raw`<p>Each rank independently receives a positive sign with probability \(1/2\) under the random-sign null. Therefore \[E[W_+]=\frac12(1.5+1.5+3+4+5)=\frac{15}{2}=7.5.\]</p><p>The variance is \[\operatorname{Var}(W_+)=\frac14\sum r_i^2=\frac14(1.5^2+1.5^2+3^2+4^2+5^2)=\frac{54.5}{4}=13.625.\]</p><p>This direct calculation automatically accounts for the tied absolute values through the midranks.</p>`,
+    rubric:["Use the random-sign representation &mdash; <b>2 pts</b>","Compute the mean as half the rank sum &mdash; <b>2 pts</b>","Compute \(\sum r_i^2=54.5\) &mdash; <b>2 pts</b>","Compute the variance \(13.625\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"With ties, the shortcut variance for ranks \(1,\ldots,n\) no longer applies exactly; use the squared midranks or a tie correction."
+  },
+  {
+    id:"Ch 20 &mdash; Q20",
+    level:"medium",
+    tags:["Method selection","Large sample"],
+    src:"Original. Median test under skewness.",
+    problem:String.raw`A sample has \(n=120\), heavy right skewness, and no observations exactly equal to \(m_0\). The target is the population median. Which test is more appropriate: a one-sample T test, a sign test with normal approximation, or a Wilcoxon signed-rank test? Explain briefly.`,
+    solution:String.raw`<p>The T test targets the mean, so it does not match a median question. The Wilcoxon signed-rank test uses more information than the sign test but relies on a symmetry assumption that heavy right skewness contradicts.</p><p>The sign test is the most appropriate of the three for the stated target. Because \(n'=120\) is large, a normal approximation to \(S_+\sim\operatorname{Bin}(120,1/2)\) is reasonable.</p>`,
+    rubric:["Reject the T test as a mean test &mdash; <b>2 pts</b>","Identify the Wilcoxon symmetry problem &mdash; <b>2 pts</b>","Choose the sign test &mdash; <b>2 pts</b>","Justify normal approximation by large \(n'\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Large sample size helps approximation accuracy, but it does not change which parameter the test targets."
+  },
+  {
+    id:"Ch 20 &mdash; Q21",
+    level:"medium",
+    tags:["Mean vs median","T test comparison"],
+    src:"Original. Parameter mismatch diagnosis.",
+    problem:String.raw`A right-skewed distribution has mean larger than its median. A one-sample T test rejects \(H_0:\mu=10\). Can this be reported as evidence that the median is not 10?`,
+    solution:String.raw`<p>No. A T test is a test about the population mean \(\mu\), not the population median. In a skewed distribution, the mean and median can differ substantially.</p><p>To make a claim about the median, use a median-targeted method such as the sign test, or Wilcoxon signed-rank test only if its symmetry assumption is defensible.</p>`,
+    rubric:["State that the T test targets \(\mu\), not the median &mdash; <b>2 pts</b>","Explain why skewness makes the distinction important &mdash; <b>2 pts</b>","Recommend an appropriate median method &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"A statistically significant mean result is not automatically a statistically significant median result."
+  },
+  {
+    id:"Ch 20 &mdash; Q22",
+    level:"medium",
+    tags:["Raw data","Sign test"],
+    src:"Original. Raw-data sign count.",
+    problem:String.raw`Test whether the median is greater than 100 using the sign test for the sample \(102,98,105,100,101,99,110,103,100,104\). Use an exact p-value.`,
+    solution:String.raw`<p>Compare each observation with 100. The two observations equal to 100 are discarded. Among the remaining 8 observations, 6 are above 100 and 2 are below 100.</p><p>For \(H_1:m>100\), \[p=P(S_+\ge6)=\frac{\binom86+\binom87+\binom88}{2^8}=\frac{28+8+1}{256}=0.1445.\]</p><p>Do not reject at the 5% level.</p>`,
+    rubric:["Discard observations equal to 100 &mdash; <b>2 pts</b>","Count \(n'=8\) and \(s_+=6\) &mdash; <b>2 pts</b>","Compute the upper-tail exact p-value &mdash; <b>2 pts</b>","Give the correct conclusion &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Always make a small sign table before computing the p-value; raw data problems are mostly bookkeeping."
+  },
+  {
+    id:"Ch 20 &mdash; Q23",
+    level:"medium",
+    tags:["Raw data","Wilcoxon signed-rank"],
+    src:"Original. Raw-data signed-rank calculation.",
+    problem:String.raw`For \(m_0=10\), the observations are \(11,12,8,13,9,14\). Compute the Wilcoxon signed-rank statistic \(W_+\) and the exact one-sided p-value for \(H_1:m>10\).`,
+    solution:String.raw`<p>The differences are \(1,2,-2,3,-1,4\). The absolute differences \(1,1,2,2,3,4\) give midranks \(1.5,1.5,3.5,3.5,5,6\).</p><p>The positive observations have ranks \(1.5,3.5,5,6\), so \(W_+=16\). The total rank sum is \(21\).</p><p>With these midranks, an exact p-value is best obtained by enumerating the \(2^6\) sign patterns. The upper tail \(W_+\ge16\) has probability \(11/64=0.1719\). Thus the result is not significant at 5%.</p>`,
+    rubric:["Compute differences from \(10\) &mdash; <b>1 pt</b>","Assign midranks for tied absolute differences &mdash; <b>3 pts</b>","Compute \(W_+=16\) &mdash; <b>2 pts</b>","Use or state the enumerated exact p-value \(11/64\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"When tied midranks occur, exact Wilcoxon p-values are usually found by enumeration or software rather than a simple no-tie table."
+  },
+  {
+    id:"Ch 20 &mdash; Q24",
+    level:"hard",
+    tags:["Error diagnosis","Wilcoxon signed-rank"],
+    src:"Original. Final-style diagnose-the-solution.",
+    problem:String.raw`A student applies the Wilcoxon signed-rank test to differences \(0,3,-3,4,-6,6\). They rank the six absolute differences as \(1,2,3,4,5,6\), assign the zero rank 1, and compute \(W_+=2+4+6=12\). Identify at least three errors and give the correct \(W_+\).`,
+    solution:String.raw`<p>There are several errors. First, the zero difference should be discarded before ranking. Second, tied absolute differences should receive average ranks. Third, assigning arbitrary ranks \(1,\ldots,6\) to tied values is invalid.</p><p>After discarding 0, the nonzero absolute differences are \(3,3,4,6,6\). The two 3s get ranks \(1.5,1.5\), the 4 gets rank \(3\), and the two 6s get ranks \(4.5,4.5\). Positive differences \(3,4,6\) have ranks \(1.5,3,4.5\), so \(W_+=9.0\).</p>`,
+    rubric:["Identify that the zero must be discarded &mdash; <b>2 pts</b>","Identify tied absolute differences and average ranks &mdash; <b>2 pts</b>","Reject the arbitrary \(1,\ldots,6\) ranking &mdash; <b>1 pt</b>","Compute the correct \(W_+=9.0\) &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"Error-diagnosis questions usually reward naming the procedural mistakes before recomputing the statistic."
+  },
+  {
+    id:"Ch 20 &mdash; Q25",
+    level:"medium",
+    tags:["Power","Robustness"],
+    src:"Original. Conceptual power comparison.",
+    problem:String.raw`When the distribution is continuous and symmetric with no outliers, why might the Wilcoxon signed-rank test be preferred over the sign test? Why might the sign test still be preferred in other settings?`,
+    solution:String.raw`<p>Under a continuous symmetric distribution, Wilcoxon uses both direction and ranked magnitude of the deviations from \(m_0\). This typically gives better power than the sign test, which uses only directions.</p><p>The sign test may be preferred when the distribution is skewed, when outliers make magnitudes unreliable, or when only ordinal above/below information is trustworthy. It has weaker assumptions and directly targets the median.</p>`,
+    rubric:["Explain that Wilcoxon uses ranked magnitudes &mdash; <b>2 pts</b>","Connect this to higher power under symmetry &mdash; <b>2 pts</b>","Explain the robustness and weaker assumptions of the sign test &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"More information can mean more power, but only when the extra assumptions are reasonable."
+  },
+  {
+    id:"Ch 20 &mdash; Q26",
+    level:"hard",
+    tags:["Derivation","Wilcoxon signed-rank"],
+    src:"Original. Random-sign null derivation.",
+    problem:String.raw`Explain why, under a continuous distribution symmetric about \(m_0\), the Wilcoxon signed-rank null distribution can be generated by assigning independent random signs to the ranks \(1,\ldots,n'\).`,
+    solution:String.raw`<p>Under symmetry about \(m_0\), the positive and negative signs of the nonzero deviations are equally likely. Continuity makes zero differences have probability 0 and makes absolute ranks well-defined apart from accidental sample ties.</p><p>Conditional on the observed absolute deviations, the signs carry no systematic information under \(H_0\). Each sign pattern is therefore equally likely, with probability \(2^{-n'}\). The Wilcoxon null distribution is obtained by summing the ranks assigned positive signs over all \(2^{n'}\) sign patterns.</p>`,
+    rubric:["Invoke symmetry about \(m_0\) &mdash; <b>2 pts</b>","Explain why signs are equally likely under \(H_0\) &mdash; <b>2 pts</b>","Condition on the absolute ranks &mdash; <b>2 pts</b>","Conclude all \(2^{n'}\) sign patterns are equally likely &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"The signed-rank test is a conditional randomization argument on the signs after the magnitudes are fixed."
+  },
+  {
+    id:"Ch 20 &mdash; Q27",
+    level:"hard",
+    tags:["Sign test","Normal approximation","Continuity correction"],
+    src:"Original. Approximation comparison.",
+    problem:String.raw`For a sign test with \(n'=80\) and \(s_+=50\), test \(H_1:m>m_0\) using the normal approximation both with and without continuity correction. Comment on the difference.`,
+    solution:String.raw`<p>Under \(H_0\), \(E[S_+]=40\) and \(\operatorname{sd}(S_+)=\sqrt{80/4}=\sqrt{20}=4.472\).</p><p>Without continuity correction, \[z=\frac{50-40}{4.472}=2.236,\quad p\approx0.0127.\] With upper-tail continuity correction, \[z=\frac{49.5-40}{4.472}=2.124,\quad p\approx0.0168.\]</p><p>Both reject at 5%, but the continuity correction gives a slightly larger and more conservative p-value.</p>`,
+    rubric:["Compute mean and standard deviation &mdash; <b>2 pts</b>","Compute the uncorrected \(z\) and p-value &mdash; <b>2 pts</b>","Compute the corrected \(z\) and p-value &mdash; <b>3 pts</b>","Comment on conservativeness &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The continuity correction matters most near the rejection boundary."
+  },
+  {
+    id:"Ch 20 &mdash; Q28",
+    level:"medium",
+    tags:["Sign test","Zeros","Exact binomial"],
+    src:"Original. Effective sample size and exact p-value.",
+    problem:String.raw`A sample of 25 observations compared with \(m_0\) gives 12 positives, 4 negatives, and 9 zeros. Test \(H_0:m=m_0\) against \(H_1:m>m_0\) using the sign test.`,
+    solution:String.raw`<p>Discard the 9 zeros. The effective sample size is \(n'=12+4=16\), and \(s_+=12\).</p><p>The upper-tail p-value is \[P(S_+\ge12)=\frac{\binom{16}{12}+\binom{16}{13}+\binom{16}{14}+\binom{16}{15}+\binom{16}{16}}{2^{16}}=\frac{1820+560+120+16+1}{65536}=0.0384.\]</p><p>Reject at the 5% level for the upper-tailed alternative.</p>`,
+    rubric:["Discard the zeros and use \(n'=16\) &mdash; <b>2 pts</b>","Use \(s_+=12\) &mdash; <b>1 pt</b>","Compute the exact upper-tail p-value &mdash; <b>3 pts</b>","State the correct rejection decision &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Many zeros reduce the effective sample size. Do not let the original \(n=25\) slip into the binomial denominator."
+  },
+  {
+    id:"Ch 20 &mdash; Q29",
+    level:"medium",
+    tags:["Median hypotheses","Paired data"],
+    src:"Original. Alternative wording.",
+    problem:String.raw`A new teaching method is evaluated by score changes \(D_i=\text{after}_i-\text{before}_i\). The claim is that the median score improvement is positive. Write hypotheses and describe the sign-test statistic.`,
+    solution:String.raw`<p>Let \(m_D\) be the population median of the score changes. The hypotheses are \[H_0:m_D=0\quad\text{versus}\quad H_1:m_D>0.\]</p><p>The sign-test statistic is \(S_+=\#\{D_i>0\}\) after discarding any \(D_i=0\). Under \(H_0\), \(S_+\sim\operatorname{Bin}(n',1/2)\), where \(n'\) is the number of nonzero changes. Large values of \(S_+\) support the claim.</p>`,
+    rubric:["Define \(m_D\) as the median change &mdash; <b>2 pts</b>","Write the upper-tailed hypotheses &mdash; <b>2 pts</b>","Define \(S_+\) after discarding zeros &mdash; <b>2 pts</b>","State the binomial null distribution &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"The null value is zero because the claim is about improvement relative to no change."
+  },
+  {
+    id:"Ch 20 &mdash; Q30",
+    level:"hard",
+    tags:["Mixed method selection","Final style"],
+    src:"Original. Final-style method selection.",
+    problem:String.raw`For each scenario, choose the most appropriate one-sample method and briefly justify it.<ol type="i"><li>\(n=11\), continuous symmetric differences, target is median difference.</li><li>\(n=40\), heavy skewness, target is median.</li><li>\(n=18\), normal population, target is mean.</li><li>\(n=9\), many observations exactly equal to \(m_0\), target is median.</li></ol>`,
+    solution:String.raw`<p><b>(i)</b> Wilcoxon signed-rank test is appropriate because the target is a median/location shift and symmetry is plausible.</p><p><b>(ii)</b> Sign test is safer because the target is the median and heavy skewness undermines the Wilcoxon symmetry assumption.</p><p><b>(iii)</b> One-sample T test is appropriate because the target is the mean and normality supports the small-sample T procedure.</p><p><b>(iv)</b> Sign test may be used after discarding zeros, but the effective sample size may be small. Report \(n'\) clearly; if too few nonzero signs remain, the test has low power.</p>`,
+    rubric:["Choose Wilcoxon under continuous symmetry &mdash; <b>2 pts</b>","Choose sign test under skewness for a median &mdash; <b>2 pts</b>","Choose T test for a normal mean problem &mdash; <b>2 pts</b>","Handle zeros and effective sample size in the sign test &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Most final questions are won by identifying the parameter and assumption match before doing arithmetic."
+  },
+  {
+    id:"Ch 20 &mdash; Q31",
+    level:"hard",
+    tags:["Comprehensive diagnosis","Robustness"],
+    src:"Original. Final-style case analysis.",
+    problem:String.raw`A data set of waiting-time differences from \(m_0=0\) is \(-1,-2,1,2,3,4,5,80\). A student says the T test must be used because it uses the actual sizes and is therefore more informative. Diagnose this statement for a median question, and compute the sign-test p-value for \(H_1:m>0\).`,
+    solution:String.raw`<p>The statement is not defensible for a median question. The T test targets the mean and is highly sensitive to the outlier 80. More numerical information is not automatically better if it targets the wrong parameter or is dominated by an outlier.</p><p>For the sign test, there are 6 positives and 2 negatives, with no zeros. Under \(H_0\), \(S_+\sim\operatorname{Bin}(8,1/2)\). The upper-tail p-value is \[P(S_+\ge6)=\frac{28+8+1}{256}=0.1445.\]</p><p>The sign test does not reject at 5%.</p>`,
+    rubric:["Identify the T test as a mean test &mdash; <b>2 pts</b>","Discuss outlier sensitivity and parameter mismatch &mdash; <b>2 pts</b>","Compute sign counts \(6\) and \(2\) &mdash; <b>1 pt</b>","Compute exact p-value \(0.1445\) &mdash; <b>2 pts</b>","State the conclusion &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"A huge value can change a mean dramatically while changing the sign test only by one positive sign."
+  },
+  {
+    id:"Ch 20 &mdash; Q32",
+    level:"hard",
+    tags:["Comprehensive","Sign vs Wilcoxon"],
+    src:"Original. Final-style method and calculation.",
+    problem:String.raw`A sample of paired differences is \(4,5,6,7,8,-1,-2,-30\). The investigator wants evidence that the median difference is positive. The histogram is visibly left-skewed because of \(-30\). Choose between the sign test and Wilcoxon signed-rank test, then carry out the chosen test exactly at the 5% level.`,
+    solution:String.raw`<p>The target is the median, and the differences are visibly skewed with a large negative outlier. The sign test is safer than Wilcoxon because Wilcoxon needs a symmetry assumption and gives rank influence to the large magnitude.</p><p>There are 5 positive and 3 negative differences, with no zeros. Under \(H_0\), \(S_+\sim\operatorname{Bin}(8,1/2)\). For \(H_1:m>0\), \[p=P(S_+\ge5)=\frac{\binom85+\binom86+\binom87+\binom88}{2^8}=\frac{56+28+8+1}{256}=0.3633.\]</p><p>Do not reject at the 5% level. The data are not strong enough to establish a positive median difference by the sign test.</p>`,
+    rubric:["Choose sign test due to median target and skewness &mdash; <b>3 pts</b>","Explain why Wilcoxon is questionable &mdash; <b>2 pts</b>","Compute \(s_+=5\), \(n'=8\) &mdash; <b>1 pt</b>","Compute exact p-value \(0.3633\) &mdash; <b>2 pts</b>","State the decision clearly &mdash; <b>1 pt</b>"],
+    total:"9 pts",
+    tip:"A majority of positive signs is not automatically statistically significant, especially for small \(n'\)."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

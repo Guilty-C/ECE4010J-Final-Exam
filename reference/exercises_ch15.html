@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 15</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 15</h1>
+  <nav class="tabs">
+    <button class="active">Ch 15 &mdash; Interval Estimation</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch15" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 15 &mdash; Interval Estimation</h2>
+    <p>Topics covered: interpretation of confidence intervals, centered two-sided intervals, one-sided bounds, known-variance Z intervals, unknown-variance T intervals, chi-squared intervals for variance and standard deviation, normality assumptions, sample-size design, and homework-style extensions to exponential and discrete-uniform models. The main exam traps are treating the parameter as random, using \(z\) when \(\sigma\) is unknown, reversing chi-squared quantiles, forgetting \(n-1\) degrees of freedom, and interpreting one-sided confidence bounds as two-sided intervals.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch15')">Expand all solutions</button>
+    <button onclick="collapseAll('ch15')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 15 &mdash; Q1",
+    level:"easy",
+    tags:["Known variance","Z interval"],
+    src:"Original. Direct application of slides 340&ndash;344.",
+    problem:String.raw`A normal population has known standard deviation \(\sigma=4.0\). A random sample of size \(n=25\) has \(\bar x=18.6\). Construct a 95% two-sided confidence interval for \(\mu\), and state the interpretation carefully.`,
+    solution:String.raw`<p><b>Formula.</b> With known \(\sigma\), use \(\bar x \pm z_{\alpha/2}\sigma/\sqrt n\).</p><p>Here \(\alpha=0.05\), \(z_{0.025}=1.96\), so the margin is \(1.96(4/\sqrt{25})=1.568\). Therefore \[\mu = 18.6 \pm 1.568 = [17.03,20.17].\]</p><p><b>Interpretation.</b> The interval was produced by a procedure that covers the fixed parameter \(\mu\) in 95% of repeated samples. It is not correct to say that this already-fixed \(\mu\) has probability 0.95 of lying in this particular computed interval.</p>`,
+    rubric:["Use the known-variance Z interval, not a T interval &mdash; <b>2 pts</b>","Compute the standard error \(4/\sqrt{25}=0.8\) &mdash; <b>1 pt</b>","Use \(z_{0.025}=1.96\) and compute the interval &mdash; <b>2 pts</b>","Give a correct repeated-sampling interpretation &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"If the problem explicitly says the population standard deviation is known, the course convention is the Z interval. Do not estimate sigma again from the sample."
+  },
+  {
+    id:"Ch 15 &mdash; Q2",
+    level:"easy",
+    tags:["Unknown variance","T interval"],
+    src:"Original. Direct application of slide 368.",
+    problem:String.raw`A random sample of \(n=16\) observations from a normal population gives \(\bar x=42.8\) and \(s=6.4\). Construct a 95% confidence interval for \(\mu\).`,
+    solution:String.raw`<p>Since \(\sigma\) is unknown and the sample comes from a normal population, use \[\bar x \pm t_{\alpha/2,n-1}\frac{s}{\sqrt n}.\]</p><p>Here \(df=15\), \(t_{0.025,15}\approx2.131\), and \(s/\sqrt n=6.4/4=1.6\). The margin is \(2.131(1.6)=3.41\), so \[\mu=[42.8-3.41,42.8+3.41]=[39.39,46.21].\]</p>`,
+    rubric:["Identify that \(\sigma\) is unknown, so use T &mdash; <b>2 pts</b>","Use \(df=n-1=15\) &mdash; <b>1 pt</b>","Compute the standard error and margin &mdash; <b>2 pts</b>","State the final interval clearly &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The most common error is to use 1.96 instead of \(t_{0.025,15}\). For small samples this visibly understates the interval width."
+  },
+  {
+    id:"Ch 15 &mdash; Q3",
+    level:"easy",
+    tags:["One-sided bound","Known variance"],
+    src:"Original. Practises slide 345.",
+    problem:String.raw`A quality-control engineer measures \(n=36\) parts. The sample mean is \(\bar x=10.42\) mm, and the population standard deviation is known to be \(\sigma=0.30\) mm. Find a 99% upper confidence bound for \(\mu\).`,
+    solution:String.raw`<p>A 99% upper confidence bound has form \[\bar x+z_{\alpha}\frac{\sigma}{\sqrt n},\qquad \alpha=0.01.\]</p><p>Using \(z_{0.01}=2.326\), the bound is \(10.42+2.326(0.30/6)=10.42+0.116=10.536\). Thus a 99% upper confidence interval is \((-\infty,10.536]\).</p>`,
+    rubric:["Recognize this is one-sided, so use \(z_\alpha\), not \(z_{\alpha/2}\) &mdash; <b>2 pts</b>","Compute standard error \(0.05\) &mdash; <b>1 pt</b>","Compute upper bound \(10.536\) &mdash; <b>2 pts</b>","Write the interval direction correctly &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"One-sided 99% uses the 1% upper-tail critical value, not the 0.5% upper-tail value."
+  },
+  {
+    id:"Ch 15 &mdash; Q4",
+    level:"easy",
+    tags:["Variance CI","Chi-squared"],
+    src:"Original. Direct application of slide 358.",
+    problem:String.raw`A normal population is sampled with \(n=21\), and the sample variance is \(s^2=12.5\). Construct a 95% confidence interval for \(\sigma^2\). Use \(\chi^2_{0.025,20}\approx34.17\) and \(\chi^2_{0.975,20}\approx9.59\), where the subscript denotes right-tail area as in the course slides.`,
+    solution:String.raw`<p>For a normal sample, \((n-1)S^2/\sigma^2\sim\chi^2_{n-1}\). The 95% interval is \[\left[\frac{(n-1)s^2}{\chi^2_{0.025,20}},\frac{(n-1)s^2}{\chi^2_{0.975,20}}\right].\]</p><p>Here \((n-1)s^2=20(12.5)=250\). Thus \[\sigma^2\in[250/34.17,250/9.59]=[7.32,26.07].\]</p>`,
+    rubric:["Use \((n-1)S^2/\sigma^2\) and \(df=20\) &mdash; <b>2 pts</b>","Place the larger chi-squared critical value in the lower endpoint &mdash; <b>2 pts</b>","Compute both endpoints &mdash; <b>2 pts</b>","State that the interval is for variance, not standard deviation &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Because \(\sigma^2\) is in the denominator of the pivot, the larger chi-squared value creates the lower endpoint."
+  },
+  {
+    id:"Ch 15 &mdash; Q5",
+    level:"easy",
+    tags:["Standard deviation CI","Chi-squared"],
+    src:"Adapted from homework exercise style on confidence intervals for standard deviation.",
+    problem:String.raw`The percentage of an alloy component is measured in \(n=51\) randomly selected parts. The sample standard deviation is \(s=0.37\). Construct a 95% confidence interval for \(\sigma\). Use \(\chi^2_{0.025,50}=71.42\) and \(\chi^2_{0.975,50}=32.36\).`,
+    solution:String.raw`<p>First construct the variance interval:</p><p>\[\sigma^2\in\left[\frac{50(0.37)^2}{71.42},\frac{50(0.37)^2}{32.36}\right].\]</p><p>Since \(50(0.37)^2=6.845\), this gives \(\sigma^2\in[0.0958,0.2115]\). Taking square roots, \[\sigma\in[0.310,0.460].\]</p>`,
+    rubric:["Use \(df=50\) &mdash; <b>1 pt</b>","Build the variance interval first &mdash; <b>2 pts</b>","Use correct chi-squared endpoint order &mdash; <b>2 pts</b>","Take square roots to answer for \(\sigma\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"If the question asks for \(\sigma\), do not stop after finding a variance interval."
+  },
+  {
+    id:"Ch 15 &mdash; Q6",
+    level:"easy",
+    tags:["Interpretation","Concept"],
+    src:"Original. Based on slide 339 interpretation warning.",
+    problem:String.raw`A 95% confidence interval for \(\mu\) is reported as \([12.4,15.8]\). Which statement is correct? Explain briefly.<ol type="a"><li>There is a 95% probability that \(\mu\) lies in \([12.4,15.8]\).</li><li>The method used to construct the interval captures \(\mu\) in 95% of repeated samples.</li><li>95% of the sample observations lie in \([12.4,15.8]\).</li></ol>`,
+    solution:String.raw`<p>The correct statement is <b>(b)</b>. In the frequentist interpretation used in the course, \(\mu\) is fixed and the interval endpoints are random before the data are observed. After the data are observed, the interval either contains \(\mu\) or it does not.</p><p>Statement (a) treats the fixed parameter as random. Statement (c) confuses a confidence interval for the mean with a coverage statement about individual observations.</p>`,
+    rubric:["Choose statement (b) &mdash; <b>2 pts</b>","Explain fixed parameter/random interval logic &mdash; <b>2 pts</b>","Reject the individual-observation interpretation &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"A confidence interval is about uncertainty in a parameter estimate, not about where most raw data points fall."
+  },
+  {
+    id:"Ch 15 &mdash; Q7",
+    level:"easy",
+    tags:["Sample size","Known variance"],
+    src:"Original. Standard design-style problem.",
+    problem:String.raw`A process has known \(\sigma=2.5\). How large should \(n\) be so that a 95% confidence interval for \(\mu\) has total width at most 1.0?`,
+    solution:String.raw`<p>Total width \(=2z_{\alpha/2}\sigma/\sqrt n\). Requiring width \(\le1.0\) is equivalent to margin \(E\le0.5\).</p><p>\[n\ge\left(\frac{z_{0.025}\sigma}{E}\right)^2=\left(\frac{1.96(2.5)}{0.5}\right)^2=96.04.\]</p><p>Round up, so \(n=97\).</p>`,
+    rubric:["Convert total width to margin \(E=0.5\) &mdash; <b>1 pt</b>","Use \(n\ge(z_{\alpha/2}\sigma/E)^2\) &mdash; <b>2 pts</b>","Compute 96.04 &mdash; <b>1 pt</b>","Round up to 97 &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Always round sample sizes up. Rounding to the nearest integer can violate the requested precision."
+  },
+  {
+    id:"Ch 15 &mdash; Q8",
+    level:"easy",
+    tags:["Centered interval","Optimality"],
+    src:"Adapted from homework exercise 6.1.",
+    problem:String.raw`For known \(\sigma\), a two-sided interval is written as \(\bar x-z_{\alpha_1}\sigma/\sqrt n\le\mu\le\bar x+z_{\alpha_2}\sigma/\sqrt n\), where \(\alpha_1+\alpha_2=\alpha\). What choice of \(\alpha_1,\alpha_2\) gives the usual centered interval, and why is it preferred in this course?`,
+    solution:String.raw`<p>The centered interval uses equal tails: \(\alpha_1=\alpha_2=\alpha/2\). This makes the interval symmetric around \(\bar x\), with margin \(z_{\alpha/2}\sigma/\sqrt n\).</p><p>For the normal distribution, equal tails also minimize the interval length among two-sided intervals with the same total noncoverage probability \(\alpha\), because the normal density is symmetric and decreasing away from 0.</p>`,
+    rubric:["State \(\alpha_1=\alpha_2=\alpha/2\) &mdash; <b>2 pts</b>","Connect this to symmetry around \(\bar x\) &mdash; <b>1 pt</b>","Mention shortest/equal-tail optimality for the normal case &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"This is a proof idea question, not a numeric table lookup. The expected answer is about symmetry and interval length."
+  },
+  {
+    id:"Ch 15 &mdash; Q9",
+    level:"easy",
+    tags:["Assumptions","Normality"],
+    src:"Original. Based on slides 336 and 356.",
+    problem:String.raw`For each interval below, state whether exact normality of the population is required: (i) Z interval for \(\mu\) with known \(\sigma\); (ii) T interval for \(\mu\) with unknown \(\sigma\); (iii) chi-squared interval for \(\sigma^2\).`,
+    solution:String.raw`<p><b>(i)</b> Exact normality gives the exact result, but for large \(n\), the CLT may justify an approximate Z interval.</p><p><b>(ii)</b> The exact T interval requires a normal population. For large samples it is often used approximately, but the exact theorem is normal.</p><p><b>(iii)</b> The chi-squared interval for \(\sigma^2\) strongly requires normality. It is not robust for arbitrary non-normal populations.</p>`,
+    rubric:["Distinguish exact theorem from large-sample approximation &mdash; <b>2 pts</b>","Identify normality requirement for the T interval &mdash; <b>1 pt</b>","Identify strong normality requirement for chi-squared variance interval &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"The variance interval is the least forgiving one. The theorem \((n-1)S^2/\sigma^2\sim\chi^2_{n-1}\) is a normal-sample result."
+  },
+  {
+    id:"Ch 15 &mdash; Q10",
+    level:"easy",
+    tags:["Quantile notation","Tables"],
+    src:"Original. Course-notation check.",
+    problem:String.raw`The course writes \(z_\alpha\) for the positive number satisfying \(P(Z\ge z_\alpha)=\alpha\). Find \(z_{0.025}\), \(z_{0.05}\), and explain why using \(z_{0.05}\) in a 95% two-sided interval is wrong.`,
+    solution:String.raw`<p>Common values are \(z_{0.025}=1.96\) and \(z_{0.05}=1.645\).</p><p>A 95% two-sided interval has total tail probability \(\alpha=0.05\), split into two tails of 0.025 each. Therefore the correct cutoff is \(z_{0.025}\). Using \(z_{0.05}\) would produce only about a 90% two-sided interval.</p>`,
+    rubric:["Give \(z_{0.025}=1.96\) &mdash; <b>1 pt</b>","Give \(z_{0.05}=1.645\) &mdash; <b>1 pt</b>","Explain tail splitting for two-sided intervals &mdash; <b>2 pts</b>"],
+    total:"4 pts",
+    tip:"The subscript is a tail area, not a confidence level."
+  },
+  {
+    id:"Ch 15 &mdash; Q11",
+    level:"medium",
+    tags:["Known vs unknown variance","Decision"],
+    src:"Original. Exam-style method selection.",
+    problem:String.raw`A dataset of \(n=12\) observations from a normal population has \(\bar x=7.30\), \(s=1.10\). A classmate constructs \(7.30\pm1.96(1.10/\sqrt{12})\). Identify the error and give the correct 95% interval.`,
+    solution:String.raw`<p>The classmate used a Z critical value while replacing \(\sigma\) by \(s\). Since \(\sigma\) is unknown and \(n=12\), the exact normal-sample interval uses \(t_{0.025,11}\approx2.201\).</p><p>Standard error: \(1.10/\sqrt{12}=0.3175\). Margin: \(2.201(0.3175)=0.699\). Thus \[\mu\in[6.60,8.00].\]</p>`,
+    rubric:["Identify the Z/T mismatch &mdash; <b>2 pts</b>","Use \(df=11\) &mdash; <b>1 pt</b>","Compute correct margin &mdash; <b>2 pts</b>","Give final corrected interval &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"If \(s\) appears in the denominator for a mean interval, expect a T critical value unless the sample size is so large that an approximation is explicitly requested."
+  },
+  {
+    id:"Ch 15 &mdash; Q12",
+    level:"medium",
+    tags:["One-sided variance bound","Quality control"],
+    src:"Original. Mirrors slide 360 soft-drink example.",
+    problem:String.raw`A filling machine is acceptable only if \(\sigma\le0.20\) fluid ounces. From \(n=25\) cans, \(s^2=0.0225\). Find a 95% upper confidence bound for \(\sigma\). Use \(\chi^2_{0.95,24}=13.85\) under the course right-tail notation.`,
+    solution:String.raw`<p>For a 95% upper bound on \(\sigma^2\), use \[0\le\sigma^2\le\frac{(n-1)s^2}{\chi^2_{0.95,n-1}}.\]</p><p>Here \((n-1)s^2=24(0.0225)=0.540\), so \[\sigma^2\le0.540/13.85=0.0390.\]</p><p>Thus \(\sigma\le\sqrt{0.0390}=0.197\). Since the upper confidence bound is below 0.20, the data support the acceptability criterion at the 95% confidence level.</p>`,
+    rubric:["Use a one-sided upper variance bound &mdash; <b>2 pts</b>","Use \(df=24\) &mdash; <b>1 pt</b>","Compute and square-root the bound &mdash; <b>2 pts</b>","Connect result to the engineering criterion &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"For an upper bound on variance, the denominator is a lower-tail chi-squared point, written here as \(\chi^2_{1-\alpha}\) in right-tail notation."
+  },
+  {
+    id:"Ch 15 &mdash; Q13",
+    level:"medium",
+    tags:["T interval","Raw data"],
+    src:"Original. Homework-style computation from data.",
+    problem:String.raw`For the data \(12.1, 11.8, 12.4, 12.0, 11.9, 12.6, 12.2, 11.7\), assume normality and construct a 90% confidence interval for \(\mu\).`,
+    solution:String.raw`<p>The sample size is \(n=8\). The sample mean is \(\bar x=12.0875\), and the sample standard deviation is \(s\approx0.3031\).</p><p>Use \(t_{0.05,7}\approx1.895\). The standard error is \(0.3031/\sqrt8=0.1072\), so the margin is \(1.895(0.1072)=0.203\). Therefore \[\mu\in[11.884,12.291].\]</p>`,
+    rubric:["Compute \(\bar x\) and \(s\) from raw data &mdash; <b>2 pts</b>","Use T with \(df=7\) &mdash; <b>2 pts</b>","Use \(t_{0.05,7}\) for a 90% interval &mdash; <b>1 pt</b>","Compute final interval &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"When raw data are given, check whether the problem gives \(s\) or \(s^2\). Here you must compute \(s\) before building the interval."
+  },
+  {
+    id:"Ch 15 &mdash; Q14",
+    level:"medium",
+    tags:["Asymmetry","Variance interval"],
+    src:"Original. Conceptual trap.",
+    problem:String.raw`A student reports a 95% confidence interval for \(\sigma^2\) as \(10.0\pm3.2=[6.8,13.2]\). Explain why this form is suspicious for a chi-squared variance interval, even before checking the arithmetic.`,
+    solution:String.raw`<p>Chi-squared variance intervals are generally not symmetric around \(s^2\). The pivot \((n-1)S^2/\sigma^2\) places \(\sigma^2\) in the denominator, and the chi-squared distribution is skewed, especially for small or moderate degrees of freedom.</p><p>A correctly derived interval has the form \[\left[\frac{(n-1)s^2}{\chi^2_{\alpha/2,n-1}},\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,n-1}}\right],\] not \(s^2\pm\text{margin}\).</p>`,
+    rubric:["State that variance CIs are not symmetric in general &mdash; <b>2 pts</b>","Reference the chi-squared pivot &mdash; <b>2 pts</b>","Write or describe the correct endpoint structure &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Symmetric plus-minus notation is natural for mean intervals, not for variance intervals."
+  },
+  {
+    id:"Ch 15 &mdash; Q15",
+    level:"medium",
+    tags:["CI width","Confidence level"],
+    src:"Original. Interpretation and comparison.",
+    problem:String.raw`Using the same data and same method, which interval is wider: a 90% confidence interval for \(\mu\) or a 99% confidence interval for \(\mu\)? Explain without calculating exact endpoints.`,
+    solution:String.raw`<p>The 99% interval is wider. A higher confidence level means the procedure must cover the true parameter more often in repeated sampling, so it uses a larger critical value. The standard error is unchanged, but the multiplier increases.</p>`,
+    rubric:["Identify the 99% interval as wider &mdash; <b>2 pts</b>","Connect width to larger critical value &mdash; <b>2 pts</b>","Avoid saying the data become more variable &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Confidence level changes the critical multiplier, not the sample mean or the observed sample standard deviation."
+  },
+  {
+    id:"Ch 15 &mdash; Q16",
+    level:"medium",
+    tags:["T interval","Large sample"],
+    src:"Original. Method-selection edge case.",
+    problem:String.raw`A non-normal population is sampled with \(n=100\). The sample mean is 5.80 and the sample standard deviation is 2.10. Construct an approximate 95% confidence interval for \(\mu\), and state why the approximation is acceptable.`,
+    solution:String.raw`<p>With \(n=100\), the CLT makes the sample mean approximately normal under broad conditions. Since \(\sigma\) is unknown, use a large-sample T interval; \(t_{0.025,99}\approx1.984\), very close to 1.96.</p><p>Standard error \(=2.10/10=0.21\). Margin \(=1.984(0.21)=0.417\). Thus \[\mu\approx[5.383,6.217].\]</p>`,
+    rubric:["State the CLT/large-sample justification &mdash; <b>2 pts</b>","Use \(s/\sqrt n\) as standard error &mdash; <b>1 pt</b>","Use an appropriate T or near-Z critical value &mdash; <b>1 pt</b>","Compute interval &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"For large \(n\), exact normality is less important for a mean interval than for a chi-squared variance interval."
+  },
+  {
+    id:"Ch 15 &mdash; Q17",
+    level:"medium",
+    tags:["Sample size","Planning"],
+    src:"Original. Final-style planning question.",
+    problem:String.raw`A pilot study suggests \(s\approx8\). You want a 99% confidence interval for \(\mu\) with margin of error at most 2.0. Estimate the required sample size.`,
+    solution:String.raw`<p>For planning, use the pilot \(s\) as an estimate of \(\sigma\). With 99% confidence, \(z_{0.005}\approx2.576\). Then \[n\ge\left(\frac{2.576(8)}{2.0}\right)^2=106.17.\]</p><p>Round up to \(n=107\). A later exact T-based design may increase this slightly, but \(107\) is the standard planning estimate.</p>`,
+    rubric:["Use pilot \(s\) as \(\sigma\) estimate &mdash; <b>1 pt</b>","Use 99% critical value \(2.576\) &mdash; <b>2 pts</b>","Compute sample size expression &mdash; <b>2 pts</b>","Round up and mention approximation &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Planning formulas usually use Z critical values because the future \(s\) and degrees of freedom are not known yet."
+  },
+  {
+    id:"Ch 15 &mdash; Q18",
+    level:"medium",
+    tags:["Lower confidence bound","T interval"],
+    src:"Original. One-sided unknown-variance case.",
+    problem:String.raw`A normal sample of \(n=10\) batteries has \(\bar x=51.2\) hours and \(s=4.5\) hours. Find a 95% lower confidence bound for the mean lifetime.`,
+    solution:String.raw`<p>Since \(\sigma\) is unknown and \(n=10\), use a one-sided T bound with \(df=9\): \[\bar x-t_{\alpha,9}\frac{s}{\sqrt n}.\]</p><p>For 95% one-sided confidence, \(\alpha=0.05\), \(t_{0.05,9}\approx1.833\). The standard error is \(4.5/\sqrt{10}=1.423\). Lower bound: \(51.2-1.833(1.423)=48.59\). Thus \([48.59,\infty)\) is the lower confidence interval for \(\mu\).</p>`,
+    rubric:["Use one-sided T critical value &mdash; <b>2 pts</b>","Use \(df=9\) &mdash; <b>1 pt</b>","Compute lower bound correctly &mdash; <b>2 pts</b>","State interval direction &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"A lower confidence bound subtracts the critical multiple from \(\bar x\); it does not use \(t_{\alpha/2}\)."
+  },
+  {
+    id:"Ch 15 &mdash; Q19",
+    level:"medium",
+    tags:["CI and tests","Preview"],
+    src:"Original. Links Chapter 15 to later Fisher/Neyman material.",
+    problem:String.raw`A 95% confidence interval for \(\mu\) is \([3.1,4.8]\). Without computing a test statistic, would a two-sided level-5% test of \(H_0:\mu=5.0\) reject? What about \(H_0:\mu=4.0\)?`,
+    solution:String.raw`<p>Using confidence-interval/test duality for the matching two-sided test: reject a null value if it lies outside the 95% confidence interval.</p><p>\(\mu_0=5.0\) lies outside \([3.1,4.8]\), so reject \(H_0:\mu=5.0\) at the 5% level. \(\mu_0=4.0\) lies inside the interval, so do not reject \(H_0:\mu=4.0\).</p>`,
+    rubric:["State the CI/test duality correctly &mdash; <b>2 pts</b>","Reject for 5.0 &mdash; <b>1 pt</b>","Do not reject for 4.0 &mdash; <b>1 pt</b>","Specify this applies to matching two-sided tests &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"This shortcut only applies when the confidence level and test significance level match, and the test is two-sided."
+  },
+  {
+    id:"Ch 15 &mdash; Q20",
+    level:"medium",
+    tags:["Endpoint algebra","Known variance"],
+    src:"Original. Reverse-engineering interval data.",
+    problem:String.raw`A 95% known-variance confidence interval for \(\mu\) is reported as \([74.12,75.88]\), based on \(n=64\). Find \(\bar x\) and the known \(\sigma\) used.`,
+    solution:String.raw`<p>The center is \(\bar x=(74.12+75.88)/2=75.00\). The margin is \(E=(75.88-74.12)/2=0.88\).</p><p>For a 95% known-variance interval, \(E=1.96\sigma/\sqrt{64}=1.96\sigma/8\). Thus \(\sigma=0.88(8)/1.96=3.59\).</p>`,
+    rubric:["Compute interval center as \(\bar x\) &mdash; <b>2 pts</b>","Compute margin &mdash; <b>1 pt</b>","Solve \(E=z\sigma/\sqrt n\) for \(\sigma\) &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"For symmetric mean intervals, the sample mean is the midpoint."
+  },
+  {
+    id:"Ch 15 &mdash; Q21",
+    level:"medium",
+    tags:["Exponential model","Chi-squared pivot"],
+    src:"Adapted from homework exercise 6.3.",
+    problem:String.raw`Let \(X_1,\ldots,X_n\) be a random sample from an exponential distribution with rate \(\beta\), so \(E[X]=1/\beta\). Show the pivot used for a confidence interval for \(\beta\), assuming \(2\beta\sum_i X_i\sim\chi^2_{2n}\).`,
+    solution:String.raw`<p>The given distributional result is already the pivot: \[Q=2\beta\sum_{i=1}^nX_i\sim\chi^2_{2n}.\]</p><p>For a two-sided \(100(1-\alpha)\%\) interval, \[\chi^2_{\alpha/2,2n}\ge Q\ge \chi^2_{1-\alpha/2,2n}\] in the course right-tail notation. Solving for \(\beta\) gives \[\beta\in\left[\frac{\chi^2_{1-\alpha/2,2n}}{2\sum X_i},\frac{\chi^2_{\alpha/2,2n}}{2\sum X_i}\right].\]</p>`,
+    rubric:["Identify \(2\beta\sum X_i\) as the pivot &mdash; <b>2 pts</b>","Use \(2n\) degrees of freedom &mdash; <b>1 pt</b>","Solve inequalities for \(\beta\) with correct endpoint order &mdash; <b>3 pts</b>"],
+    total:"6 pts",
+    tip:"The unknown parameter multiplies the statistic here, unlike the normal variance pivot where \(\sigma^2\) appears in the denominator."
+  },
+  {
+    id:"Ch 15 &mdash; Q22",
+    level:"medium",
+    tags:["Discrete uniform","Confidence set"],
+    src:"Adapted from homework exercise 6.4.",
+    problem:String.raw`Suppose \(X_1,\ldots,X_n\) are drawn from the discrete uniform distribution on \(\{1,\ldots,N\}\), and \(X_{\max}=m\). Explain why any confidence set for \(N\) must start at \(m\), and derive \(X^*\) such that \(P(X_{\max}\le X^*)\ge1-\alpha\) when \(N\) is fixed.`,
+    solution:String.raw`<p>Since all observations must be at most \(N\), observing \(X_{\max}=m\) proves \(N\ge m\). Therefore any plausible confidence set must start at \(m\).</p><p>For fixed \(N\), \(P(X_{\max}\le x)=(x/N)^n\) for integers \(1\le x\le N\). To make this probability at least \(1-\alpha\), require \((x/N)^n\ge1-\alpha\), so \(x\ge N(1-\alpha)^{1/n}\). Inverting this relationship after observing \(m\) gives an upper confidence endpoint of the form \(X^*=\left\lfloor m/(1-\alpha)^{1/n}\right\rfloor\), adjusted to respect integer support and table conventions.</p>`,
+    rubric:["State why \(N\ge X_{\max}\) &mdash; <b>2 pts</b>","Compute \(P(X_{\max}\le x)=(x/N)^n\) &mdash; <b>2 pts</b>","Derive the quantile inequality &mdash; <b>2 pts</b>","Mention integer adjustment &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"This is a confidence set rather than a symmetric interval. Discrete parameters often produce sets of possible integer values."
+  },
+  {
+    id:"Ch 15 &mdash; Q23",
+    level:"medium",
+    tags:["Normality violation","Variance CI"],
+    src:"Original. Final-style assumption diagnosis.",
+    problem:String.raw`A sample of \(n=18\) waiting times is strongly right-skewed. A student constructs a chi-squared confidence interval for \(\sigma^2\) and says the interval is exact because \(n-1=17\). Diagnose the statement.`,
+    solution:String.raw`<p>The statement is wrong. The degrees of freedom \(n-1=17\) are only part of the theorem. The exact result \((n-1)S^2/\sigma^2\sim\chi^2_{n-1}\) requires the population itself to be normal.</p><p>Waiting times are often skewed, so the chi-squared interval may be unreliable. A transformed model, parametric model for waiting times, or bootstrap method might be more appropriate, depending on course permissions.</p>`,
+    rubric:["State that \(df=17\) alone does not ensure exactness &mdash; <b>2 pts</b>","Name the missing normality assumption &mdash; <b>2 pts</b>","Explain why skewed waiting times are problematic &mdash; <b>1 pt</b>","Suggest a reasonable alternative or caveat &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"For exam answers, explicitly write the assumption before applying the variance interval."
+  },
+  {
+    id:"Ch 15 &mdash; Q24",
+    level:"medium",
+    tags:["Compare intervals","Known vs unknown"],
+    src:"Original. Conceptual comparison.",
+    problem:String.raw`For the same \(n\), \(\bar x\), and numerical value \(s=\sigma\), compare the 95% known-variance Z interval and the 95% unknown-variance T interval. Which is wider and why?`,
+    solution:String.raw`<p>The T interval is wider, except asymptotically where the difference becomes negligible. Both intervals use the same standard error numerically, but the T critical value \(t_{0.025,n-1}\) is larger than \(z_{0.025}=1.96\) for finite \(n\).</p><p>The extra width accounts for uncertainty introduced by estimating \(\sigma\) from the data.</p>`,
+    rubric:["Identify T interval as wider &mdash; <b>2 pts</b>","Explain using larger T critical value &mdash; <b>2 pts</b>","Connect to uncertainty in estimating \(\sigma\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The sample standard deviation is itself random, so the T distribution has heavier tails."
+  },
+  {
+    id:"Ch 15 &mdash; Q25",
+    level:"hard",
+    tags:["Proof","Centered CI optimality"],
+    src:"Adapted from homework exercise 6.1.",
+    problem:String.raw`Give a calculus argument that the known-variance normal interval \(\bar x-z_{\alpha_1}\sigma/\sqrt n\le\mu\le\bar x+z_{\alpha_2}\sigma/\sqrt n\), with \(\alpha_1+\alpha_2=\alpha\), has minimum length at \(\alpha_1=\alpha_2=\alpha/2\).`,
+    solution:String.raw`<p>The length is \(L(\alpha_1)=\sigma(z_{\alpha_1}+z_{\alpha-\alpha_1})/\sqrt n\). Let \(z_p=\Phi^{-1}(1-p)\), so \(dz_p/dp=-1/\phi(z_p)\).</p><p>Then \[L'(\alpha_1)\propto -\frac{1}{\phi(z_{\alpha_1})}+\frac{1}{\phi(z_{\alpha-\alpha_1})}.\] Setting \(L'=0\) gives \(\phi(z_{\alpha_1})=\phi(z_{\alpha-\alpha_1})\). For positive upper-tail cutoffs in the usual two-sided case, this implies \(z_{\alpha_1}=z_{\alpha-\alpha_1}\), hence \(\alpha_1=\alpha-\alpha_1\), so \(\alpha_1=\alpha/2\).</p><p>Symmetry and convexity of the normal quantile length around this point give the minimum.</p>`,
+    rubric:["Express interval length as a function of \(\alpha_1\) &mdash; <b>2 pts</b>","Differentiate using \(dz_p/dp=-1/\phi(z_p)\) &mdash; <b>3 pts</b>","Solve the first-order condition to get equal tails &mdash; <b>2 pts</b>","State why it is a minimum &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"A short symmetry argument may be accepted, but the homework version expects you to show where equal tails come from mathematically."
+  },
+  {
+    id:"Ch 15 &mdash; Q26",
+    level:"hard",
+    tags:["Derivation","T distribution"],
+    src:"Original. Based on slides 363&ndash;368.",
+    problem:String.raw`Starting from \(\bar X\sim N(\mu,\sigma^2/n)\) and \((n-1)S^2/\sigma^2\sim\chi^2_{n-1}\), derive the pivotal statistic used for the unknown-variance confidence interval for \(\mu\).`,
+    solution:String.raw`<p>Standardize the sample mean: \[Z=\frac{\bar X-\mu}{\sigma/\sqrt n}\sim N(0,1).\]</p><p>Also let \(V=(n-1)S^2/\sigma^2\sim\chi^2_{n-1}\), independent of \(Z\) for a normal sample. By the definition of the T distribution, \[T=\frac{Z}{\sqrt{V/(n-1)}}=\frac{(\bar X-\mu)/(\sigma/\sqrt n)}{\sqrt{S^2/\sigma^2}}=\frac{\bar X-\mu}{S/\sqrt n}\sim t_{n-1}.\]</p><p>Solving \(|T|\le t_{\alpha/2,n-1}\) for \(\mu\) gives \(\bar X\pm t_{\alpha/2,n-1}S/\sqrt n\).</p>`,
+    rubric:["Correctly standardize \(\bar X\) &mdash; <b>2 pts</b>","Use chi-squared result for \(S^2\) and independence &mdash; <b>2 pts</b>","Form the T ratio &mdash; <b>3 pts</b>","Invert to get the confidence interval &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The independence of \(\bar X\) and \(S^2\) is not automatic for all distributions; it is a normal-sample property."
+  },
+  {
+    id:"Ch 15 &mdash; Q27",
+    level:"hard",
+    tags:["Variance interval","Endpoint inversion"],
+    src:"Original. Algebra-heavy endpoint question.",
+    problem:String.raw`A normal sample has \(n=10\) and \(s^2=4.0\). Construct a 90% confidence interval for \(\sigma^2\) using \(\chi^2_{0.05,9}=16.92\) and \(\chi^2_{0.95,9}=3.33\). Then construct the corresponding interval for \(\sigma\).`,
+    solution:String.raw`<p>For 90% confidence, \(\alpha=0.10\), so use right-tail areas \(0.05\) and \(0.95\). The numerator is \((n-1)s^2=9(4)=36\).</p><p>\[\sigma^2\in[36/16.92,36/3.33]=[2.13,10.81].\]</p><p>Taking square roots gives \[\sigma\in[\sqrt{2.13},\sqrt{10.81}]=[1.46,3.29].\]</p>`,
+    rubric:["Use \(\alpha/2=0.05\) for a 90% interval &mdash; <b>1 pt</b>","Use \(df=9\) and numerator 36 &mdash; <b>2 pts</b>","Invert endpoints correctly &mdash; <b>2 pts</b>","Take square roots for \(\sigma\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Small degrees of freedom make the chi-squared interval very asymmetric; that is expected."
+  },
+  {
+    id:"Ch 15 &mdash; Q28",
+    level:"hard",
+    tags:["Exponential CI","Numerical"],
+    src:"Adapted from homework exercise 6.3.",
+    problem:String.raw`Assume \(X_1,\ldots,X_{12}\) are exponential with rate \(\beta\), and \(\sum_i x_i=480\). Using \(2\beta\sum X_i\sim\chi^2_{24}\), construct a 95% confidence interval for \(\beta\). Use \(\chi^2_{0.025,24}=39.36\) and \(\chi^2_{0.975,24}=12.40\).`,
+    solution:String.raw`<p>Using the pivot \(2\beta\sum X_i\), the interval is \[\beta\in\left[\frac{\chi^2_{0.975,24}}{2\sum x_i},\frac{\chi^2_{0.025,24}}{2\sum x_i}\right].\]</p><p>Here \(2\sum x_i=960\). Thus \[\beta\in[12.40/960,39.36/960]=[0.0129,0.0410].\]</p>`,
+    rubric:["Use the exponential chi-squared pivot &mdash; <b>2 pts</b>","Use \(2n=24\) degrees of freedom &mdash; <b>1 pt</b>","Put quantiles in correct order after solving for \(\beta\) &mdash; <b>2 pts</b>","Compute endpoints &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Check units: if \(X\) is measured in hours, \(\beta\) has units \(1/\text{hour}\)."
+  },
+  {
+    id:"Ch 15 &mdash; Q29",
+    level:"hard",
+    tags:["Error diagnosis","Multiple mistakes"],
+    src:"Original. Final-style diagnose-the-solution.",
+    problem:String.raw`A student writes: "For \(n=9\), \(\bar x=100\), \(s=12\), a 95% confidence interval for \(\mu\) is \(100\pm1.96(12/9)\)." Identify at least three errors and give the correct interval, assuming a normal population.`,
+    solution:String.raw`<p>Errors: (1) \(\sigma\) is unknown, so use T, not Z. (2) The standard error is \(s/\sqrt n\), not \(s/n\). (3) The degrees of freedom should be \(n-1=8\). A fourth issue is that normality should be stated because the sample is small.</p><p>Correctly, \(t_{0.025,8}\approx2.306\), and \(s/\sqrt n=12/3=4\). The margin is \(2.306(4)=9.224\). Thus \[\mu\in[90.78,109.22].\]</p>`,
+    rubric:["Identify Z instead of T error &mdash; <b>2 pts</b>","Identify \(s/n\) instead of \(s/\sqrt n\) error &mdash; <b>2 pts</b>","Identify degrees-of-freedom/normality issue &mdash; <b>1 pt</b>","Compute correct interval &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"Diagnose-the-error questions reward clear naming of mistakes before recomputing."
+  },
+  {
+    id:"Ch 15 &mdash; Q30",
+    level:"hard",
+    tags:["Mixed interval selection","Comprehensive"],
+    src:"Original. Final-style mixed-method selection.",
+    problem:String.raw`For each scenario, choose the correct confidence interval method and give the formula, but do not compute numerical endpoints.<ol type="i"><li>\(n=14\), normal population, \(\bar x\), \(s\), \(\sigma\) unknown, interval for \(\mu\).</li><li>\(n=60\), population standard deviation known, interval for \(\mu\).</li><li>\(n=20\), normal population, interval for \(\sigma^2\).</li><li>\(n=35\), strongly skewed population, interval for \(\sigma^2\).</li></ol>`,
+    solution:String.raw`<p><b>(i)</b> Use the T interval: \[\bar x\pm t_{\alpha/2,13}\frac{s}{\sqrt{14}}.\]</p><p><b>(ii)</b> Use the known-variance Z interval: \[\bar x\pm z_{\alpha/2}\frac{\sigma}{\sqrt{60}}.\]</p><p><b>(iii)</b> Use the chi-squared variance interval: \[\left[\frac{19s^2}{\chi^2_{\alpha/2,19}},\frac{19s^2}{\chi^2_{1-\alpha/2,19}}\right]\] under the course right-tail notation.</p><p><b>(iv)</b> Do not use the exact chi-squared interval without qualification. The normality assumption is violated; use another method or state that the chi-squared interval is not justified as exact.</p>`,
+    rubric:["Choose T interval for small normal unknown-\(\sigma\) mean &mdash; <b>2 pts</b>","Choose Z interval for known-\(\sigma\) mean &mdash; <b>1 pt</b>","Choose chi-squared interval with \(df=19\) for normal variance &mdash; <b>2 pts</b>","Reject or qualify chi-squared variance interval under strong skew &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Most final-exam interval questions are method-selection questions first and arithmetic questions second."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

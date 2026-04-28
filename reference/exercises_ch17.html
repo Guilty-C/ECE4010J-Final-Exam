@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 17</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 17</h1>
+  <nav class="tabs">
+    <button class="active">Ch 17 &mdash; Neyman-Pearson Decision Theory</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch17" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 17 &mdash; Neyman-Pearson Decision Theory</h2>
+    <p>Topics covered: null and alternative hypotheses, decision rules, Type I and Type II errors, significance level \(\alpha\), miss probability \(\beta\), power, critical regions, operating characteristic curves, sample-size planning, one-sided and two-sided decision tests, known-variance normal examples, Neyman-Pearson versus Fisher interpretation, confidence-interval duality, and final-style scenario diagnosis. The main exam traps are confusing \(\alpha\) with a posterior probability, treating a large \(p\)-value as proof of \(H_0\), forgetting that \(\beta\) depends on the true parameter value, using two-sided cutoffs for one-sided alternatives, and ignoring the pre-specified decision rule.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch17')">Expand all solutions</button>
+    <button onclick="collapseAll('ch17')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 17 &mdash; Q1",
+    level:"easy",
+    tags:["Terminology","Decision rule"],
+    src:"Original. Core Neyman-Pearson vocabulary.",
+    problem:String.raw`In Neyman-Pearson decision theory, define \(H_0\), \(H_1\), the critical region, Type I error, Type II error, \(\alpha\), \(\beta\), and power.`,
+    solution:String.raw`<p>\(H_0\) is the null hypothesis and \(H_1\) is the alternative hypothesis. A test statistic is computed from the data, and the <b>critical region</b> is the set of statistic values for which the rule says reject \(H_0\).</p><p>A Type I error is rejecting \(H_0\) when \(H_0\) is true; \(\alpha=P(\text{reject }H_0\mid H_0\text{ true})\). A Type II error is failing to reject \(H_0\) when \(H_1\) is true; \(\beta=P(\text{fail to reject }H_0\mid H_1\text{ true})\). Power is \(1-\beta=P(\text{reject }H_0\mid H_1\text{ true})\).</p>`,
+    rubric:["Define the hypotheses and critical region &mdash; <b>2 pts</b>","Define Type I error and \(\alpha\) &mdash; <b>2 pts</b>","Define Type II error and \(\beta\) &mdash; <b>2 pts</b>","Define power as \(1-\beta\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Always condition the error probability on which hypothesis or parameter value is true."
+  },
+  {
+    id:"Ch 17 &mdash; Q2",
+    level:"easy",
+    tags:["Type I error","Type II error"],
+    src:"Original. Scenario classification.",
+    problem:String.raw`A medical screening rule rejects \(H_0:\) patient is disease-free when the test statistic exceeds a cutoff. The alternative is \(H_1:\) patient has the disease. Describe the Type I and Type II errors in words.`,
+    solution:String.raw`<p>A Type I error is rejecting \(H_0\) when the patient is actually disease-free. In words, this is a false positive: the rule says the patient has the disease when they do not.</p><p>A Type II error is failing to reject \(H_0\) when the patient actually has the disease. In words, this is a false negative: the screening rule misses a diseased patient.</p>`,
+    rubric:["Translate \(H_0\) and \(H_1\) into the medical setting &mdash; <b>2 pts</b>","Identify Type I error as false positive &mdash; <b>2 pts</b>","Identify Type II error as false negative &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Do not decide which error is more serious until the context is specified; screening and confirmatory testing often value the errors differently."
+  },
+  {
+    id:"Ch 17 &mdash; Q3",
+    level:"easy",
+    tags:["Known variance","Alpha"],
+    src:"Original. Direct normal critical-region computation.",
+    problem:String.raw`Let \(X_1,\ldots,X_{16}\sim N(\mu,4^2)\). Test \(H_0:\mu=50\) against \(H_1:\mu>50\) with the rule reject \(H_0\) if \(\bar X>52\). Compute \(\alpha\).`,
+    solution:String.raw`<p>Under \(H_0\), \(\bar X\sim N(50,4^2/16)\), so the standard error is \(1\). Therefore</p><p>\[\alpha=P_{50}(\bar X>52)=P\left(Z>\frac{52-50}{1}\right)=P(Z>2)=0.0228.\]</p>`,
+    rubric:["State the null distribution of \(\bar X\) &mdash; <b>2 pts</b>","Compute standard error \(4/\sqrt{16}=1\) &mdash; <b>1 pt</b>","Standardize the cutoff correctly &mdash; <b>2 pts</b>","Report \(\alpha=0.0228\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The level is computed assuming the null parameter value, not using the observed sample mean."
+  },
+  {
+    id:"Ch 17 &mdash; Q4",
+    level:"easy",
+    tags:["Beta","Power"],
+    src:"Original. Companion to Q3.",
+    problem:String.raw`Use the same test as Q3: \(n=16\), \(\sigma=4\), reject \(H_0:\mu=50\) if \(\bar X>52\). Compute \(\beta\) and power when the true mean is \(\mu=53\).`,
+    solution:String.raw`<p>When \(\mu=53\), \(\bar X\sim N(53,1^2)\). The Type II error probability at \(\mu=53\) is</p><p>\[\beta(53)=P_{53}(\bar X\le52)=P\left(Z\le\frac{52-53}{1}\right)=P(Z\le-1)=0.1587.\]</p><p>The power at \(\mu=53\) is \(1-\beta(53)=0.8413\).</p>`,
+    rubric:["Use the alternative distribution with mean 53 &mdash; <b>2 pts</b>","Express \(\beta\) as failure to reject &mdash; <b>2 pts</b>","Compute \(\beta=0.1587\) &mdash; <b>1 pt</b>","Compute power \(0.8413\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"For a fixed decision rule, \(\alpha\) is one number here, but \(\beta(\mu)\) changes with the true alternative mean."
+  },
+  {
+    id:"Ch 17 &mdash; Q5",
+    level:"easy",
+    tags:["Critical region","One-sided test"],
+    src:"Original. Design a one-sided Z test.",
+    problem:String.raw`For \(X_1,\ldots,X_{25}\sim N(\mu,3^2)\), design a level \(\alpha=0.05\) test of \(H_0:\mu=100\) against \(H_1:\mu>100\). Give the critical region in terms of \(\bar X\).`,
+    solution:String.raw`<p>For an upper-sided test, reject for large \(\bar X\). Under \(H_0\), \(\bar X\sim N(100,(3/\sqrt{25})^2)\), with standard error \(0.6\).</p><p>Use \(z_{0.05}=1.645\). The cutoff is \(100+1.645(0.6)=100.987\). Thus reject \(H_0\) when \(\bar X>100.987\).</p>`,
+    rubric:["Choose an upper-tail critical region &mdash; <b>2 pts</b>","Compute the standard error \(0.6\) &mdash; <b>1 pt</b>","Use \(z_{0.05}=1.645\), not \(z_{0.025}\) &mdash; <b>2 pts</b>","Give the cutoff in terms of \(\bar X\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The alternative decides the tail direction; the significance level decides the tail area."
+  },
+  {
+    id:"Ch 17 &mdash; Q6",
+    level:"easy",
+    tags:["Two-sided test","Critical region"],
+    src:"Original. Two-sided known-variance cutoff.",
+    problem:String.raw`For \(X_1,\ldots,X_{36}\sim N(\mu,6^2)\), design a level \(\alpha=0.10\) two-sided test of \(H_0:\mu=20\) against \(H_1:\mu\ne20\). Give the critical region in terms of \(\bar X\).`,
+    solution:String.raw`<p>Under \(H_0\), \(\bar X\sim N(20,(6/\sqrt{36})^2)=N(20,1^2)\). A two-sided \(\alpha=0.10\) test puts \(0.05\) in each tail, so the critical value is \(z_{0.05}=1.645\).</p><p>Reject \(H_0\) if \(|\bar X-20|>1.645(1)\), equivalently if \(\bar X<18.355\) or \(\bar X>21.645\).</p>`,
+    rubric:["Recognize two-sided rejection in both tails &mdash; <b>2 pts</b>","Use \(\alpha/2=0.05\) per tail &mdash; <b>2 pts</b>","Compute standard error \(1\) &mdash; <b>1 pt</b>","State both endpoints of the critical region &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"A 10% two-sided test uses the same normal cutoff as a 90% confidence interval."
+  },
+  {
+    id:"Ch 17 &mdash; Q7",
+    level:"easy",
+    tags:["Fisher vs Neyman-Pearson","Interpretation"],
+    src:"Original. Conceptual interpretation check.",
+    problem:String.raw`A student says, "The \(p\)-value is 0.03, so \(H_0\) is false with probability 0.97." Explain why this is not a Neyman-Pearson or Fisher interpretation.`,
+    solution:String.raw`<p>The statement is wrong because the usual frequentist framework treats \(H_0\) as a fixed claim, not as a random event with posterior probability. A \(p\)-value of 0.03 means that, if \(H_0\) were true and the model assumptions held, data at least as incompatible with \(H_0\) would occur with probability 0.03.</p><p>In Neyman-Pearson testing, a pre-specified rule compares the statistic or \(p\)-value to \(\alpha\) and controls long-run Type I error. In Fisher testing, the \(p\)-value is evidence against \(H_0\), not the probability that \(H_0\) is false.</p>`,
+    rubric:["Reject the posterior-probability interpretation &mdash; <b>2 pts</b>","Give the correct conditional meaning of a \(p\)-value &mdash; <b>2 pts</b>","Mention NP long-run decision control &mdash; <b>1 pt</b>","Mention Fisher evidence interpretation &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"A \(p\)-value is computed under \(H_0\); it is not \(P(H_0\mid\text{data})\)."
+  },
+  {
+    id:"Ch 17 &mdash; Q8",
+    level:"easy",
+    tags:["Confidence interval duality","Decision"],
+    src:"Original. CI-test duality.",
+    problem:String.raw`A 95% two-sided confidence interval for a mean is \([4.2,7.8]\). Without recomputing a test statistic, what decision is made for \(H_0:\mu=8.0\) versus \(H_1:\mu\ne8.0\) at \(\alpha=0.05\)? What about \(H_0:\mu=6.0\)?`,
+    solution:String.raw`<p>For the two-sided test at \(\alpha=0.05\), reject a null value exactly when that value is outside the corresponding 95% confidence interval.</p><p>Since \(8.0\notin[4.2,7.8]\), reject \(H_0:\mu=8.0\). Since \(6.0\in[4.2,7.8]\), fail to reject \(H_0:\mu=6.0\).</p>`,
+    rubric:["State the two-sided CI-test duality &mdash; <b>2 pts</b>","Reject the null value 8.0 &mdash; <b>2 pts</b>","Fail to reject the null value 6.0 &mdash; <b>2 pts</b>","Use cautious language, not accept \(H_0\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Duality applies when the confidence level and test significance level match and both are two-sided."
+  },
+  {
+    id:"Ch 17 &mdash; Q9",
+    level:"medium",
+    tags:["Lower-tail test","Known variance"],
+    src:"Original. One-sided decision test.",
+    problem:String.raw`Let \(X_1,\ldots,X_{64}\sim N(\mu,8^2)\). Test \(H_0:\mu=40\) against \(H_1:\mu<40\) at level \(0.01\). Find the rejection rule in terms of \(\bar X\).`,
+    solution:String.raw`<p>Under \(H_0\), the standard error is \(8/\sqrt{64}=1\). A lower-tail level \(0.01\) test rejects for small \(\bar X\). The lower 1% standard normal cutoff is \(-2.326\).</p><p>So reject \(H_0\) when \((\bar X-40)/1<-2.326\), equivalently when \(\bar X<37.674\).</p>`,
+    rubric:["Choose lower-tail rejection &mdash; <b>2 pts</b>","Compute standard error \(1\) &mdash; <b>1 pt</b>","Use cutoff \(-2.326\) for 1% lower tail &mdash; <b>2 pts</b>","State \(\bar X<37.674\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"If the alternative is \(<\), the critical region is in the left tail."
+  },
+  {
+    id:"Ch 17 &mdash; Q10",
+    level:"medium",
+    tags:["Two-sided beta","Power"],
+    src:"Original. Known-variance power calculation.",
+    problem:String.raw`For \(X_1,\ldots,X_{25}\sim N(\mu,5^2)\), test \(H_0:\mu=10\) against \(H_1:\mu\ne10\) at \(\alpha=0.05\). Compute \(\beta(12)\) and power at \(\mu=12\).`,
+    solution:String.raw`<p>The standard error is \(5/\sqrt{25}=1\). The two-sided level 0.05 critical region is \(\bar X<10-1.96=8.04\) or \(\bar X>10+1.96=11.96\).</p><p>At \(\mu=12\), \(\bar X\sim N(12,1^2)\). Failure to reject means \(8.04\le\bar X\le11.96\), so</p><p>\[\beta(12)=P(-3.96\le Z\le -0.04)=\Phi(-0.04)-\Phi(-3.96)\approx0.4840-0.0000=0.4840.\]</p><p>Power is \(1-\beta(12)\approx0.5160\).</p>`,
+    rubric:["Find the two-sided critical region &mdash; <b>3 pts</b>","Use the distribution centered at \(\mu=12\) for \(\beta\) &mdash; <b>2 pts</b>","Compute the probability of the non-rejection interval &mdash; <b>2 pts</b>","Compute power &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"For a two-sided test, \(\beta\) is the probability of landing between two cutoffs under the alternative."
+  },
+  {
+    id:"Ch 17 &mdash; Q11",
+    level:"medium",
+    tags:["OC curve","Operating characteristic"],
+    src:"Original. OC curve interpretation.",
+    problem:String.raw`A test has operating characteristic function \(L(\mu)=P_\mu(\text{fail to reject }H_0)\). Suppose \(H_0:\mu=0\), \(H_1:\mu>0\), and \(L(0)=0.95\), \(L(1)=0.62\), \(L(2)=0.18\). Identify \(\alpha\), \(\beta(1)\), \(\beta(2)\), and the powers at \(\mu=1,2\).`,
+    solution:String.raw`<p>The OC function gives the probability of accepting or failing to reject \(H_0\). At the null value, \(L(0)=1-\alpha\), so \(\alpha=1-0.95=0.05\).</p><p>For alternative values, \(L(\mu)=\beta(\mu)\). Thus \(\beta(1)=0.62\), \(\beta(2)=0.18\), power at \(\mu=1\) is \(0.38\), and power at \(\mu=2\) is \(0.82\).</p>`,
+    rubric:["Use \(L(0)=1-\alpha\) &mdash; <b>2 pts</b>","Identify \(\alpha=0.05\) &mdash; <b>1 pt</b>","Identify \(\beta\) values at alternatives &mdash; <b>2 pts</b>","Compute both powers &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"OC curves usually decrease as the true value moves deeper into the rejection-favored alternative."
+  },
+  {
+    id:"Ch 17 &mdash; Q12",
+    level:"medium",
+    tags:["Sample size planning","Power"],
+    src:"Original. One-sided known-variance design.",
+    problem:String.raw`Plan a one-sided level \(0.05\) test of \(H_0:\mu=100\) against \(H_1:\mu>100\), with known \(\sigma=10\). Choose \(n\) so that power is at least \(0.90\) when \(\mu=105\).`,
+    solution:String.raw`<p>The level \(0.05\) upper-tail rule rejects when \(\bar X>100+z_{0.05}\sigma/\sqrt n\), with \(z_{0.05}=1.645\). At \(\mu=105\), requiring power \(0.90\) means \(\beta(105)\le0.10\):</p><p>\[P_{105}\left(\bar X\le100+1.645\frac{10}{\sqrt n}\right)\le0.10.\]</p><p>Standardizing gives \[\frac{100+1.645(10/\sqrt n)-105}{10/\sqrt n}\le -1.282.\]</p><p>Thus \(5\sqrt n/10\ge1.645+1.282=2.927\), so \(\sqrt n\ge5.854\) and \(n\ge34.27\). Round up to \(n=35\).</p>`,
+    rubric:["Set up the level 0.05 upper-tail cutoff &mdash; <b>2 pts</b>","Translate 90% power to \(\beta\le0.10\) &mdash; <b>2 pts</b>","Use \(z_{0.10}=1.282\) in the planning inequality &mdash; <b>2 pts</b>","Solve and round up to \(n=35\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Power planning almost always combines the Type I cutoff and the desired Type II cutoff."
+  },
+  {
+    id:"Ch 17 &mdash; Q13",
+    level:"medium",
+    tags:["Likelihood ratio","Neyman-Pearson lemma"],
+    src:"Original. Simple-versus-simple structure.",
+    problem:String.raw`State the Neyman-Pearson lemma for testing a simple null \(H_0:\theta=\theta_0\) against a simple alternative \(H_1:\theta=\theta_1\). What form does the most powerful level-\(\alpha\) test take?`,
+    solution:String.raw`<p>For testing simple \(H_0\) against simple \(H_1\), the Neyman-Pearson lemma says that among all tests with Type I error probability at most \(\alpha\), the likelihood-ratio test is most powerful for detecting \(\theta_1\).</p><p>Equivalently, reject \(H_0\) for data values where the likelihood under \(H_1\) is sufficiently large relative to the likelihood under \(H_0\): \[\frac{L(\theta_1;x)}{L(\theta_0;x)}>k,\] with \(k\) chosen so that \(P_{\theta_0}(\text{reject})=\alpha\) when possible. Some conventions use \(L(\theta_0;x)/L(\theta_1;x)<c\), which is the same rule.</p>`,
+    rubric:["State the simple-versus-simple setting &mdash; <b>2 pts</b>","State most powerful among level-\(\alpha\) tests &mdash; <b>2 pts</b>","Give the likelihood-ratio rejection form &mdash; <b>2 pts</b>","Explain the constant is chosen to control \(\alpha\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"The lemma is about maximizing power at a specified alternative, not about estimating the parameter."
+  },
+  {
+    id:"Ch 17 &mdash; Q14",
+    level:"medium",
+    tags:["Simple vs composite","Power function"],
+    src:"Original. Hypothesis classification.",
+    problem:String.raw`Classify each pair as simple or composite, and say whether \(\beta\) is a single number or a function over alternatives.<ol type="i"><li>\(H_0:\mu=0\), \(H_1:\mu=1\).</li><li>\(H_0:\mu=0\), \(H_1:\mu>0\).</li><li>\(H_0:\mu\le0\), \(H_1:\mu>0\).</li></ol>`,
+    solution:String.raw`<p><b>(i)</b> Both null and alternative are simple. For a fixed test, \(\beta\) at \(\mu=1\) is a single number.</p><p><b>(ii)</b> The null is simple and the alternative is composite. \(\beta(\mu)\) is a function for \(\mu>0\).</p><p><b>(iii)</b> Both hypotheses are composite. The Type I error may need control over all \(\mu\le0\), and \(\beta(\mu)\) is a function over \(\mu>0\).</p>`,
+    rubric:["Correctly classify (i) &mdash; <b>2 pts</b>","Correctly classify (ii) &mdash; <b>2 pts</b>","Correctly classify (iii) &mdash; <b>2 pts</b>","Explain \(\beta\) as a function for composite alternatives &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"A hypothesis is simple only if it pins down the full parameter value needed to determine the sampling distribution."
+  },
+  {
+    id:"Ch 17 &mdash; Q15",
+    level:"medium",
+    tags:["Randomization","Discrete test"],
+    src:"Original. Discrete critical region issue.",
+    problem:String.raw`A discrete test statistic \(T\) has, under \(H_0\), \(P(T\ge5)=0.031\) and \(P(T\ge4)=0.083\). You want a level \(0.05\) upper-tail test. What non-randomized critical region is available? If exact size 0.05 is required, what idea is needed?`,
+    solution:String.raw`<p>The largest non-randomized upper-tail critical region with size at most 0.05 is \(T\ge5\), because its Type I error probability is \(0.031\). Using \(T\ge4\) would exceed the level, since \(0.083>0.05\).</p><p>If an exact size \(0.05\) test is required, randomization at the boundary \(T=4\) is needed: always reject for \(T\ge5\), reject with some probability \(\gamma\) when \(T=4\), and choose \(\gamma\) so the total null rejection probability is \(0.05\).</p>`,
+    rubric:["Choose \(T\ge5\) for a non-randomized level 0.05 test &mdash; <b>2 pts</b>","Explain why \(T\ge4\) is too large &mdash; <b>2 pts</b>","Describe boundary randomization for exact size &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"In discrete problems, exact \(\alpha\) is often impossible without randomized tests."
+  },
+  {
+    id:"Ch 17 &mdash; Q16",
+    level:"medium",
+    tags:["Decision language","Acceptance"],
+    src:"Original. Interpretation discipline.",
+    problem:String.raw`A level \(0.05\) test fails to reject \(H_0\). A student concludes, "The probability that \(H_0\) is true is at least 0.95." Diagnose the statement and give a better conclusion.`,
+    solution:String.raw`<p>The statement is incorrect. A level \(0.05\) test controls \(P(\text{reject }H_0\mid H_0\text{ true})\), not \(P(H_0\text{ true}\mid\text{data})\). Failing to reject is not the same as proving \(H_0\).</p><p>A better conclusion is: at the chosen significance level and under the model assumptions, the data do not fall in the pre-specified rejection region, so there is insufficient evidence to reject \(H_0\). This may reflect either a true null or low power.</p>`,
+    rubric:["Reject the posterior probability claim &mdash; <b>2 pts</b>","State what level 0.05 actually controls &mdash; <b>2 pts</b>","Use fail-to-reject language &mdash; <b>1 pt</b>","Mention possible low power &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Neyman-Pearson tests make decisions under controlled long-run error rates; they do not assign truth probabilities to hypotheses."
+  },
+  {
+    id:"Ch 17 &mdash; Q17",
+    level:"medium",
+    tags:["Tradeoff","Alpha beta"],
+    src:"Original. Error tradeoff.",
+    problem:String.raw`For a fixed sample size and model, what usually happens to \(\beta\) and power if \(\alpha\) is made smaller? Explain using critical regions.`,
+    solution:String.raw`<p>Making \(\alpha\) smaller usually shrinks the critical region, because the test must reject less often under \(H_0\). With a smaller rejection region, it is also harder to reject under alternative parameter values.</p><p>Therefore \(\beta\), the probability of failing to reject under the alternative, usually increases, and power \(1-\beta\) decreases. The exception would require changing some other design feature, such as increasing \(n\) or changing the test statistic.</p>`,
+    rubric:["State that smaller \(\alpha\) shrinks the critical region &mdash; <b>2 pts</b>","State that \(\beta\) usually increases &mdash; <b>2 pts</b>","State that power usually decreases &mdash; <b>1 pt</b>","Mention fixed \(n\)/model condition &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"There is no free reduction of both error probabilities unless information is added, usually through a larger sample size."
+  },
+  {
+    id:"Ch 17 &mdash; Q18",
+    level:"medium",
+    tags:["Confidence interval duality","One-sided test"],
+    src:"Original. One-sided duality.",
+    problem:String.raw`A 95% lower confidence bound for \(\mu\) is \(L=12.1\). Use confidence-bound duality to decide a level \(0.05\) test of \(H_0:\mu\le10\) against \(H_1:\mu>10\).`,
+    solution:String.raw`<p>A 95% lower confidence bound corresponds to a level 0.05 upper-sided test. If the lower bound is above the null boundary 10, then all parameter values \(\mu\le10\) are excluded in the direction relevant to \(H_1:\mu>10\).</p><p>Since \(12.1>10\), reject \(H_0:\mu\le10\) at level 0.05. The data support the claim that \(\mu>10\) under the model assumptions.</p>`,
+    rubric:["Recognize one-sided confidence-bound/test duality &mdash; <b>2 pts</b>","Compare the lower bound to 10 correctly &mdash; <b>2 pts</b>","Reject \(H_0\) &mdash; <b>1 pt</b>","State the directional interpretation &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Use a lower confidence bound for greater-than alternatives and an upper confidence bound for less-than alternatives."
+  },
+  {
+    id:"Ch 17 &mdash; Q19",
+    level:"medium",
+    tags:["Critical value","Observed decision"],
+    src:"Original. Compute and decide.",
+    problem:String.raw`A factory claims the mean fill is \(\mu=500\) ml. The known standard deviation is \(\sigma=12\) ml. From \(n=36\) bottles, \(\bar x=496.1\). Test \(H_0:\mu=500\) against \(H_1:\mu<500\) at \(\alpha=0.05\).`,
+    solution:String.raw`<p>The standard error is \(12/\sqrt{36}=2\). For a lower-tail level 0.05 test, reject if</p><p>\[Z=\frac{\bar X-500}{2}<-1.645,\]</p><p>equivalently if \(\bar X<500-1.645(2)=496.71\). Since \(496.1<496.71\), reject \(H_0\). The observed statistic is \(z=(496.1-500)/2=-1.95\), which is in the rejection region.</p>`,
+    rubric:["Choose lower-tail Z test &mdash; <b>2 pts</b>","Compute standard error \(2\) &mdash; <b>1 pt</b>","Find cutoff \(496.71\) or \(z=-1.645\) &mdash; <b>2 pts</b>","Make the correct rejection decision &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"For one-sided tests, do not double the tail area unless the problem asks for a two-sided test."
+  },
+  {
+    id:"Ch 17 &mdash; Q20",
+    level:"medium",
+    tags:["Acceptance region","Alpha"],
+    src:"Original. Reverse-engineer level.",
+    problem:String.raw`A two-sided known-variance test of \(H_0:\mu=80\) uses \(n=49\), \(\sigma=14\), and accepts \(H_0\) when \(76\le\bar X\le84\). What is the significance level \(\alpha\)?`,
+    solution:String.raw`<p>Under \(H_0\), \(\bar X\sim N(80,(14/\sqrt{49})^2)=N(80,2^2)\). The acceptance endpoints are 4 units from 80, or \(4/2=2\) standard errors.</p><p>Thus the rejection region is \(|Z|>2\), and \(\alpha=P(|Z|>2)=2P(Z>2)=2(0.0228)=0.0456.\)</p>`,
+    rubric:["Identify the rejection region as outside the acceptance interval &mdash; <b>2 pts</b>","Compute standard error \(2\) &mdash; <b>1 pt</b>","Standardize endpoints to \(\pm2\) &mdash; <b>2 pts</b>","Compute \(\alpha=0.0456\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The acceptance region is the complement of the critical region."
+  },
+  {
+    id:"Ch 17 &mdash; Q21",
+    level:"hard",
+    tags:["Likelihood ratio","Bernoulli"],
+    src:"Original. Neyman-Pearson lemma application.",
+    problem:String.raw`Let \(X\sim\operatorname{Binomial}(10,p)\). Use the Neyman-Pearson idea to test \(H_0:p=0.3\) against \(H_1:p=0.6\). Show why the most powerful test rejects for large \(X\), and find the largest critical region of the form \(X\ge c\) with \(\alpha\le0.05\).`,
+    solution:String.raw`<p>The likelihood ratio favoring \(H_1\) over \(H_0\) is</p><p>\[\frac{L(0.6;x)}{L(0.3;x)}=\frac{\binom{10}{x}0.6^x0.4^{10-x}}{\binom{10}{x}0.3^x0.7^{10-x}}=\left(\frac{0.6}{0.3}\right)^x\left(\frac{0.4}{0.7}\right)^{10-x}.\]</p><p>This increases with \(x\), so the NP most powerful critical region is in the upper tail. Under \(p=0.3\), \(P(X\ge7)=0.0106+0.0014+0.0001+0.000006\approx0.012\), while \(P(X\ge6)\approx0.0473\). Thus \(X\ge6\) is the largest upper-tail critical region with \(\alpha\le0.05\).</p>`,
+    rubric:["Write or describe the likelihood ratio &mdash; <b>3 pts</b>","Show it is increasing in \(x\) &mdash; <b>2 pts</b>","Check upper-tail binomial probabilities under \(p=0.3\) &mdash; <b>2 pts</b>","Choose \(X\ge6\) &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"For binomial simple alternatives, the likelihood ratio is monotone when the alternative success probability is larger."
+  },
+  {
+    id:"Ch 17 &mdash; Q22",
+    level:"hard",
+    tags:["Power function","Known variance"],
+    src:"Original. Derive a power curve.",
+    problem:String.raw`For \(X_1,\ldots,X_n\sim N(\mu,\sigma^2)\) with known \(\sigma\), derive the power function for the level-\(\alpha\) test of \(H_0:\mu=\mu_0\) against \(H_1:\mu>\mu_0\).`,
+    solution:String.raw`<p>The level-\(\alpha\) upper-tail test rejects when</p><p>\[\bar X>\mu_0+z_\alpha\frac{\sigma}{\sqrt n}.\]</p><p>For a general true value \(\mu\), \(\bar X\sim N(\mu,\sigma^2/n)\). Therefore the power function is</p><p>\[\pi(\mu)=P_\mu\left(\bar X>\mu_0+z_\alpha\frac{\sigma}{\sqrt n}\right)=1-\Phi\left(\frac{\mu_0-\mu}{\sigma/\sqrt n}+z_\alpha\right).\]</p><p>Equivalently, \(\pi(\mu)=\Phi\left(\frac{\mu-\mu_0}{\sigma/\sqrt n}-z_\alpha\right)\).</p>`,
+    rubric:["Write the level-\(\alpha\) rejection cutoff &mdash; <b>2 pts</b>","Use the sampling distribution under general \(\mu\) &mdash; <b>2 pts</b>","Standardize correctly &mdash; <b>3 pts</b>","Give the final power function &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"A power function is not evaluated only at the null; it describes rejection probability across possible true parameter values."
+  },
+  {
+    id:"Ch 17 &mdash; Q23",
+    level:"hard",
+    tags:["Two-sided sample size","Power planning"],
+    src:"Original. Approximate two-sided design.",
+    problem:String.raw`For \(X_i\sim N(\mu,9^2)\), plan a two-sided level \(0.05\) test of \(H_0:\mu=0\) with at least 80% power when \(\mu=3\). Use the common approximation \(n\ge[(z_{\alpha/2}+z_\beta)\sigma/\delta]^2\), where \(\delta=|\mu-\mu_0|\) and \(\beta=0.20\).`,
+    solution:String.raw`<p>Here \(z_{\alpha/2}=z_{0.025}=1.96\), \(z_\beta=z_{0.20}=0.842\), \(\sigma=9\), and \(\delta=3\). Therefore</p><p>\[n\ge\left(\frac{(1.96+0.842)9}{3}\right)^2=(8.406)^2=70.66.\]</p><p>Round up to \(n=71\). The approximation is conservative-style for the common two-sided planning formula, and exact power could be checked using both tails.</p>`,
+    rubric:["Identify \(\delta=3\) and \(\beta=0.20\) &mdash; <b>2 pts</b>","Use \(z_{0.025}=1.96\) and \(z_{0.20}=0.842\) &mdash; <b>2 pts</b>","Compute the sample-size expression &mdash; <b>2 pts</b>","Round up to 71 and note approximation &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Sample sizes always round upward; otherwise the target power may not be met."
+  },
+  {
+    id:"Ch 17 &mdash; Q24",
+    level:"hard",
+    tags:["OC curve","Formula"],
+    src:"Original. Acceptance probability formula.",
+    problem:String.raw`A test of \(H_0:\mu=10\) accepts \(H_0\) when \(8.5\le\bar X\le11.5\). Suppose \(X_i\sim N(\mu,4^2)\) and \(n=16\). Derive the operating characteristic \(L(\mu)=P_\mu(8.5\le\bar X\le11.5)\), and evaluate \(L(10)\) and \(L(12)\).`,
+    solution:String.raw`<p>The standard error is \(4/\sqrt{16}=1\). For any \(\mu\),</p><p>\[L(\mu)=P_\mu(8.5\le\bar X\le11.5)=\Phi(11.5-\mu)-\Phi(8.5-\mu),\]</p><p>where the arguments are in standard-error units because the standard error is 1.</p><p>At \(\mu=10\), \(L(10)=\Phi(1.5)-\Phi(-1.5)=0.9332-0.0668=0.8664\), so \(\alpha=0.1336\). At \(\mu=12\), \(L(12)=\Phi(-0.5)-\Phi(-3.5)=0.3085-0.0002=0.3083\).</p>`,
+    rubric:["Compute standard error \(1\) &mdash; <b>1 pt</b>","Derive the OC expression &mdash; <b>3 pts</b>","Evaluate \(L(10)\) &mdash; <b>2 pts</b>","Evaluate \(L(12)\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"The OC value at the null is the probability of non-rejection, not the probability of rejection."
+  },
+  {
+    id:"Ch 17 &mdash; Q25",
+    level:"hard",
+    tags:["UMP intuition","Monotone likelihood ratio"],
+    src:"Original. Conceptual extension.",
+    problem:String.raw`For \(X_1,\ldots,X_n\sim N(\mu,\sigma^2)\) with known \(\sigma\), explain why the upper-tail Z test is a natural uniformly most powerful candidate for testing \(H_0:\mu\le\mu_0\) against \(H_1:\mu>\mu_0\).`,
+    solution:String.raw`<p>The joint normal likelihood depends on the data through \(\bar X\). For any simple comparison \(\mu_0\) versus \(\mu_1>\mu_0\), the likelihood ratio favoring \(\mu_1\) over \(\mu_0\) is an increasing function of \(\bar X\). By the Neyman-Pearson lemma, the most powerful level-\(\alpha\) test for that simple alternative rejects for large \(\bar X\).</p><p>Because the same upper-tail ordering applies for every \(\mu_1>\mu_0\), the resulting upper-tail test is the natural uniformly most powerful test for the one-sided composite alternative, with the cutoff chosen at the boundary \(\mu=\mu_0\) to control the size over \(H_0:\mu\le\mu_0\).</p>`,
+    rubric:["Identify \(\bar X\) as the relevant statistic &mdash; <b>2 pts</b>","Explain likelihood ratio increases with \(\bar X\) for larger \(\mu\) &mdash; <b>3 pts</b>","Connect to the NP lemma for simple alternatives &mdash; <b>2 pts</b>","Explain boundary control for composite \(H_0\) &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"One-sided normal tests work cleanly because larger sample means consistently favor larger true means."
+  },
+  {
+    id:"Ch 17 &mdash; Q26",
+    level:"hard",
+    tags:["Fisher vs Neyman-Pearson","Scenario diagnosis"],
+    src:"Original. Final-style interpretation.",
+    problem:String.raw`A report says: "We observed \(p=0.07\). Since this is not significant at 5%, the treatment has no effect. Also, because \(\alpha=0.05\), the chance that this conclusion is wrong is only 5%." Identify at least three problems with the report.`,
+    solution:String.raw`<p>First, failing to reject at 5% is not evidence that the treatment has exactly no effect; it means the data did not cross the pre-specified rejection threshold. Second, the chance that the conclusion is wrong is not \(\alpha\). The significance level is \(P(\text{reject }H_0\mid H_0\text{ true})\), not \(P(H_0\text{ false}\mid\text{fail to reject})\).</p><p>Third, \(p=0.07\) may still be moderate evidence in a Fisher evidence sense, depending on context, even though it does not trigger a 5% Neyman-Pearson rejection. Fourth, the report says nothing about power or sample size; a non-significant result could be caused by low power.</p>`,
+    rubric:["Reject the conclusion that no rejection proves no effect &mdash; <b>2 pts</b>","Correct the meaning of \(\alpha\) &mdash; <b>2 pts</b>","Distinguish Fisher evidence from NP decision threshold &mdash; <b>2 pts</b>","Mention power/sample-size limitations &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Final exams often reward diagnosing language as much as arithmetic."
+  },
+  {
+    id:"Ch 17 &mdash; Q27",
+    level:"hard",
+    tags:["Design tradeoff","Critical region"],
+    src:"Original. Compare two tests.",
+    problem:String.raw`Two tests use the same statistic for \(H_0:\theta=\theta_0\) against the same alternative. Test A has \(\alpha=0.01\) and power 0.55 at \(\theta=\theta_1\). Test B has \(\alpha=0.05\) and power 0.78 at \(\theta=\theta_1\). Which test is better? Give a decision-theory answer, not a one-word answer.`,
+    solution:String.raw`<p>There is no universally better test without specifying the relative costs of Type I and Type II errors or a constraint on \(\alpha\). Test A is more conservative: it has a smaller false-rejection probability under \(H_0\), but it misses \(\theta_1\) more often, with \(\beta=0.45\). Test B has larger Type I error probability but better detection at \(\theta_1\), with \(\beta=0.22\).</p><p>If the design requirement is level 0.01, choose A or redesign. If the allowed level is 0.05 and detecting \(\theta_1\) is important, B may be preferred. Neyman-Pearson theory normally fixes an acceptable \(\alpha\) first and then compares power among tests satisfying that constraint.</p>`,
+    rubric:["State that costs or constraints are needed &mdash; <b>2 pts</b>","Compare \(\alpha\) values correctly &mdash; <b>2 pts</b>","Compute or identify \(\beta\) values &mdash; <b>2 pts</b>","Explain NP constraint-then-maximize-power logic &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Higher power is attractive only among tests whose Type I error rate is acceptable for the problem."
+  },
+  {
+    id:"Ch 17 &mdash; Q28",
+    level:"hard",
+    tags:["Composite null","Size"],
+    src:"Original. Boundary argument.",
+    problem:String.raw`For \(X_i\sim N(\mu,\sigma^2)\) with known \(\sigma\), consider the test of \(H_0:\mu\le\mu_0\) against \(H_1:\mu>\mu_0\) that rejects when \(\bar X>\mu_0+z_\alpha\sigma/\sqrt n\). Show that its size is \(\alpha\).`,
+    solution:String.raw`<p>The size is \(\sup_{\mu\le\mu_0}P_\mu(\text{reject})\). For this test,</p><p>\[P_\mu(\text{reject})=P_\mu\left(\bar X>\mu_0+z_\alpha\frac{\sigma}{\sqrt n}\right)=1-\Phi\left(\frac{\mu_0-\mu}{\sigma/\sqrt n}+z_\alpha\right).\]</p><p>When \(\mu\le\mu_0\), the term \((\mu_0-\mu)/(\sigma/\sqrt n)\ge0\), so this rejection probability is at most \(1-\Phi(z_\alpha)=\alpha\). The maximum occurs at the boundary \(\mu=\mu_0\). Therefore the size is \(\alpha\).</p>`,
+    rubric:["Define size as a supremum over the composite null &mdash; <b>2 pts</b>","Compute the rejection probability for general \(\mu\le\mu_0\) &mdash; <b>3 pts</b>","Show it is maximized at \(\mu=\mu_0\) &mdash; <b>2 pts</b>","Conclude size \(\alpha\) &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"For one-sided normal tests, the least favorable null value is the boundary closest to the alternative."
+  },
+  {
+    id:"Ch 17 &mdash; Q29",
+    level:"hard",
+    tags:["Final-style diagnosis","Method selection"],
+    src:"Original. Comprehensive scenario diagnosis.",
+    problem:String.raw`A manufacturer wants to detect whether mean battery life has dropped below 10 hours. Historical data justify known \(\sigma=1.2\). A sample of \(n=64\) batteries has \(\bar x=9.72\). The team asks for "a 95% confidence interval and a yes/no production decision." Diagnose the appropriate hypotheses, test direction, level if using a 95% one-sided decision standard, decision rule, observed decision, and how the confidence bound relates.`,
+    solution:String.raw`<p>The practical concern is a decrease, so use \(H_0:\mu\ge10\) or boundary \(H_0:\mu=10\) for calibration, against \(H_1:\mu<10\). A 95% one-sided decision standard corresponds to \(\alpha=0.05\). The standard error is \(1.2/\sqrt{64}=0.15\).</p><p>The lower-tail rejection rule is \(\bar X<10-1.645(0.15)=9.753\). Since \(\bar x=9.72<9.753\), reject the no-drop null at level 0.05 and flag evidence that mean battery life is below 10 hours.</p><p>The matching 95% upper confidence bound is \((-\infty,\bar x+1.645(0.15)] = (-\infty,9.967]\). Because the upper bound is below 10, it supports the same one-sided decision.</p>`,
+    rubric:["Choose lower-tail hypotheses matching a drop &mdash; <b>2 pts</b>","Use \(\alpha=0.05\) for a 95% one-sided standard &mdash; <b>1 pt</b>","Compute standard error and critical cutoff &mdash; <b>2 pts</b>","Make the observed rejection decision &mdash; <b>2 pts</b>","Connect to the matching upper confidence bound &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"For a less-than alternative, the matching confidence object is an upper bound; if that upper bound is below the threshold, reject."
+  },
+  {
+    id:"Ch 17 &mdash; Q30",
+    level:"hard",
+    tags:["Comprehensive","Final-style"],
+    src:"Original. Mixed Chapter 17 review.",
+    problem:String.raw`For each mini-scenario, give the correct Neyman-Pearson diagnosis.<ol type="i"><li>A rule has \(\alpha=0.10\), but the observed \(p\)-value is 0.12.</li><li>A test has power 0.92 at \(\mu=15\).</li><li>A two-sided 99% confidence interval excludes \(\mu_0\).</li><li>An engineer reduces \(\alpha\) without increasing \(n\).</li><li>A one-sided alternative is \(\mu>\mu_0\), but the sample mean is far below \(\mu_0\).</li></ol>`,
+    solution:String.raw`<p><b>(i)</b> Fail to reject at \(\alpha=0.10\), because \(p=0.12>0.10\). This does not prove \(H_0\).</p><p><b>(ii)</b> The Type II error probability at \(\mu=15\) is \(\beta(15)=0.08\).</p><p><b>(iii)</b> Reject \(H_0:\mu=\mu_0\) in the corresponding two-sided \(\alpha=0.01\) test.</p><p><b>(iv)</b> The critical region usually shrinks, so power usually decreases and \(\beta\) increases for fixed alternatives.</p><p><b>(v)</b> The observation is in the wrong direction for an upper-tail test, so it should not reject for \(H_1:\mu>\mu_0\), even if it is far from \(\mu_0\) in the lower direction.</p>`,
+    rubric:["Correctly decide from \(p\)-value and \(\alpha\) &mdash; <b>2 pts</b>","Convert power to \(\beta\) &mdash; <b>2 pts</b>","Use CI-test duality at \(\alpha=0.01\) &mdash; <b>2 pts</b>","Explain alpha-power tradeoff &mdash; <b>2 pts</b>","Respect one-sided direction &mdash; <b>2 pts</b>"],
+    total:"10 pts",
+    tip:"In final-style mixed questions, first identify the decision framework, then compute. Do not let a large numerical discrepancy override the stated alternative direction."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 18</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 18</h1>
+  <nav class="tabs">
+    <button class="active">Ch 18 &mdash; Null Hypothesis Significance Testing</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch18" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 18 &mdash; Null Hypothesis Significance Testing</h2>
+    <p>Topics covered: null and alternative hypotheses, test statistics, P-values, significance levels, Fisher's evidence view, Neyman-Pearson decision rules, the modern hybrid of both traditions, reject versus fail-to-reject language, Type I and Type II errors, one-sided and two-sided tests, confidence-interval duality, multiple testing and p-hacking, practical versus statistical significance, and final-style multiple-choice interpretation. The main exam traps are treating the P-value as \(P(H_0\mid\text{data})\), saying a nonsignificant result proves \(H_0\), choosing \(\alpha\) after seeing the data, confusing statistical and practical importance, and ignoring repeated testing.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch18')">Expand all solutions</button>
+    <button onclick="collapseAll('ch18')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 18 &mdash; Q1",
+    level:"easy",
+    tags:["Vocabulary","Hypotheses"],
+    src:"Original. Basic NHST setup.",
+    problem:String.raw`A manufacturer claims the mean fill volume is 500 ml. An auditor wants to test whether the process is underfilling. Write \(H_0\) and \(H_1\), and state whether the test is one-sided or two-sided.`,
+    solution:String.raw`<p>The standard setup is \[H_0:\mu=500,\qquad H_1:\mu<500.\]</p><p>This is a left-tailed one-sided test because the auditor is specifically looking for underfilling, not any difference from 500 ml.</p>`,
+    rubric:["State \(H_0:\mu=500\) or \(\mu\ge500\) under the course's simple-null convention &mdash; <b>2 pts</b>","State \(H_1:\mu<500\) &mdash; <b>2 pts</b>","Identify the test as one-sided/left-tailed &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The alternative comes from the research question. Do not automatically write a two-sided alternative when the wording is directional."
+  },
+  {
+    id:"Ch 18 &mdash; Q2",
+    level:"easy",
+    tags:["P-value","Interpretation"],
+    src:"Original. Common P-value interpretation trap.",
+    problem:String.raw`A study reports \(p=0.031\) for testing \(H_0:\mu=0\) against \(H_1:\mu\ne0\). Which interpretation is correct?<ol type="a"><li>There is a 3.1% probability that \(H_0\) is true.</li><li>If \(H_0\) were true, data at least as extreme as those observed would occur with probability 3.1%.</li><li>There is a 96.9% probability that \(H_1\) is true.</li><li>The result is practically important.</li></ol>`,
+    solution:String.raw`<p>The correct answer is <b>(b)</b>. A P-value is computed under the assumption that \(H_0\) is true. It is a tail probability for data or a test statistic, not the posterior probability of a hypothesis.</p><p>Options (a) and (c) reverse the conditioning. Option (d) confuses statistical significance with practical significance.</p>`,
+    rubric:["Choose (b) &mdash; <b>2 pts</b>","Explain the conditioning on \(H_0\) &mdash; <b>2 pts</b>","Reject at least one common wrong interpretation &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The phrase to remember is: probability of data this extreme or more extreme, assuming the null model."
+  },
+  {
+    id:"Ch 18 &mdash; Q3",
+    level:"easy",
+    tags:["Significance level","Decision"],
+    src:"Original. Direct alpha decision question.",
+    problem:String.raw`For a prespecified significance level \(\alpha=0.05\), a test produces \(p=0.071\). What is the decision? Use correct NHST language.`,
+    solution:String.raw`<p>Since \(p=0.071>0.05\), the result is not statistically significant at the 5% level. The correct decision is to <b>fail to reject \(H_0\)</b>.</p><p>It is not correct to say "accept \(H_0\)" or "prove \(H_0\)." The data did not provide enough evidence against \(H_0\) under this test rule.</p>`,
+    rubric:["Compare \(p\) with the prespecified \(\alpha\) &mdash; <b>2 pts</b>","State fail to reject \(H_0\) &mdash; <b>2 pts</b>","Avoid accept/prove language &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"NHST decisions are asymmetric: reject, or fail to reject. Failing to reject is not evidence that the null is exactly true."
+  },
+  {
+    id:"Ch 18 &mdash; Q4",
+    level:"easy",
+    tags:["Reject language","Evidence"],
+    src:"Original. Fisher versus decision wording.",
+    problem:String.raw`A test gives \(p=0.004\). State the conclusion at \(\alpha=0.01\), and separately state the Fisher-style evidence interpretation.`,
+    solution:String.raw`<p>At \(\alpha=0.01\), \(p=0.004<0.01\), so reject \(H_0\).</p><p>Fisher-style wording: the data are quite surprising under \(H_0\), so they provide strong evidence against \(H_0\). Fisher's view emphasizes the strength of evidence in the observed P-value rather than only a binary decision.</p>`,
+    rubric:["Reject at \(\alpha=0.01\) &mdash; <b>2 pts</b>","Describe the P-value as evidence against \(H_0\) &mdash; <b>2 pts</b>","Distinguish evidence wording from the decision rule &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Modern classes often mix Fisher's evidential P-value with Neyman-Pearson's reject/fail-to-reject rule. Know which wording is being asked for."
+  },
+  {
+    id:"Ch 18 &mdash; Q5",
+    level:"easy",
+    tags:["Type I error","Type II error"],
+    src:"Original. Error definitions.",
+    problem:String.raw`In a medical screening test, \(H_0\) says a patient does not have a disease and \(H_1\) says the patient has the disease. Describe Type I and Type II errors in context.`,
+    solution:String.raw`<p>A <b>Type I error</b> is rejecting a true \(H_0\): concluding that the patient has the disease when they actually do not.</p><p>A <b>Type II error</b> is failing to reject a false \(H_0\): failing to detect the disease when the patient actually has it.</p>`,
+    rubric:["Define Type I error as false rejection &mdash; <b>2 pts</b>","Put Type I error in context &mdash; <b>1 pt</b>","Define Type II error as false failure-to-reject &mdash; <b>2 pts</b>","Put Type II error in context &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"First identify what rejecting \(H_0\) means in the story; then attach true/false status to \(H_0\)."
+  },
+  {
+    id:"Ch 18 &mdash; Q6",
+    level:"easy",
+    tags:["Alpha","Type I error"],
+    src:"Original. Meaning of significance level.",
+    problem:String.raw`A test is conducted at significance level \(\alpha=0.05\). What probability is controlled by \(\alpha\), and under what assumption?`,
+    solution:String.raw`<p>The significance level controls the probability of a Type I error: \[P(\text{reject }H_0\mid H_0\text{ is true})=\alpha\] for an exact level-\(\alpha\) test.</p><p>The probability is evaluated under the null hypothesis. It is not the probability that the null is true after seeing the data.</p>`,
+    rubric:["Identify \(\alpha\) with Type I error probability &mdash; <b>2 pts</b>","Condition on \(H_0\) being true &mdash; <b>2 pts</b>","Avoid posterior-probability language &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Alpha is chosen before observing the data. It describes long-run behavior of the testing procedure."
+  },
+  {
+    id:"Ch 18 &mdash; Q7",
+    level:"easy",
+    tags:["One-sided test","P-value"],
+    src:"Original. Z-test computation.",
+    problem:String.raw`Suppose \(\sigma=10\), \(n=25\), \(\bar x=104\), and \(H_0:\mu=100\) against \(H_1:\mu>100\). Compute the Z statistic and approximate P-value.`,
+    solution:String.raw`<p>The standard error is \(10/\sqrt{25}=2\). The test statistic is \[z=\frac{104-100}{2}=2.00.\]</p><p>For \(H_1:\mu>100\), the P-value is \(P(Z\ge2.00)\approx0.0228\).</p>`,
+    rubric:["Compute the standard error correctly &mdash; <b>1 pt</b>","Compute \(z=2.00\) &mdash; <b>2 pts</b>","Use the right-tail probability for the one-sided alternative &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"The alternative determines which tail is used. Do not double the P-value for a one-sided test."
+  },
+  {
+    id:"Ch 18 &mdash; Q8",
+    level:"easy",
+    tags:["Two-sided test","P-value"],
+    src:"Original. Z-test computation.",
+    problem:String.raw`A known-variance test gives \(z=-1.85\) for \(H_0:\mu=\mu_0\) against \(H_1:\mu\ne\mu_0\). Approximate the two-sided P-value and state the decision at \(\alpha=0.05\).`,
+    solution:String.raw`<p>For a two-sided Z test, \[p=2P(Z\le-1.85)\approx2(0.0322)=0.0644.\]</p><p>Since \(0.0644>0.05\), fail to reject \(H_0\) at the 5% level.</p>`,
+    rubric:["Use absolute extremeness or double the correct tail &mdash; <b>2 pts</b>","Compute approximate P-value near 0.064 &mdash; <b>2 pts</b>","Fail to reject at \(\alpha=0.05\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"For two-sided tests, the sign of \(z\) tells direction, but the P-value counts both equally extreme tails."
+  },
+  {
+    id:"Ch 18 &mdash; Q9",
+    level:"easy",
+    tags:["Critical region","Decision rule"],
+    src:"Original. Neyman-Pearson decision rule.",
+    problem:String.raw`For a right-tailed Z test at \(\alpha=0.05\), write the rejection region in terms of the observed test statistic \(Z\).`,
+    solution:String.raw`<p>The right-tail critical value is \(z_{0.05}=1.645\) under the course convention \(P(Z\ge z_\alpha)=\alpha\). The rejection region is \[Z\ge1.645.\]</p><p>This is a Neyman-Pearson-style precomputed decision rule: reject when the statistic falls in the rejection region.</p>`,
+    rubric:["Use the right-tail cutoff \(1.645\) &mdash; <b>2 pts</b>","Write the inequality in the correct direction &mdash; <b>2 pts</b>","Connect the rule to prespecified \(\alpha\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Right-tailed means large positive values are evidence against \(H_0\)."
+  },
+  {
+    id:"Ch 18 &mdash; Q10",
+    level:"easy",
+    tags:["NHST traditions","Fisher","Neyman-Pearson"],
+    src:"Original. Conceptual history and terminology.",
+    problem:String.raw`Modern NHST is often described as a mixture of Fisher's and Neyman-Pearson's ideas. Name one component from each tradition that appears in the common classroom testing workflow.`,
+    solution:String.raw`<p>A typical answer: Fisher contributes the <b>P-value as a measure of evidence</b> against \(H_0\). Neyman-Pearson contributes <b>prespecified \(\alpha\), rejection regions, and long-run Type I/Type II error control</b>.</p><p>The hybrid workflow often reports a P-value and also makes a reject/fail-to-reject decision by comparing it with \(\alpha\).</p>`,
+    rubric:["Identify P-values/evidence as Fisherian &mdash; <b>2 pts</b>","Identify \(\alpha\), rejection regions, or Type I/II errors as Neyman-Pearson &mdash; <b>2 pts</b>","Describe the modern comparison \(p\le\alpha\) as a hybrid &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"If a question asks about NHST philosophy, separate evidence strength from long-run decision rules."
+  },
+  {
+    id:"Ch 18 &mdash; Q11",
+    level:"medium",
+    tags:["T test","One-sample mean"],
+    src:"Original. Unknown-variance one-sample test.",
+    problem:String.raw`A normal sample of \(n=16\) has \(\bar x=51.4\) and \(s=4.0\). Test \(H_0:\mu=50\) against \(H_1:\mu>50\). Compute the test statistic, give an approximate P-value using \(t_{15}\), and conclude at \(\alpha=0.05\).`,
+    solution:String.raw`<p>Because \(\sigma\) is unknown, use a T statistic with \(df=15\): \[t=\frac{51.4-50}{4.0/\sqrt{16}}=\frac{1.4}{1.0}=1.40.\]</p><p>For a right-tailed \(t_{15}\) test, \(P(T\ge1.40)\approx0.091\). Since \(0.091>0.05\), fail to reject \(H_0\).</p>`,
+    rubric:["Use T rather than Z &mdash; <b>2 pts</b>","Use \(df=15\) &mdash; <b>1 pt</b>","Compute \(t=1.40\) &mdash; <b>2 pts</b>","Use one-sided P-value and fail to reject &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"For small samples with unknown \(\sigma\), using 1.645 or 1.96 directly usually overstates evidence."
+  },
+  {
+    id:"Ch 18 &mdash; Q12",
+    level:"medium",
+    tags:["Two-sided T test","Decision"],
+    src:"Original. Test statistic and critical-value decision.",
+    problem:String.raw`A sample of \(n=10\) measurements from a normal population gives \(\bar x=8.2\), \(s=1.5\). Test \(H_0:\mu=7.0\) against \(H_1:\mu\ne7.0\) at \(\alpha=0.05\). Use \(t_{0.025,9}=2.262\).`,
+    solution:String.raw`<p>The statistic is \[t=\frac{8.2-7.0}{1.5/\sqrt{10}}=\frac{1.2}{0.474}=2.53.\]</p><p>For a two-sided 5% test with \(df=9\), reject if \(|t|\ge2.262\). Since \(2.53>2.262\), reject \(H_0\). The data provide statistically significant evidence that \(\mu\ne7.0\).</p>`,
+    rubric:["Compute the standard error \(1.5/\sqrt{10}\) &mdash; <b>1 pt</b>","Compute \(t\approx2.53\) &mdash; <b>2 pts</b>","Use two-sided critical value \(2.262\) &mdash; <b>2 pts</b>","Reject and state conclusion in context &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"For a two-sided T test, compare \(|t|\) with the two-tail cutoff."
+  },
+  {
+    id:"Ch 18 &mdash; Q13",
+    level:"medium",
+    tags:["CI duality","Two-sided test"],
+    src:"Original. Links Chapter 15 intervals to Chapter 18 tests.",
+    problem:String.raw`A 95% confidence interval for \(\mu\) is \([1.8,4.6]\). Without recomputing a test statistic, decide the two-sided level-5% tests of \(H_0:\mu=0\), \(H_0:\mu=3\), and \(H_0:\mu=5\).`,
+    solution:String.raw`<p>For the matching two-sided test at \(\alpha=0.05\), reject null values outside the 95% confidence interval and fail to reject null values inside it.</p><p>\(0\) is outside the interval, so reject \(H_0:\mu=0\). \(3\) is inside the interval, so fail to reject \(H_0:\mu=3\). \(5\) is outside the interval, so reject \(H_0:\mu=5\).</p>`,
+    rubric:["State the CI/test duality correctly &mdash; <b>2 pts</b>","Reject \(\mu=0\) &mdash; <b>1 pt</b>","Fail to reject \(\mu=3\) &mdash; <b>1 pt</b>","Reject \(\mu=5\) &mdash; <b>1 pt</b>","Mention matching two-sided level &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"This shortcut applies to matching two-sided tests, not automatically to one-sided tests or different confidence levels."
+  },
+  {
+    id:"Ch 18 &mdash; Q14",
+    level:"medium",
+    tags:["Misinterpretation","Fail to reject"],
+    src:"Original. Language diagnosis.",
+    problem:String.raw`A report says: "Because \(p=0.32\), we have shown that the treatment has no effect." Diagnose the statement and rewrite it correctly.`,
+    solution:String.raw`<p>The statement is too strong. A large P-value means the data are not unusual enough under \(H_0\) to reject it at conventional levels. It does not prove that the treatment effect is exactly zero.</p><p>A better statement is: "This study did not find statistically significant evidence of a treatment effect." If equivalence or non-inferiority is the real goal, a different testing framework is needed.</p>`,
+    rubric:["Identify that nonsignificance does not prove no effect &mdash; <b>2 pts</b>","Use fail-to-reject style wording &mdash; <b>2 pts</b>","Mention limited evidence, power, or equivalence-test caveat &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Absence of evidence is not automatically evidence of absence, especially for small or noisy studies."
+  },
+  {
+    id:"Ch 18 &mdash; Q15",
+    level:"medium",
+    tags:["Practical significance","Statistical significance"],
+    src:"Original. Large-sample interpretation.",
+    problem:String.raw`A website experiment with \(n=2{,}000{,}000\) users finds a conversion-rate increase of 0.02 percentage points with \(p<0.001\). Explain why this can be statistically significant but not practically significant.`,
+    solution:String.raw`<p>With a huge sample size, the standard error can be extremely small, so even a tiny effect can produce a very small P-value. Statistical significance means the observed effect is unlikely to be pure null-model noise under the test assumptions.</p><p>Practical significance asks whether the effect is large enough to matter operationally or economically. A 0.02 percentage-point increase may be too small to justify implementation cost, risk, or complexity.</p>`,
+    rubric:["Connect small P-value to huge sample size/small standard error &mdash; <b>2 pts</b>","Separate statistical from practical significance &mdash; <b>2 pts</b>","Discuss effect size or cost/benefit &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Always ask how large the estimated effect is, not only whether \(p<0.05\)."
+  },
+  {
+    id:"Ch 18 &mdash; Q16",
+    level:"medium",
+    tags:["P-hacking","Repeated testing"],
+    src:"Original. Multiple comparisons calculation.",
+    problem:String.raw`A researcher tests 20 independent null hypotheses, all actually true, each at \(\alpha=0.05\). What is the probability of at least one false positive? What does this imply for repeated testing?`,
+    solution:String.raw`<p>The probability of no false positives is \(0.95^{20}\approx0.358\). Therefore the probability of at least one false positive is \[1-0.95^{20}\approx0.642.\]</p><p>Repeated testing inflates the chance of finding at least one "significant" result by luck. This is why p-hacking, unreported analyses, and uncorrected multiple comparisons are serious problems.</p>`,
+    rubric:["Compute no-false-positive probability \(0.95^{20}\) &mdash; <b>2 pts</b>","Compute familywise probability near 0.642 &mdash; <b>2 pts</b>","Connect result to repeated testing or p-hacking &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Many 5% tests do not collectively have a 5% false-alarm risk."
+  },
+  {
+    id:"Ch 18 &mdash; Q17",
+    level:"medium",
+    tags:["Multiple testing","Bonferroni"],
+    src:"Original. Correction idea.",
+    problem:String.raw`You plan to test 10 endpoints and want the familywise Type I error rate to be at most 0.05. Give the Bonferroni per-test significance level and explain its purpose.`,
+    solution:String.raw`<p>The Bonferroni per-test level is \(\alpha^\*=0.05/10=0.005\).</p><p>Using 0.005 for each individual test makes the probability of one or more false positives across the family no more than 0.05 by the union bound. It is conservative but simple.</p>`,
+    rubric:["Compute \(0.005\) &mdash; <b>2 pts</b>","State that the goal is controlling familywise error &mdash; <b>2 pts</b>","Mention conservativeness or union-bound logic &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Bonferroni changes the decision threshold; it does not change the observed P-values themselves."
+  },
+  {
+    id:"Ch 18 &mdash; Q18",
+    level:"medium",
+    tags:["P-hacking","Research design"],
+    src:"Original. Scenario diagnosis.",
+    problem:String.raw`A team tries 6 outcome variables, 4 subgroup definitions, and 3 model specifications, then reports only the smallest P-value \(p=0.018\) as if it came from a single planned test. Identify the problem and name two remedies.`,
+    solution:String.raw`<p>The problem is p-hacking or selective reporting after many researcher degrees of freedom. The nominal P-value \(0.018\) no longer has the usual single-test interpretation because many chances were taken to obtain a small value.</p><p>Remedies include preregistering the primary analysis, reporting all tests tried, using multiple-comparison corrections, validating on a fresh dataset, or treating the result as exploratory rather than confirmatory.</p>`,
+    rubric:["Identify p-hacking/selective reporting &mdash; <b>2 pts</b>","Explain why the nominal P-value is misleading &mdash; <b>2 pts</b>","Give two credible remedies &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"A P-value is meaningful only relative to the analysis plan that generated it."
+  },
+  {
+    id:"Ch 18 &mdash; Q19",
+    level:"medium",
+    tags:["Power","Type II error"],
+    src:"Original. Relationship between power and beta.",
+    problem:String.raw`A test has power 0.80 against a particular alternative \(\mu=105\). What is the Type II error probability at that alternative, and what does the power mean in repeated sampling?`,
+    solution:String.raw`<p>Power is \(1-\beta\), so \(\beta=1-0.80=0.20\) at the specified alternative.</p><p>In repeated samples when the true mean is \(\mu=105\), the test will reject \(H_0\) about 80% of the time and fail to reject about 20% of the time.</p>`,
+    rubric:["Use \(\beta=1-\text{power}\) &mdash; <b>2 pts</b>","Compute \(\beta=0.20\) &mdash; <b>1 pt</b>","Interpret power under the specified alternative &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"Power is not a property of the observed P-value alone; it is defined for a specified true alternative and test design."
+  },
+  {
+    id:"Ch 18 &mdash; Q20",
+    level:"medium",
+    tags:["Alpha tradeoff","Power"],
+    src:"Original. Decision-rule tradeoff.",
+    problem:String.raw`Holding sample size and test statistic fixed, what generally happens to Type I error probability and power when \(\alpha\) is changed from 0.01 to 0.05?`,
+    solution:String.raw`<p>Increasing \(\alpha\) from 0.01 to 0.05 makes rejection easier. The Type I error probability increases from 1% to 5% for an exact test.</p><p>Power generally increases because the rejection region is larger, so the test is more likely to reject under alternatives. The tradeoff is a higher false-positive rate.</p>`,
+    rubric:["State that Type I error probability increases &mdash; <b>2 pts</b>","State that power generally increases &mdash; <b>2 pts</b>","Explain using a larger rejection region &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"There is no free lunch: stricter false-positive control usually reduces power unless sample size is increased."
+  },
+  {
+    id:"Ch 18 &mdash; Q21",
+    level:"medium",
+    tags:["Alpha after data","P-hacking"],
+    src:"Original. Prespecification trap.",
+    problem:String.raw`A student obtains \(p=0.073\) and then says the result is significant because they "choose \(\alpha=0.10\)." Why is this questionable, and when would using \(\alpha=0.10\) be acceptable?`,
+    solution:String.raw`<p>Choosing \(\alpha\) after seeing the P-value undermines the long-run error-rate interpretation of the test. It makes the decision rule data-dependent and can inflate false positives.</p><p>Using \(\alpha=0.10\) is acceptable if it was prespecified before looking at the data and justified by the context, for example in an exploratory screen where Type II errors are especially costly.</p>`,
+    rubric:["Identify post hoc alpha choice as problematic &mdash; <b>2 pts</b>","Explain loss of error-rate control or p-hacking risk &mdash; <b>2 pts</b>","State that \(\alpha=0.10\) can be valid if prespecified &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"The cutoff is part of the design, not something to tune after seeing whether the result barely missed 0.05."
+  },
+  {
+    id:"Ch 18 &mdash; Q22",
+    level:"medium",
+    tags:["One-sided vs two-sided","Design"],
+    src:"Original. Directional alternative trap.",
+    problem:String.raw`A researcher expects a new material to be stronger than the old one. After observing that it is weaker, they want to run a left-tailed test to get significance. Explain the issue.`,
+    solution:String.raw`<p>The direction of the alternative should be chosen before seeing the data, based on the scientific question. Switching from a right-tailed to a left-tailed test after observing the sign is a form of data snooping.</p><p>If either stronger or weaker would have mattered, the appropriate planned test was two-sided. If only improvement mattered, then a weaker observed result should not be converted into a left-tailed confirmatory test.</p>`,
+    rubric:["State that alternative direction must be prespecified &mdash; <b>2 pts</b>","Identify post hoc tail switching as invalid or p-hacking &mdash; <b>2 pts</b>","Explain when a two-sided test is appropriate &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"One-sided tests are powerful for a planned direction, but invalid if chosen after the data reveal the direction."
+  },
+  {
+    id:"Ch 18 &mdash; Q23",
+    level:"medium",
+    tags:["Assumptions","Robustness"],
+    src:"Original. Test assumptions.",
+    problem:String.raw`A one-sample T test is applied to \(n=8\) observations from a strongly right-skewed population with an outlier. What assumption concern should be raised?`,
+    solution:String.raw`<p>The exact one-sample T test assumes a normal population. With \(n=8\), the CLT does not provide strong protection, and a severe outlier can strongly affect \(\bar X\) and \(S\).</p><p>The conclusion should be qualified. Depending on course tools, one might inspect the data, consider a transformation, use a nonparametric/sign test, or collect more data.</p>`,
+    rubric:["Name the normality assumption for the exact T test &mdash; <b>2 pts</b>","Explain why small \(n\) and outliers matter &mdash; <b>2 pts</b>","Suggest a qualification or alternative &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Test arithmetic is not enough; check whether the model that gives the reference distribution is credible."
+  },
+  {
+    id:"Ch 18 &mdash; Q24",
+    level:"medium",
+    tags:["Critical value","Two-sided Z test"],
+    src:"Original. Rejection-region setup.",
+    problem:String.raw`For \(H_0:\mu=20\) against \(H_1:\mu\ne20\) with known \(\sigma\), write the level-1% rejection rule in terms of the Z statistic.`,
+    solution:String.raw`<p>For a two-sided test with \(\alpha=0.01\), split the error probability into two tails of 0.005 each. The critical value is \(z_{0.005}=2.576\).</p><p>The rejection rule is \[|Z|\ge2.576,\] equivalently \(Z\le-2.576\) or \(Z\ge2.576\).</p>`,
+    rubric:["Split \(\alpha=0.01\) into two tails &mdash; <b>2 pts</b>","Use \(2.576\) &mdash; <b>2 pts</b>","Write a correct two-sided rejection region &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Two-sided level 1% does not use \(z_{0.01}=2.326\); it uses \(z_{0.005}=2.576\)."
+  },
+  {
+    id:"Ch 18 &mdash; Q25",
+    level:"hard",
+    tags:["Likelihood","P-value"],
+    src:"Original. Deep interpretation distinction.",
+    problem:String.raw`Explain why a small P-value is not the same thing as a large probability that \(H_0\) is false. What additional ingredient would be needed to compute \(P(H_0\mid\text{data})\)?`,
+    solution:String.raw`<p>A P-value is \(P(\text{data at least this extreme}\mid H_0)\), or an approximation to that probability. It conditions on \(H_0\). The probability \(P(H_0\mid\text{data})\) reverses the conditioning and is not provided by NHST alone.</p><p>To compute \(P(H_0\mid\text{data})\), one needs a Bayesian model: prior probabilities for hypotheses and likelihoods for the data under the competing hypotheses. Bayes' theorem then updates prior odds to posterior odds.</p>`,
+    rubric:["State the conditioning in a P-value &mdash; <b>2 pts</b>","Explain the conditioning reversal &mdash; <b>2 pts</b>","Identify priors and alternative-model likelihoods as needed for posterior probability &mdash; <b>3 pts</b>"],
+    total:"7 pts",
+    tip:"Confusing \(P(\text{data}\mid H_0)\) with \(P(H_0\mid\text{data})\) is one of the central interpretation errors."
+  },
+  {
+    id:"Ch 18 &mdash; Q26",
+    level:"hard",
+    tags:["Power calculation","Z test"],
+    src:"Original. Known-variance power calculation.",
+    problem:String.raw`Let \(X_1,\ldots,X_{25}\sim N(\mu,4^2)\). Test \(H_0:\mu=10\) against \(H_1:\mu>10\) at \(\alpha=0.05\). Compute the power when the true mean is \(\mu=12\).`,
+    solution:String.raw`<p>The rejection rule is \[\frac{\bar X-10}{4/\sqrt{25}}\ge1.645.\] Since \(4/\sqrt{25}=0.8\), this is \(\bar X\ge10+1.645(0.8)=11.316\).</p><p>If \(\mu=12\), then \(\bar X\sim N(12,0.8^2)\). Therefore \[\text{power}=P_{\mu=12}(\bar X\ge11.316)=P\left(Z\ge\frac{11.316-12}{0.8}\right)=P(Z\ge-0.855)\approx0.804.\]</p>`,
+    rubric:["Find the rejection cutoff for \(\bar X\) &mdash; <b>3 pts</b>","Use the sampling distribution under \(\mu=12\) &mdash; <b>2 pts</b>","Compute power near 0.80 &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"Power is calculated under the alternative, not under \(H_0\). The rejection cutoff is designed under \(H_0\), then evaluated under the true alternative."
+  },
+  {
+    id:"Ch 18 &mdash; Q27",
+    level:"hard",
+    tags:["Neyman-Pearson","Design"],
+    src:"Original. Error-rate design question.",
+    problem:String.raw`For the same test in Q26, suppose you want power at least 0.90 when \(\mu=12\), still using \(\alpha=0.05\) and known \(\sigma=4\). Find the minimum \(n\) approximately.`,
+    solution:String.raw`<p>For a right-tailed Z test, reject when \(\bar X\ge\mu_0+z_{0.05}\sigma/\sqrt n\). Power at \(\mu_1=12\) is \[P_{\mu_1}\left(\bar X\ge10+1.645\frac{4}{\sqrt n}\right).\]</p><p>Require this to be at least 0.90, so the cutoff should be at most the 10th percentile under \(\mu=12\): \[10+1.645\frac{4}{\sqrt n}\le12-1.282\frac{4}{\sqrt n}.\]</p><p>Thus \((1.645+1.282)4/\sqrt n\le2\), so \(\sqrt n\ge5.854\), and \(n\ge34.27\). Round up to \(n=35\).</p>`,
+    rubric:["Write rejection cutoff as a function of \(n\) &mdash; <b>2 pts</b>","Translate 90% power into a 10th-percentile condition &mdash; <b>3 pts</b>","Solve the inequality correctly &mdash; <b>2 pts</b>","Round up to \(n=35\) &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Power planning combines the Type I cutoff with the desired miss probability under a meaningful alternative."
+  },
+  {
+    id:"Ch 18 &mdash; Q28",
+    level:"hard",
+    tags:["Likelihood ratio","Concept"],
+    src:"Original. Neyman-Pearson lemma intuition.",
+    problem:String.raw`In testing a simple null \(H_0:\theta=\theta_0\) against a simple alternative \(H_1:\theta=\theta_1\), what kind of rejection region is favored by the Neyman-Pearson lemma? Explain in words, not a full proof.`,
+    solution:String.raw`<p>The Neyman-Pearson lemma favors rejection regions based on the likelihood ratio. For a fixed Type I error rate \(\alpha\), the most powerful test rejects \(H_0\) for data that are much more likely under \(H_1\) than under \(H_0\).</p><p>In words: spend the allowed false-positive probability on the observations that most strongly distinguish the alternative from the null.</p>`,
+    rubric:["Mention likelihood ratio or relative likelihood under \(H_1\) versus \(H_0\) &mdash; <b>3 pts</b>","State the fixed-\(\alpha\), most-powerful idea &mdash; <b>3 pts</b>","Explain the intuition in words &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Neyman-Pearson is about designing decision rules with controlled long-run error and maximum power for specified alternatives."
+  },
+  {
+    id:"Ch 18 &mdash; Q29",
+    level:"hard",
+    tags:["Final-style MC","P-value interpretation"],
+    src:"Original. Final-style multiple-choice interpretation.",
+    problem:String.raw`A randomized experiment reports \(p=0.047\) for a two-sided test at \(\alpha=0.05\). Which statements are correct? Select all that apply.<ol type="a"><li>The result is statistically significant at the 5% level.</li><li>The null hypothesis has probability 0.047 of being true.</li><li>If the null hypothesis were true, the probability of a result at least as extreme as this one is 0.047.</li><li>The effect is definitely important in practice.</li><li>If the same analysis had been one of 100 unreported analyses, the single-test interpretation would be suspect.</li></ol>`,
+    solution:String.raw`<p>Correct choices: <b>(a), (c), and (e)</b>.</p><p>(a) is correct because \(0.047<0.05\). (c) is the correct P-value interpretation. (e) is correct because many unreported analyses create multiple-testing and p-hacking concerns.</p><p>(b) reverses conditioning. (d) confuses statistical significance with practical importance.</p>`,
+    rubric:["Select (a), (c), and (e) &mdash; <b>3 pts</b>","Reject posterior-probability wording in (b) &mdash; <b>1 pt</b>","Reject practical-importance wording in (d) &mdash; <b>1 pt</b>","Explain multiple-testing concern in (e) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Final-style interpretation questions often combine three traps: conditioning, effect size, and multiplicity."
+  },
+  {
+    id:"Ch 18 &mdash; Q30",
+    level:"hard",
+    tags:["Final-style MC","Decision language"],
+    src:"Original. Final-style conclusion wording.",
+    problem:String.raw`A two-sided test of \(H_0:\mu=100\) gives \(p=0.12\). Which conclusion is best?<ol type="a"><li>Accept \(H_0\); the mean is exactly 100.</li><li>Reject \(H_0\); the P-value is positive.</li><li>Fail to reject \(H_0\); the data do not provide statistically significant evidence that \(\mu\ne100\) at \(\alpha=0.05\).</li><li>Reject \(H_0\) at \(\alpha=0.10\) because 0.12 is close to 0.10.</li></ol>`,
+    solution:String.raw`<p>The best answer is <b>(c)</b>. Since \(0.12>0.05\), the result is not statistically significant at the 5% level, so fail to reject \(H_0\).</p><p>Option (a) wrongly accepts or proves the null. Option (b) has no valid rule. Option (d) is also wrong because \(0.12>0.10\), and "close" is not the same as meeting a prespecified threshold.</p>`,
+    rubric:["Choose (c) &mdash; <b>2 pts</b>","Use comparison with \(\alpha=0.05\) &mdash; <b>1 pt</b>","Avoid accept/prove language &mdash; <b>2 pts</b>","Reject the 'close enough' rule &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The cutoff rule is \(p\le\alpha\), not \(p\) feels close to \(\alpha\)."
+  },
+  {
+    id:"Ch 18 &mdash; Q31",
+    level:"hard",
+    tags:["Comprehensive","Critique"],
+    src:"Original. Final-style critique of a flawed paragraph.",
+    problem:String.raw`Critique the following paragraph, identifying at least four statistical problems: "We tested every variable in the dataset and found \(p=0.049\), so the null hypothesis is false with 95.1% probability. Since the result is significant, the effect must be large. We changed from a two-sided to a one-sided test because the observed effect was positive. Because \(p<0.05\), future studies will replicate it."`,
+    solution:String.raw`<p>Problems include: testing every variable without correction creates multiple-testing and p-hacking risk; \(p=0.049\) is not a 95.1% probability that \(H_0\) is false; statistical significance does not imply a large or practically important effect; switching to a one-sided test after seeing a positive effect is invalid; and \(p<0.05\) does not guarantee replication.</p><p>A better summary would report the planned analysis, all tests or corrections, the estimated effect size and confidence interval, and cautious reject/fail-to-reject language.</p>`,
+    rubric:["Identify multiple testing or p-hacking &mdash; <b>2 pts</b>","Correct the posterior-probability P-value error &mdash; <b>2 pts</b>","Separate practical from statistical significance &mdash; <b>1 pt</b>","Identify post hoc one-sided testing &mdash; <b>1 pt</b>","Reject guaranteed replication language &mdash; <b>1 pt</b>","Suggest improved reporting &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"When asked to critique, list distinct errors explicitly before proposing better wording."
+  },
+  {
+    id:"Ch 18 &mdash; Q32",
+    level:"hard",
+    tags:["Comprehensive","NHST workflow"],
+    src:"Original. End-to-end testing workflow.",
+    problem:String.raw`A lab claims a calibration device has mean error zero. From \(n=36\) independent measurements, \(\bar x=0.42\), \(s=1.20\). Test \(H_0:\mu=0\) against \(H_1:\mu\ne0\) at \(\alpha=0.05\). Then give one statistically careful sentence about the result and one practical-significance caveat.`,
+    solution:String.raw`<p>Use a one-sample T test with \(df=35\): \[t=\frac{0.42-0}{1.20/\sqrt{36}}=\frac{0.42}{0.20}=2.10.\]</p><p>For \(df=35\), the two-sided 5% cutoff is about 2.03, so reject \(H_0\). Equivalently, the two-sided P-value is slightly below 0.05.</p><p>Careful statistical sentence: "At the 5% level, the measurements provide statistically significant evidence that the mean calibration error differs from zero." Practical caveat: an estimated mean error of 0.42 units should be compared with engineering tolerances before claiming the deviation matters in practice.</p>`,
+    rubric:["Choose a T test with \(df=35\) &mdash; <b>2 pts</b>","Compute \(t=2.10\) &mdash; <b>2 pts</b>","Reject using a two-sided 5% rule &mdash; <b>2 pts</b>","Use careful reject/evidence wording &mdash; <b>1 pt</b>","Add a practical-significance caveat &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"A complete answer includes method, arithmetic, decision, interpretation, and effect-size context."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

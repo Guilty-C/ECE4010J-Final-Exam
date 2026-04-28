@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 23</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid #fff;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 23</h1>
+  <nav class="tabs">
+    <button>Ch 23 &mdash; Comparison of Two Means</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch23" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 23 &mdash; Comparison of Two Means</h2>
+    <p>Topics covered: known-variance two-sample Z procedures, Student pooled T tests and intervals, Welch T tests and Welch-Satterthwaite degrees of freedom, one-sided confidence bounds for \(\mu_1-\mu_2\), sample-size and power planning, assumptions for independent samples, variance pre-test pitfalls, and final-style diagnosis of which two-mean method is appropriate. The recurring traps are pooling without a defensible common-variance model, choosing pooled vs. Welch after an F pre-test, using \(n_1+n_2-2\) degrees of freedom for Welch, and treating paired data as independent two-sample data.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch23')">Expand all solutions</button>
+    <button onclick="collapseAll('ch23')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 23 &mdash; Q1",
+    level:"easy",
+    tags:["Known variances","Z test"],
+    src:"Original. Direct application of the two-sample known-variance Z statistic.",
+    problem:String.raw`Two independent production lines have known variances \(\sigma_1^2=4\) and \(\sigma_2^2=9\). Samples of size \(n_1=n_2=25\) give \(\bar x_1=20.0\) and \(\bar x_2=18.0\). Test \(H_0:\mu_1-\mu_2=0\) vs. \(H_1:\mu_1-\mu_2\ne0\) at \(\alpha=0.05\).`,
+    solution:String.raw`<p>Use \[Z=\frac{(\bar X_1-\bar X_2)-0}{\sqrt{\sigma_1^2/n_1+\sigma_2^2/n_2}}.\] The standard error is \(\sqrt{4/25+9/25}=\sqrt{0.52}=0.721\). Thus \(z=2.0/0.721=2.77\).</p><p>Since \(|2.77|>1.96\), reject \(H_0\). The two-sided P-value is approximately \(2(1-\Phi(2.77))=0.0056\). There is strong evidence that the two line means differ.</p>`,
+    rubric:["Use Z because both variances are known &mdash; <b>1 pt</b>","Compute the two-sample standard error correctly &mdash; <b>2 pts</b>","Compute \(z\approx2.77\) &mdash; <b>1 pt</b>","Reject and report a sensible P-value &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"The standard error uses \(\sigma_i^2/n_i\), not \(\sigma_i^2\)."
+  },
+  {
+    id:"Ch 23 &mdash; Q2",
+    level:"easy",
+    tags:["Pooled T","Equal variances"],
+    src:"Original. Structure follows the Student two-sample T-test example.",
+    problem:String.raw`Two normal populations are believed to share a common unknown variance. Samples give \(n_1=10,\bar x_1=85.2,s_1=4.5\) and \(n_2=12,\bar x_2=82.1,s_2=5.0\). Test \(H_0:\mu_1=\mu_2\) vs. \(H_1:\mu_1\ne\mu_2\) at \(\alpha=0.05\) using the pooled T-test.`,
+    solution:String.raw`<p>The pooled variance is \[s_p^2=\frac{9(4.5^2)+11(5.0^2)}{20}=22.86,\quad s_p=4.781.\] The standard error is \(s_p\sqrt{1/10+1/12}=4.781(0.4282)=2.047\).</p><p>The statistic is \(t=(85.2-82.1)/2.047=1.51\), with \(df=10+12-2=20\). Since \(t_{0.025,20}=2.086\) and \(|1.51|<2.086\), do not reject. The P-value is about 0.15.</p>`,
+    rubric:["State the equal-variance normal model &mdash; <b>1 pt</b>","Compute \(s_p^2\) with \(n_i-1\) weights &mdash; <b>2 pts</b>","Use \(df=n_1+n_2-2=20\) &mdash; <b>1 pt</b>","Compute the statistic and decision &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Pooling is not averaging \(s_1\) and \(s_2\). It is a degrees-of-freedom weighted average of variances."
+  },
+  {
+    id:"Ch 23 &mdash; Q3",
+    level:"easy",
+    tags:["Pooled T interval","Mean difference"],
+    src:"Original. Confidence interval version of the pooled procedure.",
+    problem:String.raw`Assume independent normal samples with a common unknown variance. Given \(n_1=16,\bar x_1=42.0,s_1=6.0\) and \(n_2=14,\bar x_2=38.5,s_2=5.0\), construct a 95% confidence interval for \(\mu_1-\mu_2\).`,
+    solution:String.raw`<p>First pool: \[s_p^2=\frac{15(36)+13(25)}{28}=30.893,\quad s_p=5.558.\] The standard error is \(5.558\sqrt{1/16+1/14}=2.141\). With \(df=28\), \(t_{0.025,28}\approx2.048\).</p><p>The interval is \[(42.0-38.5)\pm2.048(2.141)=3.5\pm4.38=[-0.88,7.88].\]</p>`,
+    rubric:["Compute pooled standard deviation &mdash; <b>2 pts</b>","Use \(df=28\) &mdash; <b>1 pt</b>","Use the correct standard error &mdash; <b>2 pts</b>","State the interval for \(\mu_1-\mu_2\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The interval containing 0 agrees with a failure to reject the matching two-sided 5% test."
+  },
+  {
+    id:"Ch 23 &mdash; Q4",
+    level:"easy",
+    tags:["Welch test","Unequal variances"],
+    src:"Original. Direct Welch test computation.",
+    problem:String.raw`Independent samples from approximately normal populations give \(n_1=15,\bar x_1=12.4,s_1=2.0\) and \(n_2=10,\bar x_2=10.1,s_2=3.0\). Do not assume equal variances. Test \(H_0:\mu_1-\mu_2=0\) vs. \(H_1:\mu_1-\mu_2>0\) at \(\alpha=0.05\). Use Welch degrees of freedom rounded down to 13.`,
+    solution:String.raw`<p>Welch standard error: \[\sqrt{s_1^2/n_1+s_2^2/n_2}=\sqrt{4/15+9/10}=\sqrt{1.1667}=1.080.\] The statistic is \(t=(12.4-10.1)/1.080=2.13\).</p><p>With \(df=13\), the one-sided 5% critical value is \(t_{0.05,13}=1.771\). Since \(2.13>1.771\), reject \(H_0\). There is evidence that \(\mu_1>\mu_2\).</p>`,
+    rubric:["Use Welch, not pooled &mdash; <b>2 pts</b>","Compute the unpooled standard error &mdash; <b>2 pts</b>","Use one-sided critical value with the given d.f. &mdash; <b>1 pt</b>","Make the correct decision &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"For a one-sided alternative, do not use \(t_{\alpha/2,\nu}\)."
+  },
+  {
+    id:"Ch 23 &mdash; Q5",
+    level:"easy",
+    tags:["Welch interval","Mean difference"],
+    src:"Original. Basic Welch confidence interval.",
+    problem:String.raw`Using the data in Q4 and Welch \(df=13\), construct a 95% two-sided confidence interval for \(\mu_1-\mu_2\).`,
+    solution:String.raw`<p>The sample difference is \(2.3\), and the Welch standard error from Q4 is \(1.080\). For \(df=13\), \(t_{0.025,13}=2.160\). Thus \[\mu_1-\mu_2\in 2.3\pm2.160(1.080)=2.3\pm2.33=[-0.03,4.63].\]</p><p>The interval barely includes 0, so the matching two-sided 5% test would not reject, even though the one-sided test in Q4 rejected.</p>`,
+    rubric:["Reuse or compute the Welch standard error &mdash; <b>2 pts</b>","Use \(t_{0.025,13}\), not \(t_{0.05,13}\) &mdash; <b>2 pts</b>","Compute endpoints &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"One-sided rejection and two-sided non-rejection can both be true for the same data."
+  },
+  {
+    id:"Ch 23 &mdash; Q6",
+    level:"easy",
+    tags:["One-sided bound","Known variances"],
+    src:"Original. Confidence bound for a mean difference.",
+    problem:String.raw`Two independent samples have known variances \(\sigma_1^2=16\), \(\sigma_2^2=25\), sizes \(n_1=40\), \(n_2=50\), and means \(\bar x_1=71.4\), \(\bar x_2=68.9\). Find a 95% lower confidence bound for \(\mu_1-\mu_2\).`,
+    solution:String.raw`<p>For a one-sided lower bound with known variances, use \[(\bar x_1-\bar x_2)-z_{0.05}\sqrt{\sigma_1^2/n_1+\sigma_2^2/n_2}.\] The standard error is \(\sqrt{16/40+25/50}=\sqrt{0.9}=0.949\). The lower bound is \(2.5-1.645(0.949)=0.94\).</p><p>A 95% lower confidence interval is \([0.94,\infty)\).</p>`,
+    rubric:["Recognize a lower one-sided bound &mdash; <b>1 pt</b>","Use \(z_{0.05}=1.645\) &mdash; <b>1 pt</b>","Compute the known-variance standard error &mdash; <b>2 pts</b>","State the interval direction correctly &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"A lower bound subtracts the critical multiple from the observed difference."
+  },
+  {
+    id:"Ch 23 &mdash; Q7",
+    level:"easy",
+    tags:["Assumptions","Independent samples"],
+    src:"Original. Method-selection concept check.",
+    problem:String.raw`List the key assumptions for the pooled two-sample T-test and explain which assumption is not required by Welch's T-test.`,
+    solution:String.raw`<p>The pooled test assumes two independent random samples, population normality for exact small-sample inference, and a common population variance \(\sigma_1^2=\sigma_2^2\). The null is about the means, but the pooled denominator is valid only under the common-variance model.</p><p>Welch's test keeps the independent-samples and approximate normality requirements, but it does not require equal variances. That is why it uses \(s_1^2/n_1+s_2^2/n_2\) and Welch-Satterthwaite degrees of freedom instead of \(s_p\) and \(n_1+n_2-2\).</p>`,
+    rubric:["Name independent random samples &mdash; <b>1 pt</b>","Name normality or large-sample approximation &mdash; <b>1 pt</b>","Name common variance for pooled T &mdash; <b>2 pts</b>","Explain Welch removes the equal-variance assumption &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Welch is not a paired test. It is still for two independent samples."
+  },
+  {
+    id:"Ch 23 &mdash; Q8",
+    level:"easy",
+    tags:["Method selection","Paired vs independent"],
+    src:"Original. Boundary between Chapter 23 and paired procedures.",
+    problem:String.raw`A study measures blood pressure before and after a drug in the same 18 people. A classmate proposes a two-sample Welch test comparing the 18 before values and 18 after values. Diagnose the proposal.`,
+    solution:String.raw`<p>The proposal is wrong because the two samples are not independent. The observations are paired by subject, so the right analysis is a one-sample T-test on the differences \(D_i=\text{before}_i-\text{after}_i\), assuming the differences are approximately normal or \(n\) is large enough for a T approximation.</p><p>Welch solves unequal variances for independent samples; it does not repair dependence created by repeated measurements on the same subjects.</p>`,
+    rubric:["Identify the dependence/pairing &mdash; <b>2 pts</b>","Recommend a paired analysis on differences &mdash; <b>2 pts</b>","Explain why Welch is not the fix &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Ask first whether observations are linked row-by-row. If yes, Chapter 24 paired methods replace Chapter 23 independent-sample methods."
+  },
+  {
+    id:"Ch 23 &mdash; Q9",
+    level:"medium",
+    tags:["Welch d.f.","Satterthwaite"],
+    src:"Original. Practises the Welch-Satterthwaite formula.",
+    problem:String.raw`For \(n_1=20,n_2=12,s_1^2=4.0,s_2^2=15.0\), compute the Welch-Satterthwaite degrees of freedom \[\nu=\frac{(s_1^2/n_1+s_2^2/n_2)^2}{(s_1^2/n_1)^2/(n_1-1)+(s_2^2/n_2)^2/(n_2-1)}.\] What d.f. should be used in the test?`,
+    solution:String.raw`<p>Compute \(s_1^2/n_1=4/20=0.20\) and \(s_2^2/n_2=15/12=1.25\). The numerator is \((1.45)^2=2.1025\). The denominator is \(0.20^2/19+1.25^2/11=0.00211+0.14205=0.14416\).</p><p>Thus \(\nu=2.1025/0.14416=14.59\). Following the conservative course convention, round down to \(df=14\).</p>`,
+    rubric:["Compute the two variance-over-sample-size terms &mdash; <b>2 pts</b>","Apply the formula with \(n_i-1\) denominators &mdash; <b>2 pts</b>","Get \(\nu\approx14.6\) &mdash; <b>1 pt</b>","Round down to 14 &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Do not use \(n_1+n_2-2\) for Welch."
+  },
+  {
+    id:"Ch 23 &mdash; Q10",
+    level:"medium",
+    tags:["Pooled interval","One-sided bound"],
+    src:"Original. Equal-variance confidence bound.",
+    problem:String.raw`Independent normal samples with a common variance have \(n_1=9,\bar x_1=52.4,s_1=3.0\) and \(n_2=11,\bar x_2=49.1,s_2=2.5\). Find a 90% lower confidence bound for \(\mu_1-\mu_2\).`,
+    solution:String.raw`<p>Pool the variances: \[s_p^2=\frac{8(9)+10(6.25)}{18}=7.472,\quad s_p=2.733.\] The standard error is \(2.733\sqrt{1/9+1/11}=1.228\). For a 90% lower bound, use \(t_{0.10,18}=1.330\).</p><p>The lower bound is \((52.4-49.1)-1.330(1.228)=3.3-1.63=1.67\). The confidence interval is \([1.67,\infty)\).</p>`,
+    rubric:["Pool correctly under the common-variance assumption &mdash; <b>2 pts</b>","Use one-sided \(t_{0.10,18}\) &mdash; <b>2 pts</b>","Compute the lower bound &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"A 90% one-sided bound uses the 10% upper-tail T critical value."
+  },
+  {
+    id:"Ch 23 &mdash; Q11",
+    level:"medium",
+    tags:["Welch test","P-value"],
+    src:"Original. Unequal sample sizes and unequal variances.",
+    problem:String.raw`Two independent samples give \(n_1=8,\bar x_1=102.5,s_1=12.0\) and \(n_2=20,\bar x_2=91.0,s_2=8.0\). Use Welch's test for \(H_0:\mu_1-\mu_2=0\) vs. \(H_1:\mu_1-\mu_2\ne0\). The Welch d.f. is 9. Use \(t_{0.025,9}=2.262\).`,
+    solution:String.raw`<p>The Welch standard error is \(\sqrt{144/8+64/20}=\sqrt{18+3.2}=\sqrt{21.2}=4.604\). The statistic is \(t=(102.5-91.0)/4.604=2.50\).</p><p>With \(df=9\), \(|2.50|>2.262\), so reject at the 5% level. A two-sided P-value is between 0.02 and 0.05, approximately 0.034.</p>`,
+    rubric:["Use Welch standard error &mdash; <b>2 pts</b>","Compute \(t\approx2.50\) &mdash; <b>1 pt</b>","Use \(df=9\), not 26 &mdash; <b>1 pt</b>","Reject and report a reasonable P-value range &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"The small high-variance sample drives the effective degrees of freedom down."
+  },
+  {
+    id:"Ch 23 &mdash; Q12",
+    level:"medium",
+    tags:["Variance pre-test","Pitfall"],
+    src:"Original. Based on the course warning against choosing the means test after an F pre-test.",
+    problem:String.raw`An analyst first runs an F-test for equal variances at \(\alpha=0.05\). If it fails to reject, they use the pooled T-test; if it rejects, they use Welch's T-test. Explain why this workflow is discouraged, and state the safer default.`,
+    solution:String.raw`<p>The workflow uses the same data twice: first to choose the model, then to test the means as though the chosen model had been fixed in advance. This changes the actual Type I error and power properties of the final procedure. Also, the F-test is sensitive to non-normality and often has low power, so a failure to reject equal variances is weak evidence for equality.</p><p>The safer default is to use Welch's T-test for independent two-sample mean comparisons unless the equal-variance model is justified by design or strong external knowledge. Welch performs well when variances are unequal and is usually close to pooled T when they are equal.</p>`,
+    rubric:["Identify data-dependent test selection &mdash; <b>2 pts</b>","Mention Type I/power distortion &mdash; <b>2 pts</b>","Mention F-test weakness or non-normal sensitivity &mdash; <b>1 pt</b>","Recommend Welch as default &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Failing to reject equal variances is not the same as proving equal variances."
+  },
+  {
+    id:"Ch 23 &mdash; Q13",
+    level:"medium",
+    tags:["Sample size","Known variances"],
+    src:"Original. Planning a two-sample confidence interval.",
+    problem:String.raw`Suppose \(\sigma_1=\sigma_2=6\) are known and equal sample sizes \(n_1=n_2=n\) will be used. How large should \(n\) be in each group so that a 95% confidence interval for \(\mu_1-\mu_2\) has total width at most 4?`,
+    solution:String.raw`<p>Total width at most 4 means margin \(E\le2\). For equal \(n\), \(\text{SE}=\sqrt{36/n+36/n}=6\sqrt{2/n}\). Require \(1.96\cdot6\sqrt{2/n}\le2\).</p><p>Thus \(n\ge 2(1.96)^2(6^2)/2^2=69.15\). Round up to \(n=70\) per group.</p>`,
+    rubric:["Convert width to margin &mdash; <b>1 pt</b>","Use the two-sample standard error for equal \(n\) &mdash; <b>2 pts</b>","Solve the inequality &mdash; <b>2 pts</b>","Round up per group &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The answer is per group, not total sample size."
+  },
+  {
+    id:"Ch 23 &mdash; Q14",
+    level:"medium",
+    tags:["Power","Known variances"],
+    src:"Original. Approximate power for a two-sided Z test.",
+    problem:String.raw`A two-sided Z test of \(H_0:\mu_1-\mu_2=0\) uses \(n_1=n_2=36\), known common \(\sigma=6\), and \(\alpha=0.05\). Approximate the power when the true difference is \(\delta=4\).`,
+    solution:String.raw`<p>The standard error is \(\sigma\sqrt{2/n}=6\sqrt{2/36}=1.414\). The rejection threshold for the observed difference is \(\pm1.96(1.414)=\pm2.77\).</p><p>Under \(\delta=4\), \(\bar X_1-\bar X_2\sim N(4,1.414^2)\). Power is \(P(D>2.77)+P(D<-2.77)\). The second term is negligible. The first is \(P(Z>(2.77-4)/1.414)=P(Z>-0.87)=0.807\). Power is about 0.81.</p>`,
+    rubric:["Compute the alternative standard error &mdash; <b>2 pts</b>","Convert the Z critical value to a difference threshold &mdash; <b>2 pts</b>","Evaluate the probability under \(\delta=4\) &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"For two-sided power, remember the far opposite tail, even if it is negligible here."
+  },
+  {
+    id:"Ch 23 &mdash; Q15",
+    level:"medium",
+    tags:["Sample size","Power planning"],
+    src:"Original. Equal-size two-sample planning formula.",
+    problem:String.raw`Using the normal approximation, find the equal per-group sample size needed for a one-sided 5% test to have 80% power to detect \(\mu_1-\mu_2=3\), assuming a common \(\sigma=5\).`,
+    solution:String.raw`<p>For a one-sided test, the approximate planning equation is \[\frac{\delta}{\sigma\sqrt{2/n}}\ge z_\alpha+z_\beta,\] where \(1-\beta=0.80\), so \(z_\beta=z_{0.20}=0.842\), and \(z_\alpha=z_{0.05}=1.645\).</p><p>Thus \[n\ge 2\sigma^2\left(\frac{z_\alpha+z_\beta}{\delta}\right)^2=2(25)\left(\frac{2.487}{3}\right)^2=34.36.\] Round up to \(n=35\) per group.</p>`,
+    rubric:["Use \(z_{0.05}\) and \(z_{0.20}\) for one-sided 80% power &mdash; <b>2 pts</b>","Set up the two-sample equal-\(n\) standard error &mdash; <b>2 pts</b>","Compute and round up to 35 per group &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Power 80% means \(\beta=0.20\), not 0.80."
+  },
+  {
+    id:"Ch 23 &mdash; Q16",
+    level:"medium",
+    tags:["Unequal allocation","Known variances"],
+    src:"Original. Planning with fixed allocation ratio.",
+    problem:String.raw`A study will sample twice as many controls as treatments: \(n_2=2n_1\). Known standard deviations are \(\sigma_1=10\) for treatment and \(\sigma_2=12\) for control. Find \(n_1,n_2\) so that a 95% CI for \(\mu_1-\mu_2\) has margin at most 4.`,
+    solution:String.raw`<p>The standard error is \[\sqrt{100/n_1+144/(2n_1)}=\sqrt{172/n_1}.\] Require \(1.96\sqrt{172/n_1}\le4\). Hence \(n_1\ge 1.96^2(172)/16=41.30\).</p><p>Round up to \(n_1=42\) treatments and \(n_2=84\) controls.</p>`,
+    rubric:["Use the allocation ratio correctly &mdash; <b>2 pts</b>","Build the standard error expression &mdash; <b>2 pts</b>","Solve and round up both sample sizes &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Do not plug the total \(n\) into both standard-error terms."
+  },
+  {
+    id:"Ch 23 &mdash; Q17",
+    level:"medium",
+    tags:["CI-test duality","Pooled T"],
+    src:"Original. Links intervals and tests.",
+    problem:String.raw`A 95% pooled T confidence interval for \(\mu_1-\mu_2\) is \([-1.2,5.6]\). Without recomputing the T statistic, what are the decisions for two-sided 5% tests of \(H_0:\mu_1-\mu_2=0\) and \(H_0:\mu_1-\mu_2=6\)?`,
+    solution:String.raw`<p>For the matching two-sided pooled T procedure, reject a null value if it lies outside the 95% confidence interval.</p><p>Since 0 lies inside \([-1.2,5.6]\), do not reject \(H_0:\mu_1-\mu_2=0\). Since 6 lies outside the interval, reject \(H_0:\mu_1-\mu_2=6\) at the 5% level.</p>`,
+    rubric:["State the matching CI-test duality &mdash; <b>2 pts</b>","Do not reject for 0 &mdash; <b>1 pt</b>","Reject for 6 &mdash; <b>1 pt</b>","Specify this is for the same two-sided procedure &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The shortcut only works when confidence level, sidedness, and standard-error model match."
+  },
+  {
+    id:"Ch 23 &mdash; Q18",
+    level:"medium",
+    tags:["Effect size","Pooled variance"],
+    src:"Original. Interpreting pooled variance.",
+    problem:String.raw`For the pooled T-test, show that when \(n_1=n_2=n\), the pooled variance is the simple average of \(s_1^2\) and \(s_2^2\). Does this remain true when \(n_1\ne n_2\)?`,
+    solution:String.raw`<p>If \(n_1=n_2=n\), then \[s_p^2=\frac{(n-1)s_1^2+(n-1)s_2^2}{2n-2}=\frac{s_1^2+s_2^2}{2}.\]</p><p>When \(n_1\ne n_2\), it is not a simple average. The larger sample receives weight proportional to its degrees of freedom, \(n_i-1\). This weighting is needed because each sample variance is based on a different amount of information.</p>`,
+    rubric:["Write the pooled variance formula &mdash; <b>1 pt</b>","Simplify correctly for equal sample sizes &mdash; <b>2 pts</b>","Explain unequal-size degree-of-freedom weighting &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"Never average standard deviations directly for the pooled T-test."
+  },
+  {
+    id:"Ch 23 &mdash; Q19",
+    level:"medium",
+    tags:["Robustness","Large samples"],
+    src:"Original. Assumption diagnosis for non-normal populations.",
+    problem:String.raw`Two independent samples have \(n_1=120,n_2=150\). Histograms are right-skewed, but neither has extreme outliers. A student says no two-sample T method can be used because the populations are not normal. Diagnose the claim.`,
+    solution:String.raw`<p>The claim is too strong. Exact small-sample T theory assumes normality, but for large independent samples the central limit theorem often makes \(\bar X_1-\bar X_2\) approximately normal. A Welch large-sample T procedure is reasonable here, especially because it does not require equal variances.</p><p>The answer should still check that observations are independent and that there are no extreme outliers or infinite-variance behavior. Skewness alone with \(n_1=120,n_2=150\) is not enough to forbid two-sample mean inference.</p>`,
+    rubric:["Distinguish exact from approximate T inference &mdash; <b>2 pts</b>","Invoke CLT for large independent samples &mdash; <b>2 pts</b>","Recommend Welch unless equal variances are justified &mdash; <b>1 pt</b>","Mention outlier/heavy-tail caveat &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Large \(n\) helps mean inference much more than it helps an F-test for variances."
+  },
+  {
+    id:"Ch 23 &mdash; Q20",
+    level:"medium",
+    tags:["Error diagnosis","Standard error"],
+    src:"Original. Common algebra mistakes.",
+    problem:String.raw`A student writes \(T=(\bar x_1-\bar x_2)/(s_p(1/n_1+1/n_2))\) for the pooled test. Identify the error and explain its effect on the test statistic.`,
+    solution:String.raw`<p>The denominator should be \(s_p\sqrt{1/n_1+1/n_2}\), not \(s_p(1/n_1+1/n_2)\). The square root is essential because variances add, then standard deviation is the square root of variance.</p><p>Since \(1/n_1+1/n_2<1\) in ordinary samples, omitting the square root makes the denominator too small, inflating \(|T|\) and creating too many false rejections.</p>`,
+    rubric:["State the correct denominator &mdash; <b>2 pts</b>","Explain why the square root appears &mdash; <b>2 pts</b>","Describe the direction of the error &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Standard errors are square roots of variances; do the variance algebra first."
+  },
+  {
+    id:"Ch 23 &mdash; Q21",
+    level:"hard",
+    tags:["Welch vs pooled","Decision conflict"],
+    src:"Original. Shows why pooling can be misleading.",
+    problem:String.raw`Independent samples give \(n_1=6,\bar x_1=30.0,s_1=10.0\) and \(n_2=30,\bar x_2=22.0,s_2=4.0\). Compare the pooled and Welch two-sided 5% tests of \(H_0:\mu_1=\mu_2\). Use Welch \(df=5\).`,
+    solution:String.raw`<p><b>Pooled:</b> \(s_p^2=[5(100)+29(16)]/34=28.35\), \(s_p=5.324\). SE \(=5.324\sqrt{1/6+1/30}=2.381\), so \(t=8/2.381=3.36\), \(df=34\). Since \(3.36>t_{0.025,34}\approx2.03\), pooled rejects.</p><p><b>Welch:</b> SE \(=\sqrt{100/6+16/30}=\sqrt{17.20}=4.147\), so \(t=8/4.147=1.93\), \(df=5\). Since \(1.93<t_{0.025,5}=2.571\), Welch does not reject.</p><p>The conflict occurs because the small sample has the much larger variance. Pooling lets the large low-variance sample dominate \(s_p^2\), underestimating the uncertainty in \(\bar X_1\).</p>`,
+    rubric:["Compute pooled statistic and decision &mdash; <b>3 pts</b>","Compute Welch statistic and decision &mdash; <b>3 pts</b>","Explain why the methods disagree &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Unequal variances are most dangerous when the smaller sample has the larger variance."
+  },
+  {
+    id:"Ch 23 &mdash; Q22",
+    level:"hard",
+    tags:["One-sided Welch bound","Confidence bound"],
+    src:"Original. Harder confidence-bound arithmetic.",
+    problem:String.raw`Independent samples have \(n_1=18,\bar x_1=14.8,s_1=5.4\) and \(n_2=24,\bar x_2=11.6,s_2=2.7\). Do not assume equal variances. Find a 99% lower confidence bound for \(\mu_1-\mu_2\). Use Welch \(df=22\) and \(t_{0.01,22}=2.508\).`,
+    solution:String.raw`<p>The observed difference is \(3.2\). The Welch standard error is \[\sqrt{5.4^2/18+2.7^2/24}=\sqrt{29.16/18+7.29/24}=\sqrt{1.923}=1.387.\]</p><p>A 99% lower bound is \(3.2-2.508(1.387)=3.2-3.48=-0.28\). The confidence interval is \([-0.28,\infty)\).</p>`,
+    rubric:["Choose Welch and one-sided lower-bound form &mdash; <b>2 pts</b>","Compute the unpooled standard error &mdash; <b>2 pts</b>","Use the 99% one-sided critical value &mdash; <b>1 pt</b>","Compute and interpret the bound &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"The lower bound can be negative even when the sample difference is positive."
+  },
+  {
+    id:"Ch 23 &mdash; Q23",
+    level:"hard",
+    tags:["Power","Pooled T"],
+    src:"Original. Approximate power for a pooled T test.",
+    problem:String.raw`A one-sided pooled T-test of \(H_0:\mu_1\le\mu_2\) vs. \(H_1:\mu_1>\mu_2\) uses \(n_1=n_2=15\), estimated common \(\sigma=3.0\), and \(\alpha=0.05\). Approximate the power if the true difference is \(\delta=3.0\). Use a normal approximation to the noncentral T calculation.`,
+    solution:String.raw`<p>The standard error is \(3\sqrt{2/15}=1.095\). With \(df=28\), \(t_{0.05,28}\approx1.701\), so the rejection threshold for \(\bar X_1-\bar X_2\) is \(1.701(1.095)=1.86\).</p><p>Under \(\delta=3.0\), approximate power is \(P(D>1.86)\) for \(D\sim N(3.0,1.095^2)\). Thus \(P(Z>(1.86-3.0)/1.095)=P(Z>-1.04)=0.85\). The power is about 0.85.</p>`,
+    rubric:["Compute two-sample SE &mdash; <b>2 pts</b>","Convert T critical value to a raw-difference threshold &mdash; <b>2 pts</b>","Evaluate power under the alternative &mdash; <b>3 pts</b>"],
+    total:"7 pts",
+    tip:"The exact alternative distribution is noncentral T; the normal approximation is a planning shortcut."
+  },
+  {
+    id:"Ch 23 &mdash; Q24",
+    level:"hard",
+    tags:["OC curve","Sample size planning"],
+    src:"Original. Mirrors the course OC-chart sample-size logic.",
+    problem:String.raw`The course OC-chart method for the pooled two-sample T-test uses the transformation \(n^*=2n-1\) when \(n_1=n_2=n\). Explain what \(n^*\) represents and how you would use an OC curve to pick \(n\) for a desired Type II error \(\beta\) at a specified standardized difference \(d=\delta/\sigma\).`,
+    solution:String.raw`<p>The pooled equal-size test has \(df=2n-2\). The OC-chart convention often indexes curves by a one-sample-like parameter \(n^*=2n-1\), so that \(df=n^*-1=2n-2\). It is a chart-reading device, not the total sample size.</p><p>To plan \(n\), compute the standardized effect \(d=\delta/\sigma\), choose the curve or abscissa corresponding to the desired test size \(\alpha\), and find the smallest \(n^*\) whose OC value is at most the target \(\beta\). Then convert back using \(n=(n^*+1)/2\) and round up to an integer per group.</p>`,
+    rubric:["Explain \(n^*=2n-1\) and its d.f. connection &mdash; <b>3 pts</b>","State that OC ordinate is \(\beta\), not power &mdash; <b>2 pts</b>","Convert back to per-group \(n\) and round up &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"A common mistake is to report \(n^*\) as the per-group sample size."
+  },
+  {
+    id:"Ch 23 &mdash; Q25",
+    level:"hard",
+    tags:["Derivation","Pooled T"],
+    src:"Original. Derivation of the Student two-sample statistic.",
+    problem:String.raw`Derive the pooled two-sample T statistic under independent normal samples with \(\sigma_1^2=\sigma_2^2=\sigma^2\). State its degrees of freedom.`,
+    solution:String.raw`<p>Under the model, \(\bar X_1-\bar X_2\sim N(\mu_1-\mu_2,\sigma^2(1/n_1+1/n_2))\). Also, \((n_1-1)S_1^2/\sigma^2\) and \((n_2-1)S_2^2/\sigma^2\) are independent chi-squared variables, so their sum is \(\chi^2_{n_1+n_2-2}\).</p><p>Define \[S_p^2=\frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1+n_2-2}.\] Then \((n_1+n_2-2)S_p^2/\sigma^2\sim\chi^2_{n_1+n_2-2}\), independent of the standardized mean difference. Therefore \[T=\frac{(\bar X_1-\bar X_2)-(\mu_1-\mu_2)}{S_p\sqrt{1/n_1+1/n_2}}\sim t_{n_1+n_2-2}.\]</p>`,
+    rubric:["State distribution of the mean difference &mdash; <b>2 pts</b>","Combine the two chi-squared variance pieces &mdash; <b>2 pts</b>","Define \(S_p^2\) correctly &mdash; <b>2 pts</b>","Form the T statistic and d.f. &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"The pooled statistic is exact only because the two normal samples share the same variance."
+  },
+  {
+    id:"Ch 23 &mdash; Q26",
+    level:"hard",
+    tags:["Welch derivation","Degrees of freedom"],
+    src:"Original. Conceptual derivation of Welch's approximation.",
+    problem:String.raw`Why does Welch's test use an approximate degrees of freedom instead of \(n_1+n_2-2\)? Give the formula and explain why the result is usually rounded down in hand calculations.`,
+    solution:String.raw`<p>When variances are unequal, there is no single common \(\sigma^2\) to estimate, so the pooled chi-squared argument that gives \(n_1+n_2-2\) degrees of freedom no longer applies. Welch uses \[SE^2=S_1^2/n_1+S_2^2/n_2,\] a sum of two separately estimated variance components. The distribution of this estimated standard error is approximated by matching moments to a scaled chi-squared variable.</p><p>The Welch-Satterthwaite d.f. is \[\nu=\frac{(s_1^2/n_1+s_2^2/n_2)^2}{(s_1^2/n_1)^2/(n_1-1)+(s_2^2/n_2)^2/(n_2-1)}.\] It is rounded down in hand calculations to be conservative: a smaller d.f. gives a larger critical value.</p>`,
+    rubric:["Explain why pooled d.f. no longer applies &mdash; <b>2 pts</b>","State the Welch standard error &mdash; <b>1 pt</b>","Give the d.f. formula &mdash; <b>3 pts</b>","Explain conservative rounding down &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Welch's d.f. is not a count of observations; it is an effective degrees of freedom."
+  },
+  {
+    id:"Ch 23 &mdash; Q27",
+    level:"hard",
+    tags:["Variance pre-test","Error diagnosis"],
+    src:"Original. Final-style critique of a full workflow.",
+    problem:String.raw`A report states: "The F-test for equality of variances gives \(P=0.08>0.05\), so variances are equal. We therefore used the pooled T-test and found \(P=0.049\), proving a mean difference." Identify at least three problems with this reasoning.`,
+    solution:String.raw`<p>First, \(P=0.08\) in an F-test does not prove equal variances; it only fails to reject equality at the chosen level. Second, using the F-test to decide whether to pool and then treating the selected T-test as preplanned is a data-dependent workflow that can distort error rates. Third, the F-test is sensitive to non-normality and may have poor power, so it is a weak screening tool.</p><p>Also, \(P=0.049\) does not "prove" a difference; it is evidence against a null under a specified model. A safer analysis would report Welch's T-test by default, plus assumptions and an effect-size confidence interval.</p>`,
+    rubric:["Reject the claim that non-rejection proves equality &mdash; <b>2 pts</b>","Identify the pre-test selection problem &mdash; <b>2 pts</b>","Mention F-test sensitivity or low power &mdash; <b>1 pt</b>","Correct the language around \(P=0.049\) &mdash; <b>1 pt</b>","Recommend Welch/effect-size CI &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"This is a reasoning problem, not a calculation problem."
+  },
+  {
+    id:"Ch 23 &mdash; Q28",
+    level:"hard",
+    tags:["Final diagnosis","Choose procedure"],
+    src:"Original. Comprehensive method-selection scenario.",
+    problem:String.raw`For each scenario, choose the best procedure for comparing means and give a one-sentence justification. (i) Two independent small normal samples, equal variances guaranteed by calibration. (ii) Two independent small normal samples, variances visibly different. (iii) Two independent large skewed samples. (iv) Same subjects measured before and after treatment. (v) Two independent samples with known population variances.`,
+    solution:String.raw`<p><b>(i)</b> Use the pooled two-sample T-test or interval, because the common-variance normal model is justified. <b>(ii)</b> Use Welch's T-test, because equal variances are not credible. <b>(iii)</b> Use large-sample Welch T inference, with outlier checks, because the CLT supports the mean difference and Welch avoids equal-variance assumptions.</p><p><b>(iv)</b> Use a paired T-test on subject-level differences, not any independent two-sample test. <b>(v)</b> Use the known-variance two-sample Z procedure.</p>`,
+    rubric:["Choose pooled T for guaranteed equal variances &mdash; <b>1 pt</b>","Choose Welch for unequal variances &mdash; <b>1 pt</b>","Choose large-sample Welch for large skewed independent samples &mdash; <b>2 pts</b>","Choose paired T for repeated measures &mdash; <b>2 pts</b>","Choose Z for known variances &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Start every final-style question by identifying independence, pairing, variance knowledge, and sample size."
+  },
+  {
+    id:"Ch 23 &mdash; Q29",
+    level:"hard",
+    tags:["Noninferiority","One-sided test"],
+    src:"Original. Applied one-sided mean-difference test.",
+    problem:String.raw`A new battery is acceptable if its mean lifetime is no more than 2 hours below the old battery. Let \(\Delta=\mu_{\text{new}}-\mu_{\text{old}}\). Independent samples give \(n_1=25,\bar x_1=48.6,s_1=5.0\) for new and \(n_2=25,\bar x_2=50.0,s_2=4.8\) for old. Use Welch \(df=47\). Test noninferiority at \(\alpha=0.05\).`,
+    solution:String.raw`<p>Noninferiority hypotheses are \(H_0:\Delta\le -2\) vs. \(H_1:\Delta>-2\). The observed difference is \(-1.4\). Welch SE \(=\sqrt{25/25+23.04/25}=\sqrt{1.9216}=1.386\).</p><p>The statistic relative to the margin is \(t=[(-1.4)-(-2)]/1.386=0.433\). With \(df=47\), \(t_{0.05,47}\approx1.677\). Since \(0.433<1.677\), do not reject \(H_0\). The data do not establish noninferiority at the 5% level.</p>`,
+    rubric:["Set up noninferiority hypotheses correctly &mdash; <b>2 pts</b>","Test against \(-2\), not 0 &mdash; <b>2 pts</b>","Compute Welch SE and statistic &mdash; <b>2 pts</b>","Make the correct noninferiority conclusion &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"A sample difference above the margin is not enough; it must be far enough above the margin statistically."
+  },
+  {
+    id:"Ch 23 &mdash; Q30",
+    level:"hard",
+    tags:["Equivalence","Two one-sided tests"],
+    src:"Original. Extension of one-sided testing logic.",
+    problem:String.raw`A device is practically equivalent to a standard if \(-1<\mu_1-\mu_2<1\). A 90% two-sided Welch confidence interval for \(\mu_1-\mu_2\) is \([-0.6,0.8]\). What conclusion follows from the two-one-sided-tests equivalence logic at \(\alpha=0.05\)?`,
+    solution:String.raw`<p>Equivalence at level 5% can be concluded when the entire 90% two-sided confidence interval lies inside the equivalence margin \((-1,1)\). Here \([-0.6,0.8]\) is completely inside \((-1,1)\), so the data support practical equivalence at \(\alpha=0.05\).</p><p>This is different from failing to reject equality. Equivalence requires positive evidence that the difference is small enough in both directions.</p>`,
+    rubric:["Know why a 90% CI pairs with two one-sided 5% tests &mdash; <b>2 pts</b>","Check both margins &mdash; <b>2 pts</b>","Conclude equivalence &mdash; <b>1 pt</b>","Distinguish equivalence from non-rejection of equality &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Equivalence is stronger than saying the usual two-sided test was not significant."
+  },
+  {
+    id:"Ch 23 &mdash; Q31",
+    level:"hard",
+    tags:["Table data","Welch calculation"],
+    src:"Original. Summary-statistics problem with a small data table.",
+    problem:String.raw`Two independent laboratories measure impurity concentration. Summary statistics are shown below. Do not assume equal variances. Construct a 95% Welch CI for \(\mu_A-\mu_B\). Use \(df=10\).<table class="data"><tr><th>Lab</th><th>n</th><th>mean</th><th>s</th></tr><tr><td>A</td><td>7</td><td>4.82</td><td>0.30</td></tr><tr><td>B</td><td>9</td><td>4.55</td><td>0.18</td></tr></table>`,
+    solution:String.raw`<p>The observed difference is \(0.27\). Welch SE is \[\sqrt{0.30^2/7+0.18^2/9}=\sqrt{0.01286+0.00360}=\sqrt{0.01646}=0.1283.\] With \(df=10\), \(t_{0.025,10}=2.228\).</p><p>The CI is \(0.27\pm2.228(0.1283)=0.27\pm0.286=[-0.016,0.556]\). The interval barely includes 0.</p>`,
+    rubric:["Extract the correct summary statistics &mdash; <b>1 pt</b>","Use Welch SE &mdash; <b>2 pts</b>","Use \(df=10\) and 95% critical value &mdash; <b>2 pts</b>","Compute endpoints &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"A visible difference in sample standard deviations is enough reason not to pool unless the design says variances are common."
+  },
+  {
+    id:"Ch 23 &mdash; Q32",
+    level:"hard",
+    tags:["Final-style scenario","Comprehensive diagnosis"],
+    src:"Original. Capstone diagnosis problem.",
+    problem:String.raw`A final-exam scenario says: "Two teaching methods are compared using scores from 14 students in Method A and 16 different students in Method B. Scores look roughly normal. Sample summaries: \(\bar x_A=78.4,s_A=9.5\), \(\bar x_B=72.1,s_B=5.2\). A student first performs an F-test, gets \(P=0.041\), then uses Welch and reports \(t=2.18,df=16,P=0.044\)." Give a complete diagnosis: design type, appropriate test, whether the pre-test was needed, and the conclusion at 5%.`,
+    solution:String.raw`<p>The design is two independent samples, not paired, because the groups contain different students. The roughly normal small-sample setting supports T methods. Since the sample standard deviations are quite different and the F-test rejects equality, pooling is not attractive; however, the F-test pre-test was not needed. Welch should be chosen as the default independent-samples procedure unless equal variances are justified externally.</p><p>Using the reported Welch result, \(t=2.18\), \(df=16\), \(P=0.044<0.05\), reject \(H_0:\mu_A=\mu_B\) at the 5% level. Report this as evidence that the mean scores differ, with Method A higher in the sample. The conclusion depends on independence, approximate normality, and the validity of the sampling design; it is not proof that the method caused the difference unless the study was randomized.</p>`,
+    rubric:["Identify independent two-sample design &mdash; <b>1 pt</b>","Choose Welch and reject mandatory pre-testing &mdash; <b>3 pts</b>","Use the reported P-value for the 5% decision &mdash; <b>1 pt</b>","State direction and contextual conclusion carefully &mdash; <b>2 pts</b>","Mention randomization/causality caveat &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Final diagnosis answers should separate design, assumptions, computation, and interpretation."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

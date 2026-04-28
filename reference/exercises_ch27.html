@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 27</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px solid var(--rule);
+    margin-top:1.5em;
+    padding-top:.8em;
+  }
+  @media (max-width:700px){
+    header.site{ position:static; }
+    .card{ padding:.85em; }
+    table.data{ font-size:.82em; }
+  }
+</style>
+</head>
+<body>
+<header class="site">
+  <h1>VE401 / ECE4010J Exercise Bank</h1>
+  <nav class="tabs" aria-label="Chapter navigation">
+    <button class="active" type="button">Chapter 27</button>
+  </nav>
+</header>
+
+<main>
+  <section id="ch27" class="chapter">
+    <div class="chapter-header">
+      <h2>Chapter 27: Simple Linear Regression II &mdash; Predictions and Model Analysis</h2>
+      <p>Prediction for mean response and new observations, confidence and prediction bands, extrapolation, residual diagnostics, pure error, lack-of-fit testing, and model adequacy interpretation.</p>
+    </div>
+    <div class="toolbar">
+      <button type="button" onclick="expandAll('ch27')">Expand all solutions</button>
+      <button type="button" onclick="collapseAll('ch27')">Collapse all solutions</button>
+    </div>
+    <div id="cards"></div>
+    <div class="citebar">
+      Standalone exercise bank generated for Chapter 27. Numerical quantiles are provided inside questions when needed; use the course convention \(t_{\alpha/2,\nu}\) and \(f_{\alpha,\nu_1,\nu_2}\) as upper-tail critical values.
+    </div>
+  </section>
+</main>
+
+<script>
+const questions = [
+  {
+    id:"Ch 27 &mdash; Q01",
+    level:"easy",
+    tags:["Formula selection","Mean CI","Prediction interval"],
+    src:"Original. Core Chapter 27 formula check.",
+    problem:String.raw`In simple linear regression with fitted line \(\hat y=b_0+b_1x\), residual standard error \(s\), sample size \(n\), mean \(\bar x\), and \(S_{xx}=\sum(x_i-\bar x)^2\), write the formulas for a \(100(1-\alpha)\%\) confidence interval for \(\mu_{Y|x^*}\) and a prediction interval for one new observation \(Y_{\mathrm{new}}\) at \(x^*\).`,
+    solution:String.raw`<p>The fitted value is \(\hat y^*=b_0+b_1x^*\).</p><p>For the estimated mean response, \[\hat y^*\pm t_{\alpha/2,n-2}s\sqrt{\frac1n+\frac{(x^*-\bar x)^2}{S_{xx}}}.\]</p><p>For one future observation, \[\hat y^*\pm t_{\alpha/2,n-2}s\sqrt{1+\frac1n+\frac{(x^*-\bar x)^2}{S_{xx}}}.\]</p><p>The only algebraic difference is the extra \(1\) in the PI standard error, representing irreducible noise in the new observation.</p>`,
+    rubric:["State fitted value \(\hat y^*\) &mdash; <b>1 pt</b>","Give the mean-response CI formula &mdash; <b>3 pts</b>","Give the new-observation PI formula with the extra \(1\) &mdash; <b>3 pts</b>","Use \(n-2\) degrees of freedom &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"If the interval is for an average at \(x^*\), no extra \(1\). If it is for a single future \(Y\), include the extra \(1\)."
+  },
+  {
+    id:"Ch 27 &mdash; Q02",
+    level:"easy",
+    tags:["Numerical CI","Numerical PI"],
+    src:"Adapted from a bare-handed SLR example.",
+    problem:String.raw`Using \(\hat y=0.3+1.7x\), \(n=5\), \(\bar x=3\), \(S_{xx}=10\), \(s=0.3162\), and \(t_{0.025,3}=3.182\), construct (a) a 95% CI for \(\mu_{Y|4}\), and (b) a 95% PI for a new observation at \(x^*=4\).`,
+    solution:String.raw`<p>The fitted value is \(\hat y^*=0.3+1.7(4)=7.1\).</p><p>For the mean response, \[\mathrm{SE}_{\mathrm{mean}}=0.3162\sqrt{\frac15+\frac{(4-3)^2}{10}}=0.3162\sqrt{0.3}=0.1732.\] The margin is \(3.182(0.1732)=0.551\), so the CI is \([6.55,7.65]\).</p><p>For a new observation, \[\mathrm{SE}_{\mathrm{pred}}=0.3162\sqrt{1+\frac15+\frac{1}{10}}=0.3162\sqrt{1.3}=0.3605.\] The margin is \(3.182(0.3605)=1.147\), so the PI is \([5.95,8.25]\).</p>`,
+    rubric:["Compute \(\hat y^*=7.1\) &mdash; <b>1 pt</b>","Use the correct CI standard error &mdash; <b>2 pts</b>","Compute the CI endpoints &mdash; <b>2 pts</b>","Use the PI standard error with extra \(1\) &mdash; <b>2 pts</b>","Compute the PI endpoints &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The PI should be wider than the CI at the same \(x^*\). If it is not, the extra \(1\) was probably omitted."
+  },
+  {
+    id:"Ch 27 &mdash; Q03",
+    level:"easy",
+    tags:["Interpretation","Coverage"],
+    src:"Original. Frequentist interval language.",
+    problem:String.raw`A 95% CI for \(\mu_{Y|5}\) is reported as \([10.4,12.2]\), and a 95% PI for a new \(Y\) at \(x=5\) is \([8.1,14.5]\). Give a correct interpretation of each interval. Also identify one incorrect interpretation.`,
+    solution:String.raw`<p>The CI interpretation is procedural: if we repeatedly sampled data, refit the regression, and built this kind of interval, about 95% of those intervals would contain the fixed unknown mean response \(\mu_{Y|5}\).</p><p>The PI interpretation is also procedural: if we repeatedly sampled data, built the interval, and then observed one new \(Y\) at \(x=5\), about 95% of those future observations would fall inside the corresponding PI.</p><p>An incorrect statement is: there is a 95% probability that the fixed \(\mu_{Y|5}\) is inside \([10.4,12.2]\). In the frequentist model, the interval is random before sampling; the parameter is fixed.</p>`,
+    rubric:["Interpret the CI as coverage for the mean response &mdash; <b>2 pts</b>","Interpret the PI as coverage for a future observation &mdash; <b>2 pts</b>","Mention repeated sampling or procedure coverage &mdash; <b>1 pt</b>","Identify a fixed-parameter probability statement as incorrect &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Do not compare a single future observation to a CI for the mean. Use the PI for that."
+  },
+  {
+    id:"Ch 27 &mdash; Q04",
+    level:"easy",
+    tags:["Band shape","Design center"],
+    src:"Original. Conceptual band geometry.",
+    problem:String.raw`For fixed \(s,n,S_{xx}\), at what \(x^*\) are both the confidence interval for \(\mu_{Y|x^*}\) and the prediction interval for \(Y_{\mathrm{new}}\) narrowest? Explain from the formula.`,
+    solution:String.raw`<p>Both intervals are narrowest at \(x^*=\bar x\), the design center. The only term that changes with \(x^*\) is \((x^*-\bar x)^2/S_{xx}\), which is minimized at zero.</p><p>At \(x^*=\bar x\), the CI radical is \(\sqrt{1/n}\), while the PI radical is \(\sqrt{1+1/n}\). Away from \(\bar x\), both bands flare upward symmetrically.</p>`,
+    rubric:["Identify \(x^*=\bar x\) &mdash; <b>2 pts</b>","Use the squared distance term to justify the answer &mdash; <b>2 pts</b>","State that both bands widen away from the center &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The prediction band is not constant-width. It is narrowest near the data center and wider toward the ends."
+  },
+  {
+    id:"Ch 27 &mdash; Q05",
+    level:"easy",
+    tags:["Extrapolation","Model limits"],
+    src:"Original. Final-style caution question.",
+    problem:String.raw`A regression is fit using \(x\)-values from 2 to 9. A student uses the fitted line to predict at \(x^*=20\), reports a very wide prediction interval, and says the large width fully solves the extrapolation problem. Diagnose the statement.`,
+    solution:String.raw`<p>The statement is incomplete. The formula does widen the interval because \((x^*-\bar x)^2/S_{xx}\) is large, so it accounts for extra uncertainty in estimating the line far from the design center.</p><p>However, the formula still assumes the same linear model is valid at \(x=20\). Extrapolation can fail because the relationship may curve, saturate, break, or change mechanism outside the observed range. A wide interval does not validate the model beyond the data.</p>`,
+    rubric:["Recognize that the interval widens algebraically &mdash; <b>2 pts</b>","State that linearity outside the observed range is an assumption &mdash; <b>2 pts</b>","Explain why extrapolation is still risky &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Prediction formulas quantify uncertainty under the model. They do not prove the model remains true outside the data range."
+  },
+  {
+    id:"Ch 27 &mdash; Q06",
+    level:"easy",
+    tags:["Residual plots","L-I-N-H assumptions"],
+    src:"Original. Diagnostic matching.",
+    problem:String.raw`Match each residual diagnostic to the likely model issue: (i) residuals vs. \(x\) show a U-shape, (ii) residuals vs. fitted values show a funnel, (iii) residuals vs. time index show long runs of positive then negative residuals, (iv) a normal Q-Q plot has strong tail departures.`,
+    solution:String.raw`<p>(i) A U-shape suggests nonlinearity: the linear mean function is inadequate.</p><p>(ii) A funnel suggests nonconstant variance, or heteroscedasticity.</p><p>(iii) Long time-ordered runs suggest dependence or autocorrelation.</p><p>(iv) Strong Q-Q tail departures suggest nonnormal errors, often heavy tails or outliers.</p>`,
+    rubric:["Identify nonlinearity for U-shape &mdash; <b>1 pt</b>","Identify heteroscedasticity for funnel &mdash; <b>1 pt</b>","Identify dependence for ordered runs &mdash; <b>1 pt</b>","Identify nonnormality for Q-Q departures &mdash; <b>1 pt</b>"],
+    total:"4 pts",
+    tip:"A useful memory aid is L-I-N-H: Linearity, Independence, Normality, Homoscedasticity."
+  },
+  {
+    id:"Ch 27 &mdash; Q07",
+    level:"medium",
+    tags:["Mean CI","At design center"],
+    src:"Original. Calculation at \(\bar x\).",
+    problem:String.raw`An SLR fit has \(n=16\), \(\bar x=10\), \(S_{xx}=80\), \(s=2.4\), and \(\hat y=5+0.8x\). Using \(t_{0.025,14}=2.145\), construct a 95% CI for \(\mu_{Y|10}\).`,
+    solution:String.raw`<p>At \(x^*=10=\bar x\), the fitted value is \(\hat y^*=5+0.8(10)=13\). The distance term is zero, so \[\mathrm{SE}_{\mathrm{mean}}=2.4\sqrt{\frac1{16}}=0.6.\]</p><p>The margin is \(2.145(0.6)=1.287\). Therefore the 95% CI is \([11.71,14.29]\).</p>`,
+    rubric:["Compute \(\hat y^*=13\) &mdash; <b>1 pt</b>","Recognize \(x^*=\bar x\) so the distance term is zero &mdash; <b>2 pts</b>","Compute the standard error and margin &mdash; <b>2 pts</b>","Report endpoints &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"At the design center, \(S_{xx}\) does not affect the interval width because the distance term vanishes."
+  },
+  {
+    id:"Ch 27 &mdash; Q08",
+    level:"medium",
+    tags:["Prediction interval","Future observation"],
+    src:"Original. Calculation away from center.",
+    problem:String.raw`For the same fit as Q07, construct a 95% PI for one new observation at \(x^*=14\). Use \(t_{0.025,14}=2.145\).`,
+    solution:String.raw`<p>The fitted value is \(\hat y^*=5+0.8(14)=16.2\). The distance term is \((14-10)^2/80=16/80=0.2\).</p><p>The PI standard error is \[2.4\sqrt{1+\frac1{16}+0.2}=2.4\sqrt{1.2625}=2.696.\] The margin is \(2.145(2.696)=5.784\).</p><p>The 95% PI is \([10.42,21.98]\).</p>`,
+    rubric:["Compute fitted value \(16.2\) &mdash; <b>1 pt</b>","Compute the leverage distance term \(0.2\) &mdash; <b>2 pts</b>","Use the PI radical with extra \(1\) &mdash; <b>2 pts</b>","Compute and report endpoints &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"A PI can be much wider than the mean-response CI even with the same confidence level."
+  },
+  {
+    id:"Ch 27 &mdash; Q09",
+    level:"medium",
+    tags:["CI vs PI","Ratio"],
+    src:"Original. Algebraic comparison.",
+    problem:String.raw`At a fixed \(x^*\), let \(h^*=1/n+(x^*-\bar x)^2/S_{xx}\). Show that the PI half-width divided by the CI half-width is \(\sqrt{(1+h^*)/h^*}\). What happens to this ratio when \(x^*=\bar x\) and \(n\) is large?`,
+    solution:String.raw`<p>The CI half-width is \(tsh^{*1/2}\). The PI half-width is \(ts(1+h^*)^{1/2}\). Dividing cancels \(t\) and \(s\): \[\frac{\mathrm{PI\ half}}{\mathrm{CI\ half}}=\sqrt{\frac{1+h^*}{h^*}}.\]</p><p>At \(x^*=\bar x\), \(h^*=1/n\), so the ratio is \(\sqrt{(1+1/n)/(1/n)}=\sqrt{n+1}\). For large \(n\), the mean is estimated very precisely at the center, but a new observation still has noise, so the PI is much wider than the CI.</p>`,
+    rubric:["Define CI and PI half-widths in terms of \(h^*\) &mdash; <b>2 pts</b>","Cancel common factors correctly &mdash; <b>2 pts</b>","Evaluate \(h^*=1/n\) at the center &mdash; <b>1 pt</b>","Interpret the large-\(n\) behavior &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"As \(n\) grows, uncertainty in the fitted mean can vanish, but the noise of a single future observation does not vanish."
+  },
+  {
+    id:"Ch 27 &mdash; Q10",
+    level:"medium",
+    tags:["Prediction bands","Sketch"],
+    src:"Original. Confidence and prediction band comparison.",
+    problem:String.raw`Without computing numbers, describe how the 95% confidence band for \(\mu_{Y|x}\) and the 95% prediction band for a new \(Y\) differ in a graph over the observed \(x\)-range. Include where they are narrowest and which one is wider.`,
+    solution:String.raw`<p>Both bands are centered on the fitted line \(\hat y=b_0+b_1x\). Both are narrowest at \(x=\bar x\) and widen as \(|x-\bar x|\) increases.</p><p>The prediction band is wider everywhere because its standard error includes the extra \(1\) for the new observation's own random error. The confidence band describes uncertainty in the mean response; the prediction band describes uncertainty for one future response.</p>`,
+    rubric:["State both bands are centered on the fitted line &mdash; <b>1 pt</b>","State both are narrowest at \(\bar x\) &mdash; <b>2 pts</b>","State both widen away from \(\bar x\) &mdash; <b>1 pt</b>","State the prediction band is wider and why &mdash; <b>3 pts</b>"],
+    total:"7 pts",
+    tip:"A prediction band cannot be inside the corresponding pointwise confidence band at the same \(x\)."
+  },
+  {
+    id:"Ch 27 &mdash; Q11",
+    level:"medium",
+    tags:["Extrapolation","Half-width table"],
+    src:"Adapted from Chapter 27 prediction-band examples.",
+    problem:String.raw`Using \(\hat y=0.3+1.7x\), \(n=5\), \(\bar x=3\), \(S_{xx}=10\), \(s=0.3162\), and \(t_{0.025,3}=3.182\), compute the 95% PI half-widths at \(x^*=3,5,10\). Comment on extrapolation.`,
+    solution:String.raw`<p>Here \(ts=3.182(0.3162)=1.0061\). The PI half-width is \[1.0061\sqrt{1+\frac15+\frac{(x^*-3)^2}{10}}.\]</p><table class="data"><thead><tr><th>\(x^*\)</th><th>\((x^*-3)^2/10\)</th><th>radical</th><th>half-width</th></tr></thead><tbody><tr><td>3</td><td>0.000</td><td>1.095</td><td>1.102</td></tr><tr><td>5</td><td>0.400</td><td>1.265</td><td>1.273</td></tr><tr><td>10</td><td>4.900</td><td>2.470</td><td>2.485</td></tr></tbody></table><p>The half-width more than doubles by \(x^*=10\). This reflects parameter-estimation uncertainty far from the data center, and it does not remove the separate concern that the linear model may not hold outside the observed range.</p>`,
+    rubric:["Write the correct PI half-width formula &mdash; <b>2 pts</b>","Compute the three distance terms &mdash; <b>2 pts</b>","Compute reasonable half-widths &mdash; <b>3 pts</b>","Give an extrapolation warning &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The flare comes from the squared distance from \(\bar x\), not from a change in the residual standard error."
+  },
+  {
+    id:"Ch 27 &mdash; Q12",
+    level:"medium",
+    tags:["Leverage","Prediction precision"],
+    src:"Original. Design comparison.",
+    problem:String.raw`Two experiments use the same \(n=20\), same \(s=3\), and both predict at \(x^*=10\). Experiment A has \(\bar x=10\), \(S_{xx}=50\). Experiment B has \(\bar x=6\), \(S_{xx}=50\). Which experiment gives a narrower CI for \(\mu_{Y|10}\), and why?`,
+    solution:String.raw`<p>The standard error for the mean is \(s\sqrt{1/n+(x^*-\bar x)^2/S_{xx}}\). Experiment A has \(x^*=\bar x\), so its radical is \(\sqrt{1/20}\).</p><p>Experiment B has \((10-6)^2/50=16/50=0.32\), so its radical is \(\sqrt{1/20+0.32}\). This is larger. Experiment A gives the narrower CI because the target point is at the design center.</p>`,
+    rubric:["Use the mean-response standard error &mdash; <b>2 pts</b>","Compute or compare the distance terms &mdash; <b>2 pts</b>","Select Experiment A &mdash; <b>1 pt</b>","Explain in terms of design center or leverage &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Prediction precision depends not just on sample size, but on where the new \(x^*\) sits relative to the collected \(x\)-values."
+  },
+  {
+    id:"Ch 27 &mdash; Q13",
+    level:"medium",
+    tags:["Pure error","Replicates"],
+    src:"Original. Repeated-observation decomposition.",
+    problem:String.raw`Replicated observations are collected at three \(x\)-levels: at \(x=1\), \(y=4,5\); at \(x=2\), \(y=7,9,8\); at \(x=3\), \(y=10,11\). Compute the pure error sum of squares \(\mathrm{SSE}_{\mathrm{pe}}\) and its degrees of freedom.`,
+    solution:String.raw`<p>Within each \(x\)-level, subtract the group mean. At \(x=1\), the mean is \(4.5\), giving \(0.25+0.25=0.50\). At \(x=2\), the mean is \(8\), giving \(1+1+0=2.00\). At \(x=3\), the mean is \(10.5\), giving \(0.25+0.25=0.50\).</p><p>Thus \(\mathrm{SSE}_{\mathrm{pe}}=0.50+2.00+0.50=3.00\). There are \(n=7\) observations and \(k=3\) distinct \(x\)-levels, so the pure error degrees of freedom are \(n-k=4\).</p>`,
+    rubric:["Compute group means correctly &mdash; <b>2 pts</b>","Compute within-group sums of squares &mdash; <b>3 pts</b>","Add to get \(\mathrm{SSE}_{\mathrm{pe}}=3.00\) &mdash; <b>1 pt</b>","Use \(df_{\mathrm{pe}}=n-k=4\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Pure error is within-replicate variation. It does not care what line was fit."
+  },
+  {
+    id:"Ch 27 &mdash; Q14",
+    level:"medium",
+    tags:["Lack of fit","ANOVA decomposition"],
+    src:"Original. Lack-of-fit arithmetic.",
+    problem:String.raw`For a replicated SLR study, \(n=14\), \(k=5\) distinct \(x\)-levels, total regression error \(\mathrm{SSE}=28.4\), and pure error \(\mathrm{SSE}_{\mathrm{pe}}=16.0\). Compute \(\mathrm{SSE}_{\mathrm{lf}}\), its degrees of freedom, and the lack-of-fit test statistic.`,
+    solution:String.raw`<p>The lack-of-fit sum of squares is \(\mathrm{SSE}_{\mathrm{lf}}=\mathrm{SSE}-\mathrm{SSE}_{\mathrm{pe}}=28.4-16.0=12.4\).</p><p>The degrees of freedom are \(df_{\mathrm{lf}}=k-2=5-2=3\) and \(df_{\mathrm{pe}}=n-k=14-5=9\). Therefore \[F=\frac{\mathrm{SSE}_{\mathrm{lf}}/(k-2)}{\mathrm{SSE}_{\mathrm{pe}}/(n-k)}=\frac{12.4/3}{16.0/9}=2.325.\]</p>`,
+    rubric:["Compute \(\mathrm{SSE}_{\mathrm{lf}}\) &mdash; <b>2 pts</b>","Use \(df_{\mathrm{lf}}=k-2\) &mdash; <b>1 pt</b>","Use \(df_{\mathrm{pe}}=n-k\) &mdash; <b>1 pt</b>","Compute the F statistic &mdash; <b>3 pts</b>"],
+    total:"7 pts",
+    tip:"The line uses two fitted parameters, so the lack-of-fit degrees of freedom are \(k-2\), not \(k-1\)."
+  },
+  {
+    id:"Ch 27 &mdash; Q15",
+    level:"medium",
+    tags:["Lack-of-fit test","Decision"],
+    src:"Adapted from replicated data example.",
+    problem:String.raw`Replicated data have \(n=8\), \(k=4\), \(\mathrm{SSE}=3.65\), and \(\mathrm{SSE}_{\mathrm{pe}}=3.50\). Test for lack of fit at \(\alpha=0.05\) using \(f_{0.05,2,4}=6.94\).`,
+    solution:String.raw`<p>The lack-of-fit sum of squares is \(3.65-3.50=0.15\). The degrees of freedom are \(k-2=2\) and \(n-k=4\).</p><p>\[F=\frac{0.15/2}{3.50/4}=\frac{0.075}{0.875}=0.0857.\]</p><p>Because \(0.0857<6.94\), we fail to reject \(H_0\). There is no evidence of lack of fit relative to the pure-error variation.</p>`,
+    rubric:["Compute \(\mathrm{SSE}_{\mathrm{lf}}=0.15\) &mdash; <b>2 pts</b>","Use df \((2,4)\) &mdash; <b>2 pts</b>","Compute \(F=0.0857\) &mdash; <b>2 pts</b>","Make the correct fail-to-reject conclusion &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"A small lack-of-fit F means the line is not doing worse than replicate noise would suggest."
+  },
+  {
+    id:"Ch 27 &mdash; Q16",
+    level:"medium",
+    tags:["No replicates","Undefined test"],
+    src:"Original. Lack-of-fit limitation.",
+    problem:String.raw`A student fits SLR to \(n=12\) observations, all at distinct \(x\)-values, and tries to perform the pure-error lack-of-fit F-test. Explain what \(k\), \(\mathrm{SSE}_{\mathrm{pe}}\), and \(df_{\mathrm{pe}}\) are, and why the test is undefined.`,
+    solution:String.raw`<p>If all \(x\)-values are distinct, then \(k=n=12\). Each group has one observation, so its group mean equals that observation and \(\mathrm{SSE}_{\mathrm{pe}}=0\).</p><p>The pure-error degrees of freedom are \(n-k=0\). The denominator of the lack-of-fit F statistic is \(\mathrm{SSE}_{\mathrm{pe}}/(n-k)=0/0\), so the test is undefined. Without replicates, there is no model-free estimate of \(\sigma^2\) to compare the fitted line against.</p>`,
+    rubric:["State \(k=n=12\) &mdash; <b>1 pt</b>","State \(\mathrm{SSE}_{\mathrm{pe}}=0\) &mdash; <b>2 pts</b>","State \(df_{\mathrm{pe}}=0\) &mdash; <b>1 pt</b>","Explain why the F denominator is undefined &mdash; <b>2 pts</b>","Explain the role of replicates &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Residual plots can still be useful without replicates, but the formal pure-error lack-of-fit test is not available."
+  },
+  {
+    id:"Ch 27 &mdash; Q17",
+    level:"medium",
+    tags:["Residual analysis","Remedies"],
+    src:"Original. Model adequacy actions.",
+    problem:String.raw`For each residual pattern, give a likely remedy: (a) curved residuals vs. \(x\), (b) funnel-shaped residuals, (c) one point with extreme \(x\) and large residual, (d) time-ordered residuals with autocorrelation.`,
+    solution:String.raw`<p>(a) Add curvature, such as an \(x^2\) term, transform \(x\), or use a more appropriate nonlinear mean model.</p><p>(b) Use a variance-stabilizing transformation such as \(\log Y\) or \(\sqrt Y\), or use weighted least squares if the variance pattern is known.</p><p>(c) Investigate the observation, check data entry, assess leverage/influence, and report sensitivity with and without the point if justified. Do not delete it automatically.</p><p>(d) Include time structure, such as time covariates, lagged variables, or a model with correlated errors such as GLS.</p>`,
+    rubric:["Give a curvature remedy for nonlinearity &mdash; <b>2 pts</b>","Give transformation or weighting for heteroscedasticity &mdash; <b>2 pts</b>","Handle influential point carefully rather than deleting blindly &mdash; <b>2 pts</b>","Give time-series or correlated-error remedy &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"A diagnostic is only useful if it changes the modeling decision."
+  },
+  {
+    id:"Ch 27 &mdash; Q18",
+    level:"medium",
+    tags:["Transformations","Log scale"],
+    src:"Original. Variance stabilization.",
+    problem:String.raw`A bacterial count response \(Y\) has residuals whose spread grows roughly in proportion to the fitted mean. A student fits \(Z=\log Y\) on \(x\). Explain why this may improve model adequacy and interpret the slope on the log scale.`,
+    solution:String.raw`<p>If the original errors are multiplicative, \(Y=\mu(x)\eta\), then \(\log Y=\log\mu(x)+\log\eta\). The transformed error \(\log\eta\) can have approximately constant variance, so the funnel pattern may disappear.</p><p>In the model \(\log Y=\beta_0+\beta_1x+\varepsilon\), increasing \(x\) by one unit multiplies the median response by \(e^{\beta_1}\). For small \(\beta_1\), the approximate percent change is \(100\beta_1\%\) per unit \(x\).</p>`,
+    rubric:["Connect funnel pattern to nonconstant variance &mdash; <b>2 pts</b>","Explain multiplicative errors become additive on log scale &mdash; <b>2 pts</b>","Interpret \(e^{\beta_1}\) as a multiplicative effect &mdash; <b>2 pts</b>","Mention approximate percent change for small slopes &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"After modeling \(\log Y\), back-transformed intervals for \(Y\) are asymmetric."
+  },
+  {
+    id:"Ch 27 &mdash; Q19",
+    level:"medium",
+    tags:["Out-of-band observation","Interpretation"],
+    src:"Original. Prediction interval diagnosis.",
+    problem:String.raw`A fitted model gives a 95% PI \([20,30]\) for a new observation at \(x=7\). The next observed value is \(31\). Does this single value prove the model is wrong? What follow-up would be reasonable?`,
+    solution:String.raw`<p>No. Under a correct model, about 5% of future observations will fall outside a 95% PI. A single value just outside the interval is not proof of model failure.</p><p>Reasonable follow-up includes checking measurement or data-entry error, asking whether \(x=7\) is within the design range, and tracking additional future observations. If many future values fall outside the PI or mostly on the same side, then the mean model, variance estimate, or distributional assumptions may be inadequate.</p>`,
+    rubric:["State that one outside observation does not prove failure &mdash; <b>2 pts</b>","Use the 95% PI coverage idea &mdash; <b>2 pts</b>","Suggest data/model checks &mdash; <b>2 pts</b>","Mention repeated out-of-band pattern as stronger evidence &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"The relevant comparison for a single new observation is the PI, not the CI for the mean."
+  },
+  {
+    id:"Ch 27 &mdash; Q20",
+    level:"medium",
+    tags:["Simultaneous vs pointwise","Bands"],
+    src:"Original. Scope of inference.",
+    problem:String.raw`A student computes the pointwise 95% CI for \(\mu_{Y|x}\) at each of 20 plotted \(x\)-values and calls the resulting curves a simultaneous 95% confidence band for the whole line. Diagnose the statement.`,
+    solution:String.raw`<p>The statement is wrong. Pointwise 95% intervals guarantee 95% coverage at a single prechosen \(x\). They do not guarantee that the entire true mean line lies inside all plotted intervals simultaneously with probability 95%.</p><p>A true simultaneous band needs a different critical value, usually larger than the pointwise \(t\) value. The pointwise curves are still useful visually, but their coverage statement is local, not global.</p>`,
+    rubric:["Distinguish pointwise from simultaneous coverage &mdash; <b>3 pts</b>","State that repeated pointwise intervals do not preserve 95% global coverage &mdash; <b>2 pts</b>","Mention need for a larger/different critical value &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Pointwise bands answer: what about this \(x\)? Simultaneous bands answer: what about all \(x\) in the range?"
+  },
+  {
+    id:"Ch 27 &mdash; Q21",
+    level:"hard",
+    tags:["Full computation","CI and PI"],
+    src:"Original. Summary-statistics prediction problem.",
+    problem:String.raw`An SLR has \(n=10\), \(\bar x=4\), \(S_{xx}=30\), \(b_0=2.0\), \(b_1=1.5\), and \(\mathrm{SSE}=18\). Using \(t_{0.025,8}=2.306\), construct both the 95% CI for \(\mu_{Y|6}\) and the 95% PI for a new \(Y\) at \(x^*=6\).`,
+    solution:String.raw`<p>The residual variance estimate is \(s^2=\mathrm{SSE}/(n-2)=18/8=2.25\), so \(s=1.5\). The fitted value is \(\hat y^*=2+1.5(6)=11\). The leverage term is \[h^*=\frac1{10}+\frac{(6-4)^2}{30}=0.1+\frac4{30}=0.2333.\]</p><p>For the mean response, the standard error is \(1.5\sqrt{0.2333}=0.7246\). The margin is \(2.306(0.7246)=1.671\), so the CI is \([9.33,12.67]\).</p><p>For a new observation, the standard error is \(1.5\sqrt{1.2333}=1.665\). The margin is \(2.306(1.665)=3.839\), so the PI is \([7.16,14.84]\).</p>`,
+    rubric:["Compute \(s=1.5\) &mdash; <b>2 pts</b>","Compute fitted value \(11\) &mdash; <b>1 pt</b>","Compute \(h^*=0.2333\) &mdash; <b>2 pts</b>","Compute CI endpoints &mdash; <b>2 pts</b>","Compute PI endpoints &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"Always convert SSE into \(s\) before using prediction formulas."
+  },
+  {
+    id:"Ch 27 &mdash; Q22",
+    level:"hard",
+    tags:["Derivation","Variance of prediction"],
+    src:"Original. Formula derivation.",
+    problem:String.raw`Derive the variance factor \(1/n+(x^*-\bar x)^2/S_{xx}\) for \(\hat Y(x^*)=B_0+B_1x^*\) in SLR, assuming \(\mathrm{Var}(B_1)=\sigma^2/S_{xx}\), \(\mathrm{Var}(B_0)=\sigma^2(1/n+\bar x^2/S_{xx})\), and \(\mathrm{Cov}(B_0,B_1)=-\bar x\sigma^2/S_{xx}\).`,
+    solution:String.raw`<p>Use the variance of a linear combination:</p><p>\[\mathrm{Var}(B_0+B_1x^*)=\mathrm{Var}(B_0)+(x^*)^2\mathrm{Var}(B_1)+2x^*\mathrm{Cov}(B_0,B_1).\]</p><p>Substitute the given expressions:</p><p>\[\sigma^2\left(\frac1n+\frac{\bar x^2}{S_{xx}}\right)+(x^*)^2\frac{\sigma^2}{S_{xx}}-2x^*\frac{\bar x\sigma^2}{S_{xx}}=\sigma^2\left[\frac1n+\frac{(x^*)^2-2x^*\bar x+\bar x^2}{S_{xx}}\right].\]</p><p>Therefore \[\mathrm{Var}(\hat Y(x^*))=\sigma^2\left[\frac1n+\frac{(x^*-\bar x)^2}{S_{xx}}\right].\]</p>`,
+    rubric:["Start with the variance of \(B_0+x^*B_1\) &mdash; <b>2 pts</b>","Include the covariance term &mdash; <b>2 pts</b>","Substitute the three given variance/covariance formulas &mdash; <b>2 pts</b>","Complete the square to get \((x^*-\bar x)^2\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Forgetting the covariance term is the most common derivation error."
+  },
+  {
+    id:"Ch 27 &mdash; Q23",
+    level:"hard",
+    tags:["Lack of fit","Full data"],
+    src:"Original. Full replicated-data lack-of-fit test.",
+    problem:String.raw`For the data below, test for lack of fit of a straight line at \(\alpha=0.05\). Use \(f_{0.05,2,5}=5.79\).<table class="data"><tbody><tr><th>\(x\)</th><td>0</td><td>0</td><td>1</td><td>1</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td></tr><tr><th>\(y\)</th><td>1</td><td>2</td><td>2</td><td>4</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr></tbody></table>Useful fitted-line summaries: \(b_0=0.9697\), \(b_1=2.7576\), and \(\mathrm{SSE}=5.6364\).`,
+    solution:String.raw`<p>There are \(n=9\) observations and \(k=4\) distinct \(x\)-levels. First compute pure error from replicate groups.</p><p>At \(x=0\), mean \(1.5\), contribution \(0.5\). At \(x=1\), mean \(3\), contribution \(2\). At \(x=2\), mean \(6.5\), contribution \(0.5\). At \(x=3\), mean \(9\), contribution \(1+0+1=2\). Thus \(\mathrm{SSE}_{\mathrm{pe}}=5.0\) with \(df_{\mathrm{pe}}=n-k=5\).</p><p>\(\mathrm{SSE}_{\mathrm{lf}}=5.6364-5.0=0.6364\) with \(df_{\mathrm{lf}}=k-2=2\). Therefore \[F=\frac{0.6364/2}{5.0/5}=0.3182.\]</p><p>Since \(0.3182<5.79\), fail to reject. These data do not provide evidence of lack of fit for the straight-line model.</p>`,
+    rubric:["Compute \(\mathrm{SSE}_{\mathrm{pe}}=5.0\) &mdash; <b>3 pts</b>","Use df \(5\) for pure error &mdash; <b>1 pt</b>","Compute \(\mathrm{SSE}_{\mathrm{lf}}=0.6364\) &mdash; <b>2 pts</b>","Use df \(2\) for lack of fit &mdash; <b>1 pt</b>","Compute F and compare to critical value &mdash; <b>2 pts</b>","State the conclusion in context &mdash; <b>1 pt</b>"],
+    total:"10 pts",
+    tip:"The pure-error calculation is independent of the fitted line; it is only within-group variation."
+  },
+  {
+    id:"Ch 27 &mdash; Q24",
+    level:"hard",
+    tags:["Strong lack of fit","Pure error"],
+    src:"Original. Curvature detected by replicates.",
+    problem:String.raw`A replicated experiment has \(n=15\), \(k=5\), \(\mathrm{SSE}=90\), and \(\mathrm{SSE}_{\mathrm{pe}}=10\). Test for lack of fit at \(\alpha=0.01\) using \(f_{0.01,3,10}=6.55\). Interpret the result.`,
+    solution:String.raw`<p>\(\mathrm{SSE}_{\mathrm{lf}}=90-10=80\). The degrees of freedom are \(df_{\mathrm{lf}}=k-2=3\) and \(df_{\mathrm{pe}}=n-k=10\).</p><p>\[F=\frac{80/3}{10/10}=26.67.\]</p><p>Since \(26.67>6.55\), reject \(H_0\). The straight-line model has significant lack of fit beyond what can be explained by pure replicate variation. A curved model, transformation, or different mean function should be considered.</p>`,
+    rubric:["Compute \(\mathrm{SSE}_{\mathrm{lf}}=80\) &mdash; <b>2 pts</b>","Use df \((3,10)\) &mdash; <b>2 pts</b>","Compute \(F=26.67\) &mdash; <b>2 pts</b>","Reject at \(\alpha=0.01\) &mdash; <b>1 pt</b>","Interpret as evidence against a straight-line mean &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"A significant lack-of-fit test criticizes the mean form, not necessarily the existence of any relationship."
+  },
+  {
+    id:"Ch 27 &mdash; Q25",
+    level:"hard",
+    tags:["Model adequacy","Conflicting diagnostics"],
+    src:"Original. Final-style diagnosis.",
+    problem:String.raw`A regression output has \(R^2=0.94\) and a highly significant slope. However, residuals vs. \(x\) show a clear wave pattern, and the last five residuals in collection order are all positive. Write a final-exam quality diagnosis. Should the fitted line be trusted for prediction?`,
+    solution:String.raw`<p>The high \(R^2\) and significant slope show strong association, but they do not prove the linear regression assumptions are adequate. The wave pattern in residuals vs. \(x\) suggests the linear mean function is misspecified. The run of positive residuals in collection order also raises concern about dependence, drift, or an omitted time effect.</p><p>The fitted line should not be trusted for precise prediction until the model is improved and diagnostics are rechecked. Possible fixes include adding curvature or a periodic/seasonal term, including time or run-order covariates, or fitting a model with correlated errors. Prediction intervals from the current line may have incorrect centers and incorrect coverage.</p>`,
+    rubric:["Do not accept high \(R^2\) as sufficient &mdash; <b>2 pts</b>","Identify nonlinearity from wave residual pattern &mdash; <b>2 pts</b>","Identify possible dependence or time drift &mdash; <b>2 pts</b>","State prediction intervals may be unreliable &mdash; <b>2 pts</b>","Suggest reasonable model improvements &mdash; <b>2 pts</b>"],
+    total:"10 pts",
+    tip:"Final answers should connect diagnostics to consequences for inference and prediction, not just name assumptions."
+  },
+  {
+    id:"Ch 27 &mdash; Q26",
+    level:"hard",
+    tags:["Influence","Sensitivity"],
+    src:"Original. High-leverage point reasoning.",
+    problem:String.raw`A dataset has one observation at \(x=100\), while all other \(x\)-values are between 0 and 10. The residual of this point under the fitted line is small, but removing it changes the slope from \(0.2\) to \(1.1\). Diagnose the situation and state how it should be reported.`,
+    solution:String.raw`<p>The point has high leverage because its \(x\)-value is far from the rest of the design. A small residual does not mean it is harmless; a high-leverage point can pull the fitted line toward itself and therefore have large influence on the slope.</p><p>The analysis should report sensitivity: fit with and without the point, verify whether it is a valid observation or from the same population/process, and avoid extrapolating from the main cluster to \(x=100\) without substantive justification. If the point is valid, it may define the slope, but that dependence must be made explicit.</p>`,
+    rubric:["Identify high leverage from extreme \(x\) &mdash; <b>2 pts</b>","Explain why small residual does not imply low influence &mdash; <b>3 pts</b>","Discuss sensitivity fits with and without the point &mdash; <b>2 pts</b>","Mention validity/same-process check &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"Influence is about changing the fitted model, not just having a large residual."
+  },
+  {
+    id:"Ch 27 &mdash; Q27",
+    level:"hard",
+    tags:["Back transformation","Prediction interval"],
+    src:"Original. Log-scale prediction interpretation.",
+    problem:String.raw`A model is fit on \(Z=\log Y\). At \(x^*=4\), the fitted value on the log scale is \(\hat z=2.00\), and a 95% PI for \(Z_{\mathrm{new}}\) is \([1.60,2.40]\). Give the corresponding PI for \(Y_{\mathrm{new}}\). Is \(e^{2.00}\) the predicted mean of \(Y\)?`,
+    solution:String.raw`<p>Because the exponential function is monotone, exponentiate both endpoints: \[Y_{\mathrm{new}}\in[e^{1.60},e^{2.40}]=[4.95,11.02].\] The interval is asymmetric around \(e^{2.00}=7.39\) on the original scale.</p><p>\(e^{2.00}\) is the back-transformed fitted median under a lognormal error interpretation, not the mean. If \(Z|x\) is normal with variance \(\sigma_Z^2\), then \(E(Y|x)=\exp(\mu_Z+\sigma_Z^2/2)\). A bias correction is needed for the mean.</p>`,
+    rubric:["Exponentiate both PI endpoints &mdash; <b>3 pts</b>","Compute approximate original-scale endpoints &mdash; <b>2 pts</b>","State \(e^{\hat z}\) is a median, not generally a mean &mdash; <b>2 pts</b>","Give or describe the lognormal mean correction &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"Never add and subtract the same original-scale margin after exponentiating a log-scale interval."
+  },
+  {
+    id:"Ch 27 &mdash; Q28",
+    level:"hard",
+    tags:["Interval misuse","Mean vs individual"],
+    src:"Original. Diagnose-the-error question.",
+    problem:String.raw`A student predicts a single future value at \(x=8\) by reporting \(\hat y\pm t s\sqrt{1/n+(8-\bar x)^2/S_{xx}}\). Identify the error, give the correct formula, and explain the practical consequence.`,
+    solution:String.raw`<p>The student used the standard error for the estimated mean response, not for a single future observation. The correct PI is \[\hat y(8)\pm t_{\alpha/2,n-2}s\sqrt{1+\frac1n+\frac{(8-\bar x)^2}{S_{xx}}}.\]</p><p>The practical consequence is undercoverage: the interval will be too narrow because it ignores the new observation's own error term. It may be appropriate for \(\mu_{Y|8}\), but not for \(Y_{\mathrm{new}}\).</p>`,
+    rubric:["Identify that the mean-response CI formula was used &mdash; <b>2 pts</b>","Write the correct PI formula with extra \(1\) &mdash; <b>3 pts</b>","Explain undercoverage or excessive narrowness &mdash; <b>2 pts</b>","Distinguish \(\mu_{Y|8}\) from \(Y_{\mathrm{new}}\) &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The phrase single future value is the trigger for the extra \(1\)."
+  },
+  {
+    id:"Ch 27 &mdash; Q29",
+    level:"hard",
+    tags:["Experiment design","Prediction precision"],
+    src:"Original. Design-for-prediction reasoning.",
+    problem:String.raw`You can collect 12 observations to predict near \(x=50\). Design A places all \(x\)-values between 0 and 10. Design B places several values near 50 and spreads the rest around 40 to 60. Assuming the linear model is otherwise plausible, which design gives more reliable prediction near 50? Explain using the Chapter 27 formulas.`,
+    solution:String.raw`<p>Design B gives more reliable prediction near \(x=50\). The interval width contains the term \((x^*-\bar x)^2/S_{xx}\). Design A makes \(x^*=50\) far from \(\bar x\), so the leverage term is large and the prediction is extrapolative.</p><p>Design B centers the design near the target and gives \(S_{xx}\) in the relevant region, making the leverage term smaller. It also allows the analyst to check whether linearity is plausible near the intended prediction point.</p>`,
+    rubric:["Choose Design B &mdash; <b>2 pts</b>","Use \((x^*-\bar x)^2/S_{xx}\) in the explanation &mdash; <b>3 pts</b>","Identify Design A as extrapolation &mdash; <b>2 pts</b>","Mention checking linearity near the target &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Good prediction design puts data where predictions will be made."
+  },
+  {
+    id:"Ch 27 &mdash; Q30",
+    level:"hard",
+    tags:["Comprehensive","Final-style diagnosis"],
+    src:"Original. Mixed interpretation and diagnosis.",
+    problem:String.raw`A materials experiment fits strength \(Y\) on temperature \(x\) using data from \(100^\circ\)C to \(180^\circ\)C. The fitted line is significant, \(R^2=0.88\), and the 95% PI at \(160^\circ\)C is \([42,58]\). The PI at \(230^\circ\)C is \([20,80]\). Residuals vs. \(x\) show slight curvature, and residual spread increases at high temperatures. Write a concise technical recommendation about using this model for process prediction.`,
+    solution:String.raw`<p>The model may be usable only as a rough descriptive model inside the observed temperature range, and even there the diagnostics require caution. The significant slope and high \(R^2\) show association, but curvature suggests the straight-line mean may be misspecified and increasing spread suggests nonconstant variance.</p><p>The prediction at \(160^\circ\)C is interpolation and has a moderately informative PI, but the reported coverage may still be unreliable if the diagnostics are ignored. The prediction at \(230^\circ\)C is extrapolation beyond \(180^\circ\)C; the very wide PI reflects leverage uncertainty, and the linear relationship may not hold at all. For process prediction, collect data at high temperatures, consider a curved or transformed model, address heteroscedasticity, and revalidate residual diagnostics before using the model for decisions.</p>`,
+    rubric:["Separate association from model adequacy &mdash; <b>2 pts</b>","Identify curvature as a linearity issue &mdash; <b>2 pts</b>","Identify increasing spread as heteroscedasticity &mdash; <b>2 pts</b>","Distinguish interpolation at 160 from extrapolation at 230 &mdash; <b>2 pts</b>","Give practical next steps before decision use &mdash; <b>2 pts</b>"],
+    total:"10 pts",
+    tip:"A strong final answer ends with a recommendation, not just a list of defects."
+  },
+  {
+    id:"Ch 27 &mdash; Q31",
+    level:"hard",
+    tags:["Normality","Prediction validity"],
+    src:"Original. Assumption consequence.",
+    problem:String.raw`Residuals look centered with constant variance, but the Q-Q plot shows very heavy tails. Which Chapter 27 intervals are most affected: CI for the mean response, PI for a future observation, or both? Explain.`,
+    solution:String.raw`<p>Both use the normal-error theory and \(t\) critical values, so both can be affected. However, the PI for a future observation is often more visibly sensitive to heavy tails because it is trying to cover individual observations, exactly where tail behavior matters.</p><p>The mean-response CI may be more robust in larger samples because it concerns the fitted mean and can benefit from approximate normality of estimators, but in small samples or severe heavy tails its nominal coverage can also fail. A final answer should recommend checking outliers, using transformations, robust regression, or empirical/bootstrap prediction methods if allowed.</p>`,
+    rubric:["State both intervals rely on distributional assumptions &mdash; <b>2 pts</b>","Explain why PI is especially tail-sensitive &mdash; <b>3 pts</b>","Qualify mean CI robustness by sample size/severity &mdash; <b>2 pts</b>","Suggest a reasonable remedy or caveat &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"Heavy tails matter most when you are promising future individual observations will be covered."
+  },
+  {
+    id:"Ch 27 &mdash; Q32",
+    level:"hard",
+    tags:["Pure error","Model-free variance"],
+    src:"Original. Conceptual proof.",
+    problem:String.raw`Explain why \(\mathrm{SSE}_{\mathrm{pe}}/(n-k)\) estimates \(\sigma^2\) without assuming the regression mean is linear, while the usual \(\mathrm{SSE}/(n-2)\) estimates \(\sigma^2\) only if the fitted linear mean is correct.`,
+    solution:String.raw`<p>Pure error uses deviations of observations from their own replicate-group means at the same \(x\). Within a fixed \(x\)-level, all replicates share the same true mean, regardless of whether the overall mean function is linear, curved, or something else. Therefore within-group variation isolates random error and estimates \(\sigma^2\) without requiring the line to be correct.</p><p>The usual regression SSE measures deviations from the fitted straight line. If the true mean is curved, those residuals contain both random error and systematic lack of fit, so \(\mathrm{SSE}/(n-2)\) is inflated and is not a pure estimate of \(\sigma^2\). This is why the lack-of-fit F-test compares lack-of-fit mean square to pure-error mean square.</p>`,
+    rubric:["Describe pure error as within-replicate variation at fixed \(x\) &mdash; <b>3 pts</b>","Explain why this does not require linearity &mdash; <b>3 pts</b>","Explain why ordinary SSE includes systematic lack of fit under misspecification &mdash; <b>3 pts</b>","Connect to the lack-of-fit F-test denominator &mdash; <b>1 pt</b>"],
+    total:"10 pts",
+    tip:"Pure error is the benchmark because it estimates noise without asking whether the line is right."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 21</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 21</h1>
+  <nav class="tabs">
+    <button class="active">Ch 21 &mdash; Inferences on Proportions</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch21" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 21 &mdash; Inferences on Proportions</h2>
+    <p>Topics covered: one-proportion confidence intervals, one-proportion hypothesis tests, large-sample normal approximation, validity conditions, conservative sample-size planning with \(p=1/2\), planning from a pilot estimate, interpretation of confidence intervals and P-values, and final-style diagnosis of common errors. The recurring exam traps are using \(\hat p\) instead of \(p_0\) in a null test standard error, treating the sample proportion as the parameter, ignoring success-failure conditions, failing to round sample sizes up, and interpreting a P-value as the probability that the null hypothesis is true.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch21')">Expand all solutions</button>
+    <button onclick="collapseAll('ch21')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 21 &mdash; Q1",
+    level:"easy",
+    tags:["One-proportion CI","Large sample"],
+    src:"Original. Direct large-sample confidence interval practice.",
+    problem:String.raw`In a random sample of \(n=400\) students, \(x=112\) say they regularly use public transit. Construct a 95% large-sample confidence interval for the population proportion \(p\).`,
+    solution:String.raw`<p>The sample proportion is \(\hat p=112/400=0.280\). The large-sample standard error for a confidence interval is \[\sqrt{\frac{\hat p(1-\hat p)}{n}}=\sqrt{\frac{0.28(0.72)}{400}}=0.02245.\]</p><p>For 95% confidence, use \(z_{0.025}=1.96\). The margin is \(1.96(0.02245)=0.0440\), so \[p\in[0.236,0.324].\]</p>`,
+    rubric:["Compute \(\hat p=0.280\) &mdash; <b>1 pt</b>","Use \(\sqrt{\hat p(1-\hat p)/n}\) for a confidence interval &mdash; <b>2 pts</b>","Use \(z_{0.025}=1.96\) &mdash; <b>1 pt</b>","Give the final interval with sensible rounding &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"For a confidence interval, the unknown \(p\) in the standard error is estimated by \(\hat p\). That is different from a null-hypothesis test."
+  },
+  {
+    id:"Ch 21 &mdash; Q2",
+    level:"easy",
+    tags:["Validity conditions","Success-failure"],
+    src:"Original. Conditions check for the normal approximation.",
+    problem:String.raw`A survey has \(n=80\) and \(x=6\) successes. A student wants to use the usual large-sample 95% confidence interval for \(p\). Check the success-failure condition and state whether this approximation is well justified.`,
+    solution:String.raw`<p>Here \(\hat p=6/80=0.075\). The expected counts estimated from the sample are \(n\hat p=6\) successes and \(n(1-\hat p)=74\) failures.</p><p>The usual success-failure rule asks for both counts to be at least about 10. Since \(6&lt;10\), the usual normal-approximation interval is not well justified. An exact binomial or adjusted interval would be more appropriate if allowed.</p>`,
+    rubric:["Compute or identify \(n\hat p=6\) &mdash; <b>1 pt</b>","Compute or identify \(n(1-\hat p)=74\) &mdash; <b>1 pt</b>","Apply the both-counts-at-least-10 rule &mdash; <b>2 pts</b>","Conclude the usual normal interval is questionable &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Large \(n\) alone is not enough. A rare-event proportion can still make the normal approximation poor."
+  },
+  {
+    id:"Ch 21 &mdash; Q3",
+    level:"easy",
+    tags:["One-proportion test","Two-sided"],
+    src:"Original. Basic test statistic and P-value.",
+    problem:String.raw`A manufacturer claims that \(p=0.20\) of parts need rework. In a random sample of \(n=250\), \(x=65\) need rework. Test \(H_0:p=0.20\) against \(H_1:p\ne0.20\) at level \(0.05\).`,
+    solution:String.raw`<p>The sample proportion is \(\hat p=65/250=0.260\). Under \(H_0\), the standard error is \[\sqrt{\frac{p_0(1-p_0)}{n}}=\sqrt{\frac{0.20(0.80)}{250}}=0.02530.\]</p><p>The test statistic is \[z=\frac{0.260-0.200}{0.02530}=2.37.\] For a two-sided test, \(P\text{-value}=2P(Z\ge2.37)\approx0.0178\). Since \(0.0178&lt;0.05\), reject \(H_0\). There is evidence that the rework proportion differs from 0.20.</p>`,
+    rubric:["State \(\hat p=0.260\) &mdash; <b>1 pt</b>","Use null standard error with \(p_0=0.20\) &mdash; <b>2 pts</b>","Compute \(z\approx2.37\) &mdash; <b>2 pts</b>","Use a two-sided P-value and reject &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Hypothesis tests use the standard error implied by the null value \(p_0\), because the null distribution is what produces the P-value."
+  },
+  {
+    id:"Ch 21 &mdash; Q4",
+    level:"easy",
+    tags:["One-sided test","P-value"],
+    src:"Original. One-sided lower-tail decision.",
+    problem:String.raw`A website historically converts \(p_0=0.12\) of visitors into buyers. After a redesign, \(38\) of \(400\) visitors buy. Test whether the redesign decreased the conversion rate using \(\alpha=0.05\).`,
+    solution:String.raw`<p>The hypotheses are \(H_0:p=0.12\) and \(H_1:p&lt;0.12\). The observed proportion is \(\hat p=38/400=0.095\).</p><p>Under the null, \[\text{SE}_0=\sqrt{\frac{0.12(0.88)}{400}}=0.01625,\qquad z=\frac{0.095-0.120}{0.01625}=-1.54.\]</p><p>The lower-tail P-value is \(P(Z\le-1.54)\approx0.062\). Since \(0.062&gt;0.05\), do not reject \(H_0\). The data do not give significant evidence of a decrease at the 5% level.</p>`,
+    rubric:["Set the lower-tailed alternative \(p&lt;0.12\) &mdash; <b>1 pt</b>","Use null standard error &mdash; <b>2 pts</b>","Compute \(z\approx-1.54\) &mdash; <b>2 pts</b>","Use the lower-tail P-value and make the correct decision &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"The sign of \(z\) matters for a one-sided test. Do not double the P-value unless the alternative is two-sided."
+  },
+  {
+    id:"Ch 21 &mdash; Q5",
+    level:"easy",
+    tags:["Interpretation","Confidence interval"],
+    src:"Original. Frequentist interpretation check.",
+    problem:String.raw`A 90% confidence interval for a population proportion is reported as \([0.41,0.49]\). Give a correct interpretation and identify one incorrect interpretation.`,
+    solution:String.raw`<p>A correct interpretation is: the procedure used to construct the interval would capture the fixed population proportion \(p\) in 90% of repeated random samples.</p><p>One incorrect interpretation is: there is a 90% probability that \(p\) is between 0.41 and 0.49 after this interval has been computed. In the usual frequentist interpretation, \(p\) is fixed and the random quantity is the interval before observing the data.</p>`,
+    rubric:["Give a repeated-sampling interpretation &mdash; <b>2 pts</b>","State that \(p\) is fixed after sampling &mdash; <b>1 pt</b>","Identify a specific incorrect probability or individual-observation interpretation &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"A confidence interval is about a population parameter, not the percentage of future observations that must fall in the numerical interval."
+  },
+  {
+    id:"Ch 21 &mdash; Q6",
+    level:"easy",
+    tags:["Sample-size planning","Conservative design"],
+    src:"Original. Conservative \(p=1/2\) margin planning.",
+    problem:String.raw`How large should \(n\) be to estimate a population proportion with 95% confidence and margin of error at most \(0.04\), if no preliminary estimate of \(p\) is available?`,
+    solution:String.raw`<p>Without a preliminary estimate, use the conservative value \(p^*=1/2\), which maximizes \(p(1-p)\). The planning formula is \[n\ge\frac{z_{\alpha/2}^2p^*(1-p^*)}{E^2}.\]</p><p>With \(z_{0.025}=1.96\), \(E=0.04\), and \(p^*=0.5\), \[n\ge\frac{1.96^2(0.25)}{0.04^2}=600.25.\] Round up to \(n=601\).</p>`,
+    rubric:["Use conservative \(p^*=0.5\) &mdash; <b>2 pts</b>","Use the proportion sample-size formula &mdash; <b>2 pts</b>","Compute \(600.25\) &mdash; <b>1 pt</b>","Round up to 601 &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Rounding down would make the planned margin slightly larger than allowed. Always round required sample sizes up."
+  },
+  {
+    id:"Ch 21 &mdash; Q7",
+    level:"easy",
+    tags:["P-value","Interpretation"],
+    src:"Original. P-value interpretation check.",
+    problem:String.raw`In testing \(H_0:p=0.30\) against \(H_1:p>0.30\), a study reports \(P\text{-value}=0.018\). Interpret this P-value in context.`,
+    solution:String.raw`<p>If the true population proportion were \(0.30\), the probability of observing a sample proportion at least as large as the one observed, just by random sampling variation, would be about \(0.018\).</p><p>It is not the probability that \(H_0\) is true, and it is not the probability that \(p&gt;0.30\).</p>`,
+    rubric:["Condition the interpretation on \(H_0\) being true &mdash; <b>2 pts</b>","Refer to data at least as extreme in the direction of \(H_1\) &mdash; <b>2 pts</b>","Avoid treating the P-value as \(P(H_0\text{ true})\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"A P-value is computed assuming the null hypothesis, not assigning probability to the null hypothesis."
+  },
+  {
+    id:"Ch 21 &mdash; Q8",
+    level:"easy",
+    tags:["Normal approximation","Binomial"],
+    src:"Original. Distribution approximation setup.",
+    problem:String.raw`Let \(X\sim\operatorname{Binomial}(n,p)\) with \(n=200\) and \(p=0.35\). State the approximate sampling distribution of \(\hat p=X/n\), and compute its mean and standard deviation.`,
+    solution:String.raw`<p>For large \(n\), \(\hat p\) is approximately normal:</p><p>\[\hat p\approx N\left(p,\frac{p(1-p)}{n}\right)=N\left(0.35,\frac{0.35(0.65)}{200}\right).\]</p><p>The mean is \(0.35\), and the standard deviation is \(\sqrt{0.35(0.65)/200}=0.0337\).</p>`,
+    rubric:["State approximate normality of \(\hat p\) &mdash; <b>2 pts</b>","Give mean \(p=0.35\) &mdash; <b>1 pt</b>","Give standard deviation \(\sqrt{p(1-p)/n}\) &mdash; <b>2 pts</b>","Compute \(0.0337\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The binomial count \(X\) has variance \(np(1-p)\), while the sample proportion \(X/n\) has variance \(p(1-p)/n\)."
+  },
+  {
+    id:"Ch 21 &mdash; Q9",
+    level:"easy",
+    tags:["Decision rule","Critical value"],
+    src:"Original. Critical-value form of a proportion test.",
+    problem:String.raw`For a two-sided level \(0.01\) large-sample test of \(H_0:p=p_0\), what critical values of the \(z\)-statistic are used? State the rejection rule.`,
+    solution:String.raw`<p>For a two-sided level \(0.01\) test, the total tail area \(0.01\) is split into \(0.005\) in each tail. Thus the critical value is \(z_{0.005}\approx2.576\).</p><p>Reject \(H_0\) when \(|z|>2.576\), equivalently when \(z&lt;-2.576\) or \(z&gt;2.576\).</p>`,
+    rubric:["Split the significance level into two tails &mdash; <b>2 pts</b>","Use \(z_{0.005}\approx2.576\) &mdash; <b>2 pts</b>","State the two-sided rejection rule &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Do not use \(z_{0.01}=2.326\) for a two-sided 1% test; that would put 1% in each tail."
+  },
+  {
+    id:"Ch 21 &mdash; Q10",
+    level:"easy",
+    tags:["Parameter vs statistic","Concept"],
+    src:"Original. Basic notation diagnosis.",
+    problem:String.raw`Explain the difference between \(p\), \(\hat p\), and \(p_0\) in one-proportion inference.`,
+    solution:String.raw`<p>\(p\) is the unknown population proportion, the fixed parameter we want to estimate or test. \(\hat p=X/n\) is the sample proportion computed from the data, so it varies from sample to sample. \(p_0\) is the specific value of \(p\) asserted by the null hypothesis in a test.</p><p>In a confidence interval, \(\hat p\) is used to estimate \(p\). In a test of \(H_0:p=p_0\), the null standard error uses \(p_0\).</p>`,
+    rubric:["Define \(p\) as the population parameter &mdash; <b>1 pt</b>","Define \(\hat p\) as the sample statistic &mdash; <b>1 pt</b>","Define \(p_0\) as the null value &mdash; <b>1 pt</b>","Connect the definitions to CI and test standard errors &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"Many arithmetic mistakes in this chapter come from using the right formula with the wrong version of \(p\)."
+  },
+  {
+    id:"Ch 21 &mdash; Q11",
+    level:"medium",
+    tags:["One-proportion CI","90% confidence"],
+    src:"Original. Medium arithmetic confidence interval.",
+    problem:String.raw`A poll of \(n=900\) voters finds \(x=477\) support a proposal. Construct a 90% confidence interval for the support proportion.`,
+    solution:String.raw`<p>\(\hat p=477/900=0.530\). The standard error is \[\sqrt{\frac{0.53(0.47)}{900}}=0.01664.\]</p><p>For 90% confidence, \(z_{0.05}=1.645\). The margin is \(1.645(0.01664)=0.0274\). Thus \[p\in[0.503,0.557].\]</p>`,
+    rubric:["Compute \(\hat p=0.530\) &mdash; <b>1 pt</b>","Use the confidence-interval standard error with \(\hat p\) &mdash; <b>2 pts</b>","Use 90% critical value \(1.645\) &mdash; <b>1 pt</b>","Compute the interval &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"A 90% interval is narrower than a 95% interval from the same data because it uses a smaller critical value."
+  },
+  {
+    id:"Ch 21 &mdash; Q12",
+    level:"medium",
+    tags:["One-proportion test","Upper-tail"],
+    src:"Original. Upper-tailed significance test.",
+    problem:String.raw`A course coordinator expects at most 15% of students to miss a weekly quiz. In one week, \(52\) of \(280\) students miss it. Test \(H_0:p=0.15\) against \(H_1:p>0.15\) at level \(0.05\).`,
+    solution:String.raw`<p>The sample proportion is \(\hat p=52/280=0.1857\). Under the null, \[\text{SE}_0=\sqrt{\frac{0.15(0.85)}{280}}=0.02134.\]</p><p>The statistic is \[z=\frac{0.1857-0.1500}{0.02134}=1.67.\] The upper-tail P-value is \(P(Z\ge1.67)\approx0.047\). Since \(0.047&lt;0.05\), reject \(H_0\) at the 5% level. There is marginal evidence that the missed-quiz proportion exceeds 15%.</p>`,
+    rubric:["Set up the upper-tailed alternative &mdash; <b>1 pt</b>","Use null standard error with \(p_0=0.15\) &mdash; <b>2 pts</b>","Compute \(z\approx1.67\) &mdash; <b>2 pts</b>","Compute or approximate the upper-tail P-value and reject &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"When the wording says 'exceeds,' 'greater than,' or 'more than,' the P-value is an upper-tail probability."
+  },
+  {
+    id:"Ch 21 &mdash; Q13",
+    level:"medium",
+    tags:["Sample-size planning","Pilot estimate"],
+    src:"Original. Planning with an estimated proportion.",
+    problem:String.raw`A pilot survey estimates \(p\approx0.18\). How many observations are needed for a 95% confidence interval with margin of error at most \(0.03\), using the pilot estimate?`,
+    solution:String.raw`<p>Use \[n\ge\frac{z_{\alpha/2}^2p^*(1-p^*)}{E^2}\] with \(p^*=0.18\), \(E=0.03\), and \(z_{0.025}=1.96\).</p><p>\[n\ge\frac{1.96^2(0.18)(0.82)}{0.03^2}=630.02.\] Round up to \(n=631\).</p>`,
+    rubric:["Use the pilot estimate \(p^*=0.18\) &mdash; <b>1 pt</b>","Use \(1.96\) for 95% confidence &mdash; <b>1 pt</b>","Apply the margin formula correctly &mdash; <b>2 pts</b>","Round up to 631 &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"A pilot estimate can reduce the planned sample size compared with conservative \(p=0.5\), but it relies on the pilot being credible."
+  },
+  {
+    id:"Ch 21 &mdash; Q14",
+    level:"medium",
+    tags:["Conservative design","Comparison"],
+    src:"Original. Conservative versus pilot planning.",
+    problem:String.raw`For the design in Q13, compute the conservative sample size using \(p^*=0.5\). Compare it with the pilot-based value \(n=631\).`,
+    solution:String.raw`<p>Using \(p^*=0.5\), \[n\ge\frac{1.96^2(0.25)}{0.03^2}=1067.11.\] Thus the conservative design requires \(n=1068\).</p><p>This is larger than \(631\) because \(p(1-p)\) is maximized at \(p=0.5\). The conservative design protects the margin of error even when no reliable preliminary estimate is available.</p>`,
+    rubric:["Use \(p^*=0.5\) &mdash; <b>1 pt</b>","Compute \(1067.11\) &mdash; <b>2 pts</b>","Round up to 1068 &mdash; <b>1 pt</b>","Explain why the conservative value is larger &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"The phrase 'conservative' means safe for all possible \(p\), not smaller or less cautious."
+  },
+  {
+    id:"Ch 21 &mdash; Q15",
+    level:"medium",
+    tags:["Validity conditions","Test conditions"],
+    src:"Original. Conditions for a hypothesis test.",
+    problem:String.raw`For \(H_0:p=0.04\), a planned large-sample test will use \(n=180\). Check the normal-approximation condition under the null and state whether the usual \(z\)-test is appropriate.`,
+    solution:String.raw`<p>For a hypothesis test, check the expected counts under the null value \(p_0\):</p><p>\[np_0=180(0.04)=7.2,\qquad n(1-p_0)=180(0.96)=172.8.\]</p><p>The success count is below 10, so the normal approximation is questionable. The usual large-sample \(z\)-test is not well justified; an exact binomial test would be safer if available.</p>`,
+    rubric:["Check counts using \(p_0\), not \(\hat p\) &mdash; <b>2 pts</b>","Compute \(np_0=7.2\) &mdash; <b>1 pt</b>","Compute \(n(1-p_0)=172.8\) &mdash; <b>1 pt</b>","Conclude the \(z\)-test is questionable &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"For tests, the null model determines the sampling distribution, so conditions are checked under \(p_0\)."
+  },
+  {
+    id:"Ch 21 &mdash; Q16",
+    level:"medium",
+    tags:["CI-test connection","Two-sided"],
+    src:"Original. Duality between intervals and tests.",
+    problem:String.raw`A 95% confidence interval for \(p\) is \([0.318,0.382]\). Without recomputing a test statistic, what would a matching two-sided level \(0.05\) test conclude for \(H_0:p=0.40\)? What about \(H_0:p=0.35\)?`,
+    solution:String.raw`<p>For the matching two-sided test, null values outside the 95% confidence interval are rejected at level \(0.05\), while values inside are not rejected.</p><p>\(0.40\) is outside \([0.318,0.382]\), so reject \(H_0:p=0.40\). The value \(0.35\) is inside the interval, so do not reject \(H_0:p=0.35\).</p>`,
+    rubric:["State the two-sided CI-test connection &mdash; <b>2 pts</b>","Reject \(p=0.40\) &mdash; <b>1 pt</b>","Do not reject \(p=0.35\) &mdash; <b>1 pt</b>","Note that this is for the matching two-sided test &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"This shortcut does not directly apply to one-sided tests or to intervals built by a different method than the test."
+  },
+  {
+    id:"Ch 21 &mdash; Q17",
+    level:"medium",
+    tags:["Margin of error","Reverse engineering"],
+    src:"Original. Recovering sample size from a margin.",
+    problem:String.raw`A 95% confidence interval for a proportion based on \(n=625\) has \(\hat p=0.64\). What is its margin of error?`,
+    solution:String.raw`<p>The standard error is \[\sqrt{\frac{0.64(0.36)}{625}}=0.0192.\]</p><p>For 95% confidence, the margin is \[E=1.96(0.0192)=0.0376.\] The interval would be \(0.64\pm0.0376\).</p>`,
+    rubric:["Use \(\sqrt{\hat p(1-\hat p)/n}\) &mdash; <b>2 pts</b>","Compute standard error \(0.0192\) &mdash; <b>1 pt</b>","Multiply by 1.96 &mdash; <b>1 pt</b>","Report margin \(0.0376\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The margin of error is the half-width of the interval, not the full width."
+  },
+  {
+    id:"Ch 21 &mdash; Q18",
+    level:"medium",
+    tags:["Continuity correction","Normal approximation"],
+    src:"Original. Count-scale approximation and correction.",
+    problem:String.raw`Let \(X\sim\operatorname{Binomial}(100,0.30)\). Use the normal approximation with continuity correction to estimate \(P(X\le25)\).`,
+    solution:String.raw`<p>The binomial mean is \(np=30\), and the standard deviation is \(\sqrt{np(1-p)}=\sqrt{21}=4.583\). The event \(X\le25\) is approximated by \(Y\le25.5\) for \(Y\sim N(30,21)\).</p><p>\[z=\frac{25.5-30}{4.583}=-0.982.\] Thus \(P(X\le25)\approx P(Z\le-0.982)\approx0.163.\)</p>`,
+    rubric:["Use count mean \(np=30\) and count SD \(\sqrt{np(1-p)}\) &mdash; <b>2 pts</b>","Apply continuity correction \(25.5\) &mdash; <b>2 pts</b>","Compute \(z\approx-0.98\) &mdash; <b>1 pt</b>","Give probability about 0.16 &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Continuity correction is used when approximating the integer count \(X\), not usually when building the standard large-sample interval for \(p\)."
+  },
+  {
+    id:"Ch 21 &mdash; Q19",
+    level:"medium",
+    tags:["Critical-value test","Lower-tail"],
+    src:"Original. Rejection-region calculation.",
+    problem:String.raw`A level \(0.05\) lower-tailed test of \(H_0:p=0.60\) is based on \(n=500\). Find the rejection rule in terms of \(\hat p\) using the normal approximation.`,
+    solution:String.raw`<p>The lower-tail critical value is \(-z_{0.05}=-1.645\). Under \(H_0\), \[\text{SE}_0=\sqrt{\frac{0.60(0.40)}{500}}=0.02191.\]</p><p>Reject when \[\frac{\hat p-0.60}{0.02191}<-1.645,\] or \[\hat p<0.60-1.645(0.02191)=0.564.\]</p>`,
+    rubric:["Use \(-1.645\) for a 5% lower-tailed test &mdash; <b>1 pt</b>","Use the null standard error &mdash; <b>2 pts</b>","Solve the inequality for \(\hat p\) &mdash; <b>2 pts</b>","Report rejection when \(\hat p<0.564\) approximately &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"A rejection region can be written on the \(z\)-scale or converted back to the sample-proportion scale."
+  },
+  {
+    id:"Ch 21 &mdash; Q20",
+    level:"medium",
+    tags:["Planning","Finite arithmetic"],
+    src:"Original. Margin check after rounding.",
+    problem:String.raw`A team chooses \(n=385\) using the conservative 95% design for margin about \(0.05\). Verify the worst-case margin of error when \(p=0.5\).`,
+    solution:String.raw`<p>The worst-case standard error is \(\sqrt{0.25/385}=0.02548\). The 95% worst-case margin is \[E=1.96(0.02548)=0.0499.\]</p><p>Thus \(n=385\) achieves a margin just below \(0.05\) in the conservative worst case.</p>`,
+    rubric:["Use \(p=0.5\) for the worst case &mdash; <b>1 pt</b>","Compute standard error \(\sqrt{0.25/385}\) &mdash; <b>2 pts</b>","Multiply by 1.96 &mdash; <b>1 pt</b>","Conclude the margin is about 0.05 &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"This common survey number comes from \(1.96^2(0.25)/0.05^2=384.16\), rounded up."
+  },
+  {
+    id:"Ch 21 &mdash; Q21",
+    level:"medium",
+    tags:["Error diagnosis","Standard error"],
+    src:"Original. Final-style formula diagnosis.",
+    problem:String.raw`A student tests \(H_0:p=0.25\) using \(n=300\), \(x=90\), and writes \(z=(0.30-0.25)/\sqrt{0.30(0.70)/300}\). Identify the mistake and compute the correct test statistic.`,
+    solution:String.raw`<p>The student used the confidence-interval standard error based on \(\hat p=0.30\). For testing \(H_0:p=0.25\), the null standard error must use \(p_0=0.25\).</p><p>\[\text{SE}_0=\sqrt{\frac{0.25(0.75)}{300}}=0.0250,\qquad z=\frac{0.30-0.25}{0.0250}=2.00.\]</p>`,
+    rubric:["Identify that \(\hat p\) was used incorrectly in the test SE &mdash; <b>2 pts</b>","Use \(p_0=0.25\) in the standard error &mdash; <b>2 pts</b>","Compute the correct SE \(0.0250\) &mdash; <b>1 pt</b>","Compute \(z=2.00\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"If the formula is for a P-value under \(H_0\), the standard error should describe the sampling variation when \(H_0\) is true."
+  },
+  {
+    id:"Ch 21 &mdash; Q22",
+    level:"medium",
+    tags:["Independence","Design conditions"],
+    src:"Original. Sampling assumptions beyond count conditions.",
+    problem:String.raw`A poll samples \(n=2000\) responses from an online forum where users can answer multiple times. The sample has many successes and failures. Is the usual one-proportion interval automatically justified? Explain.`,
+    solution:String.raw`<p>No. The success-failure condition is only one part of the justification. The data should also come from a random or otherwise representative sample, and the observations should be approximately independent.</p><p>If users can answer multiple times, responses may be duplicated or dependent and may not represent the target population. A large count of successes and failures does not fix a biased or dependent sampling design.</p>`,
+    rubric:["State that count conditions alone are not enough &mdash; <b>2 pts</b>","Mention independence or random sampling &mdash; <b>2 pts</b>","Connect multiple responses to dependence or bias &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Statistical formulas cannot repair a poor data-collection process. Always separate design assumptions from normal-approximation conditions."
+  },
+  {
+    id:"Ch 21 &mdash; Q23",
+    level:"medium",
+    tags:["P-value","Two-sided doubling"],
+    src:"Original. Tail-area calculation.",
+    problem:String.raw`In a two-sided test for a proportion, the observed statistic is \(z=-2.18\). Approximate the P-value and state the decision at \(\alpha=0.01\).`,
+    solution:String.raw`<p>For a two-sided test, \[P\text{-value}=2P(Z\le-2.18).\] Since \(P(Z\le-2.18)\approx0.0146\), the P-value is about \(0.0292\).</p><p>Because \(0.0292&gt;0.01\), do not reject \(H_0\) at the 1% level.</p>`,
+    rubric:["Use a two-sided tail area &mdash; <b>2 pts</b>","Compute or approximate \(2(0.0146)\) &mdash; <b>2 pts</b>","Compare with \(0.01\) &mdash; <b>1 pt</b>","Make the correct non-rejection decision &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"A result can be significant at 5% but not at 1%. Always compare the P-value to the stated \(\alpha\)."
+  },
+  {
+    id:"Ch 21 &mdash; Q24",
+    level:"medium",
+    tags:["Estimate from interval","Reverse engineering"],
+    src:"Original. Reading information from a reported interval.",
+    problem:String.raw`A symmetric large-sample confidence interval for \(p\) is reported as \([0.212,0.288]\). What are \(\hat p\) and the margin of error?`,
+    solution:String.raw`<p>The point estimate is the midpoint:</p><p>\[\hat p=\frac{0.212+0.288}{2}=0.250.\]</p><p>The margin of error is the half-width:</p><p>\[E=\frac{0.288-0.212}{2}=0.038.\]</p>`,
+    rubric:["Compute midpoint correctly &mdash; <b>2 pts</b>","Identify midpoint as \(\hat p\) &mdash; <b>1 pt</b>","Compute half-width correctly &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"The sample proportion is at the center of the usual Wald interval."
+  },
+  {
+    id:"Ch 21 &mdash; Q25",
+    level:"hard",
+    tags:["Final-style diagnosis","Multiple errors"],
+    src:"Original. Comprehensive error diagnosis.",
+    problem:String.raw`A student writes: "In a sample of \(n=50\), \(x=3\). A 95% confidence interval is \(0.06\pm1.96\sqrt{0.06(0.94)/50}=[-0.006,0.126]\), so the true proportion might be negative." Identify the statistical issues and give an appropriate conclusion for this course.`,
+    solution:String.raw`<p>The arithmetic follows the usual Wald formula, but the method is not well justified: \(n\hat p=3&lt;10\). The lower endpoint is negative, which is impossible for a population proportion and is another warning that the normal approximation is poor here.</p><p>An appropriate conclusion is that the usual large-sample confidence interval should not be trusted for these data. One should use an exact binomial or adjusted interval if available; at minimum, report that the data suggest a small positive proportion but the standard large-sample interval is invalid or unreliable.</p>`,
+    rubric:["Identify failure of the success condition &mdash; <b>2 pts</b>","Note that negative endpoints are impossible for \(p\) &mdash; <b>2 pts</b>","Avoid accepting the interval literally &mdash; <b>2 pts</b>","Recommend or mention an exact/adjusted alternative or caveat &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"When an interval for a proportion leaves \([0,1]\), do not just truncate it silently unless the method specifically says to do so."
+  },
+  {
+    id:"Ch 21 &mdash; Q26",
+    level:"hard",
+    tags:["Derivation","Large-sample CI"],
+    src:"Original. Formula derivation from the CLT.",
+    problem:String.raw`Derive the usual large-sample two-sided confidence interval for \(p\) from the approximate normal distribution of \(\hat p\).`,
+    solution:String.raw`<p>For a binomial sample, \(\hat p=X/n\) has mean \(p\) and variance \(p(1-p)/n\). For large samples, \[\frac{\hat p-p}{\sqrt{p(1-p)/n}}\approx N(0,1).\]</p><p>Because \(p\) is unknown, the standard error is estimated by replacing \(p\) with \(\hat p\), giving \[\widehat{\text{SE}}=\sqrt{\frac{\hat p(1-\hat p)}{n}}.\]</p><p>Thus an approximate \(100(1-\alpha)\%\) confidence interval is \[\hat p\pm z_{\alpha/2}\sqrt{\frac{\hat p(1-\hat p)}{n}}.\]</p>`,
+    rubric:["State the approximate normal distribution or standardized statistic &mdash; <b>2 pts</b>","Use the variance \(p(1-p)/n\) &mdash; <b>2 pts</b>","Explain replacing \(p\) by \(\hat p\) for the estimated SE &mdash; <b>2 pts</b>","Give the final interval formula &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"This derivation explains why the CI standard error and the test standard error are not the same expression."
+  },
+  {
+    id:"Ch 21 &mdash; Q27",
+    level:"hard",
+    tags:["Power idea","Alternative probability"],
+    src:"Original. Extension using the normal approximation under an alternative.",
+    problem:String.raw`A level \(0.05\) upper-tailed test of \(H_0:p=0.40\) uses \(n=200\). Approximate the probability of rejecting \(H_0\) if the true proportion is \(p=0.50\).`,
+    solution:String.raw`<p>First find the rejection cutoff under \(H_0\). The null standard error is \(\sqrt{0.4(0.6)/200}=0.03464\). Reject for \[\hat p>0.40+1.645(0.03464)=0.4570.\]</p><p>If the true \(p=0.50\), then \(\hat p\approx N(0.50,0.50(0.50)/200)\), with standard deviation \(0.03536\). Therefore \[P(\text{reject}\mid p=0.50)\approx P\left(\hat p>0.4570\right)=P\left(Z>\frac{0.4570-0.5000}{0.03536}\right).\]</p><p>The \(z\)-value is \(-1.22\), so the probability is \(P(Z>-1.22)\approx0.889\).</p>`,
+    rubric:["Find the rejection cutoff using the null distribution &mdash; <b>3 pts</b>","Use the alternative distribution centered at 0.50 &mdash; <b>2 pts</b>","Compute the alternative standard deviation &mdash; <b>1 pt</b>","Compute probability about 0.89 &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Tests set their rejection cutoff under the null, but power is evaluated under the alternative."
+  },
+  {
+    id:"Ch 21 &mdash; Q28",
+    level:"hard",
+    tags:["Continuity correction","Test approximation"],
+    src:"Original. Count-based rejection and continuity correction.",
+    problem:String.raw`A two-sided test of \(H_0:p=0.10\) uses \(n=120\) and observes \(x=20\). Compute the usual large-sample \(z\)-test P-value. Then approximate the exact binomial tail using a continuity-corrected normal approximation to \(X\), and compare.`,
+    solution:String.raw`<p>The usual test uses \(\hat p=20/120=0.1667\) and null standard error \(\sqrt{0.10(0.90)/120}=0.02739\). Thus \[z=\frac{0.1667-0.1000}{0.02739}=2.43.\] The two-sided \(z\)-test P-value is about \(2P(Z\ge2.43)=0.015.\)</p><p>On the count scale under \(H_0\), \(X\approx N(12,10.8)\). Since the observed count is above the null mean, use \(P(X\ge20)\approx P(Y\ge19.5)\). The corrected statistic is \[(19.5-12)/\sqrt{10.8}=2.28.\] Doubling for a two-sided approximation gives about \(2P(Z\ge2.28)=0.023.\)</p><p>The two answers are close in conclusion but not identical. Continuity correction on the count scale can matter when counts are not very large.</p>`,
+    rubric:["Compute the usual \(z\)-test statistic about 2.43 &mdash; <b>2 pts</b>","Compute usual two-sided P-value about 0.015 &mdash; <b>1 pt</b>","Use \(X\approx N(12,10.8)\) under the null &mdash; <b>2 pts</b>","Apply the continuity correction \(19.5\) &mdash; <b>2 pts</b>","Compare the two approximations reasonably &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The standard course \(z\)-test is written in terms of \(\hat p\); continuity correction is a refinement made on the integer count scale."
+  },
+  {
+    id:"Ch 21 &mdash; Q29",
+    level:"hard",
+    tags:["Sample-size planning","Algebra"],
+    src:"Original. Solve for confidence level or sample size.",
+    problem:String.raw`You can afford \(n=1000\) observations and want a conservative margin of error at most \(0.025\) for a proportion. What is the largest two-sided confidence level you can guarantee using \(p^*=0.5\)?`,
+    solution:String.raw`<p>The conservative margin is \[E=z_{\alpha/2}\sqrt{\frac{0.25}{1000}}=z_{\alpha/2}(0.01581).\]</p><p>Requiring \(E\le0.025\) gives \(z_{\alpha/2}\le0.025/0.01581=1.581\). The largest confidence level uses \(z=1.581\), so \[1-\alpha=P(-1.581\le Z\le1.581)=2\Phi(1.581)-1.\]</p><p>Since \(\Phi(1.58)\approx0.943\), the confidence level is about \(2(0.943)-1=0.886\), or \(88.6\%\).</p>`,
+    rubric:["Write the conservative margin equation &mdash; <b>2 pts</b>","Solve for the allowable \(z\)-critical value &mdash; <b>2 pts</b>","Convert \(z\) to two-sided confidence level &mdash; <b>3 pts</b>","Report about 88.6% &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Higher confidence requires a larger critical value. With fixed \(n\), confidence level and margin of error trade off."
+  },
+  {
+    id:"Ch 21 &mdash; Q30",
+    level:"hard",
+    tags:["Final-style diagnosis","P-value"],
+    src:"Original. Interpretation and decision errors.",
+    problem:String.raw`A report says: "The test of \(H_0:p=0.50\) gave \(P\text{-value}=0.07\), so there is a 7% chance that exactly half the population supports the policy. Because 7% is small, we have proved \(p\ne0.50\)." Diagnose the errors.`,
+    solution:String.raw`<p>The P-value is not the probability that \(H_0\) is true. It is the probability, assuming \(p=0.50\), of observing a statistic at least as extreme as the one obtained.</p><p>Also, whether \(0.07\) is small enough depends on the prechosen significance level. At \(\alpha=0.05\), \(0.07&gt;0.05\), so the test would not reject \(H_0\). Even if a test rejects, it does not prove the alternative; it gives statistical evidence against the null under the model assumptions.</p>`,
+    rubric:["Reject the interpretation \(P(H_0\text{ true})=0.07\) &mdash; <b>2 pts</b>","Give the correct conditional interpretation of the P-value &mdash; <b>2 pts</b>","State that the decision depends on \(\alpha\) &mdash; <b>1 pt</b>","Explain that rejection is not proof &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"P-value language should always include 'assuming the null hypothesis is true' or an equivalent phrase."
+  },
+  {
+    id:"Ch 21 &mdash; Q31",
+    level:"hard",
+    tags:["Comprehensive","Method selection"],
+    src:"Original. Final-style mixed inference selection.",
+    problem:String.raw`For each situation, choose the correct method or explain why the usual method is not justified. Do not compute final numeric endpoints unless needed.<ol type="i"><li>\(n=640\), \(x=352\), estimate \(p\) with 95% confidence.</li><li>\(n=90\), \(x=2\), estimate \(p\) with 95% confidence.</li><li>\(n=500\), test \(H_0:p=0.30\) against \(H_1:p&lt;0.30\).</li><li>\(n=60\), test \(H_0:p=0.02\) using a large-sample \(z\)-test.</li></ol>`,
+    solution:String.raw`<p><b>(i)</b> The usual large-sample one-proportion confidence interval is appropriate: \[\hat p\pm1.96\sqrt{\hat p(1-\hat p)/640},\quad \hat p=352/640.\]</p><p><b>(ii)</b> The usual large-sample interval is not justified because \(n\hat p=2&lt;10\). Use an exact or adjusted method if permitted.</p><p><b>(iii)</b> Use the one-proportion \(z\)-test with \[z=\frac{\hat p-0.30}{\sqrt{0.30(0.70)/500}}\] and a lower-tail P-value.</p><p><b>(iv)</b> The normal approximation under the null is not justified because \(np_0=60(0.02)=1.2&lt;10\). Do not rely on the usual large-sample \(z\)-test.</p>`,
+    rubric:["Choose the usual CI for case (i) with correct formula &mdash; <b>2 pts</b>","Reject the usual CI for case (ii) due to too few successes &mdash; <b>2 pts</b>","Choose a lower-tailed one-proportion \(z\)-test for case (iii) &mdash; <b>2 pts</b>","Reject or qualify the \(z\)-test for case (iv) using \(np_0\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Method-selection questions often test whether you know which proportion goes into the condition check."
+  },
+  {
+    id:"Ch 21 &mdash; Q32",
+    level:"hard",
+    tags:["Continuity/validity","Boundary cases"],
+    src:"Original. Boundary and interpretation diagnosis.",
+    problem:String.raw`A rare-event study observes \(x=0\) events in \(n=75\) trials. A student reports the large-sample interval \(0\pm1.96\sqrt{0(1)/75}=[0,0]\) and concludes the event is impossible. Diagnose the solution.`,
+    solution:String.raw`<p>The solution is invalid. The success-failure condition fails completely because \(n\hat p=0\). The estimated standard error is zero only because the sample observed no events; it does not prove the true population proportion is zero.</p><p>The conclusion that the event is impossible is unjustified. A rare event may simply not appear in a small sample. An exact binomial upper confidence bound or another rare-event method should be used if the goal is to bound \(p\).</p>`,
+    rubric:["Identify failure of the large-sample condition &mdash; <b>2 pts</b>","Explain why zero sample events do not imply \(p=0\) &mdash; <b>2 pts</b>","Reject the zero-width interval as misleading &mdash; <b>2 pts</b>","Mention an exact upper bound or rare-event method &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Boundary estimates \(\hat p=0\) or \(\hat p=1\) are especially dangerous for the usual Wald interval."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

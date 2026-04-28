@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 29</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 29</h1>
+  <nav class="tabs">
+    <button class="active">Ch 29 &mdash; Multiple Linear Regression II</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch29" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 29 &mdash; Multiple Linear Regression II: Inferences on the Model</h2>
+    <p>Topics covered: distributions of SSE and SSR, regression ANOVA, overall F tests, \(R^2\)-to-F conversion, coefficient variance-covariance matrices, T tests, confidence intervals for model parameters, confidence intervals for mean response, prediction intervals for new observations, partial F tests for nested models, contrasts, and final-style model interpretation. The main exam traps are using the wrong degrees of freedom, treating overall significance as proof that every coefficient is significant, ignoring covariance terms in contrasts, confusing mean intervals with prediction intervals, and using individual T tests for joint hypotheses.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch29')">Expand all solutions</button>
+    <button onclick="collapseAll('ch29')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 29 &mdash; Q1",
+    level:"easy",
+    tags:["SSE distribution","Variance"],
+    src:"Original. Direct application of the MLR error-variance pivot.",
+    problem:String.raw`An MLR with \(n=18\) observations and \(p=3\) predictors reports \(\mathrm{SSE}=56.0\). State the distribution of \(\mathrm{SSE}/\sigma^2\), compute \(s^2\), and construct a 95% confidence interval for \(\sigma^2\). Use \(\chi^2_{0.025,14}=26.12\) and \(\chi^2_{0.975,14}=5.629\), where the subscript is right-tail area.`,
+    solution:String.raw`<p>The error degrees of freedom are \(n-p-1=18-3-1=14\). Under the normal linear model, \[\frac{\mathrm{SSE}}{\sigma^2}\sim\chi^2_{14}.\]</p><p>The unbiased estimator is \(s^2=\mathrm{SSE}/14=56/14=4.00\). The 95% confidence interval is \[\left[\frac{56}{26.12},\frac{56}{5.629}\right]=[2.14,9.95].\]</p>`,
+    rubric:["Use error df \(n-p-1=14\) &mdash; <b>2 pts</b>","State the chi-squared pivot for SSE &mdash; <b>2 pts</b>","Compute \(s^2=4.00\) &mdash; <b>1 pt</b>","Invert chi-squared endpoints correctly &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"In MLR, \(p\) counts predictors excluding the intercept. The fitted model estimates \(p+1\) coefficients, so error df is \(n-p-1\)."
+  },
+  {
+    id:"Ch 29 &mdash; Q2",
+    level:"easy",
+    tags:["ANOVA","SSE","SSR"],
+    src:"Original. Regression ANOVA table drill.",
+    problem:String.raw`A regression with \(n=25\), \(p=4\), \(\mathrm{SST}=520\), and \(\mathrm{SSE}=130\) is fitted with an intercept. Compute \(\mathrm{SSR}\), \(R^2\), \(s^2\), and the ANOVA degrees of freedom.`,
+    solution:String.raw`<p>\(\mathrm{SSR}=\mathrm{SST}-\mathrm{SSE}=520-130=390\). Thus \(R^2=\mathrm{SSR}/\mathrm{SST}=390/520=0.75\).</p><p>The degrees of freedom are: regression \(p=4\), error \(n-p-1=20\), total \(n-1=24\). Therefore \(s^2=\mathrm{MSE}=130/20=6.50\).</p>`,
+    rubric:["Compute \(\mathrm{SSR}=390\) &mdash; <b>1 pt</b>","Compute \(R^2=0.75\) &mdash; <b>1 pt</b>","Use df regression/error/total as \(4,20,24\) &mdash; <b>3 pts</b>","Compute \(s^2=6.50\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The ANOVA identity is \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\). The df identity is \(n-1=p+(n-p-1)\)."
+  },
+  {
+    id:"Ch 29 &mdash; Q3",
+    level:"easy",
+    tags:["Overall F","Significance of regression"],
+    src:"Original. Standard significance-of-regression test.",
+    problem:String.raw`For the model in Q2, test \(H_0:\beta_1=\beta_2=\beta_3=\beta_4=0\) against the alternative that at least one slope is nonzero at \(\alpha=0.05\). Use \(f_{0.05,4,20}=2.87\).`,
+    solution:String.raw`<p>The overall F statistic is \[F=\frac{\mathrm{MSR}}{\mathrm{MSE}}=\frac{\mathrm{SSR}/p}{\mathrm{SSE}/(n-p-1)}=\frac{390/4}{130/20}=\frac{97.5}{6.5}=15.0.\]</p><p>Since \(15.0>2.87\), reject \(H_0\). The regression is significant as a whole: at least one predictor contributes linearly to the mean response.</p>`,
+    rubric:["State the correct joint null &mdash; <b>1 pt</b>","Compute MSR and MSE &mdash; <b>2 pts</b>","Compute \(F=15.0\) on \((4,20)\) df &mdash; <b>2 pts</b>","Reject and interpret as at least one nonzero slope &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Overall F does not identify which coefficient is nonzero. It only rejects the all-slopes-zero null."
+  },
+  {
+    id:"Ch 29 &mdash; Q4",
+    level:"easy",
+    tags:["R squared","F conversion"],
+    src:"Original. Uses \(F=((n-p-1)/p)R^2/(1-R^2)\).",
+    problem:String.raw`A model has \(n=30\), \(p=5\), and \(R^2=0.60\). Compute the overall significance-of-regression F statistic and its degrees of freedom.`,
+    solution:String.raw`<p>Use \[F=\frac{n-p-1}{p}\frac{R^2}{1-R^2}.\]</p><p>Here \(n-p-1=24\), so \[F=\frac{24}{5}\frac{0.60}{0.40}=4.8(1.5)=7.20.\]</p><p>The degrees of freedom are \((5,24)\).</p>`,
+    rubric:["Use the correct \(R^2\)-to-F formula &mdash; <b>2 pts</b>","Compute denominator df \(24\) &mdash; <b>1 pt</b>","Compute \(F=7.20\) &mdash; <b>2 pts</b>","Report df \((5,24)\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"This conversion only applies to the overall all-slopes-zero F test for an intercept model."
+  },
+  {
+    id:"Ch 29 &mdash; Q5",
+    level:"easy",
+    tags:["R squared","Critical value"],
+    src:"Original. Reverse \(R^2\)-to-F threshold.",
+    problem:String.raw`For \(n=22\) and \(p=3\), what minimum \(R^2\) is needed for the overall regression F test to reject at \(\alpha=0.05\) if \(f_{0.05,3,18}=3.16\)?`,
+    solution:String.raw`<p>The test rejects when \[\frac{18}{3}\frac{R^2}{1-R^2}>3.16.\]</p><p>Thus \(6R^2>3.16(1-R^2)\), so \(9.16R^2>3.16\). Therefore \(R^2>3.16/9.16=0.345\).</p>`,
+    rubric:["Use df \(18\) and the overall F formula &mdash; <b>2 pts</b>","Set the rejection inequality correctly &mdash; <b>2 pts</b>","Solve for \(R^2>0.345\) &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"A visually moderate \(R^2\) can be significant when \(n\) is large; a high \(R^2\) may fail when df are tiny."
+  },
+  {
+    id:"Ch 29 &mdash; Q6",
+    level:"easy",
+    tags:["Variance-covariance matrix","Coefficients"],
+    src:"Original. Direct matrix inference calculation.",
+    problem:String.raw`A fitted model has \(s^2=9\) and \((X^TX)^{-1}=C=\begin{pmatrix}0.40&-0.02&0.01\\-0.02&0.05&-0.004\\0.01&-0.004&0.02\end{pmatrix}\). Write the estimated variance-covariance matrix of \(\mathbf b=(b_0,b_1,b_2)^T\), and compute \(\mathrm{SE}(b_1)\) and \(\mathrm{SE}(b_2)\).`,
+    solution:String.raw`<p>The exact covariance is \(\mathrm{Var}(\mathbf b)=\sigma^2C\). The estimated covariance matrix is \[s^2C=9C=\begin{pmatrix}3.60&-0.18&0.09\\-0.18&0.45&-0.036\\0.09&-0.036&0.18\end{pmatrix}.\]</p><p>Thus \(\mathrm{SE}(b_1)=\sqrt{0.45}=0.671\), and \(\mathrm{SE}(b_2)=\sqrt{0.18}=0.424\).</p>`,
+    rubric:["State \(\widehat{\mathrm{Var}}(\mathbf b)=s^2(X^TX)^{-1}\) &mdash; <b>2 pts</b>","Multiply the matrix by 9 correctly &mdash; <b>2 pts</b>","Compute both standard errors from diagonal entries &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Do not use \(\sqrt{c_{jj}}\) alone. The coefficient standard error is \(s\sqrt{c_{jj}}\)."
+  },
+  {
+    id:"Ch 29 &mdash; Q7",
+    level:"easy",
+    tags:["T test","Coefficient"],
+    src:"Original. Individual coefficient test.",
+    problem:String.raw`A model with \(n=16\), \(p=3\) reports \(b_2=1.20\), \(s^2=4\), and \(c_{22}=0.09\). Test \(H_0:\beta_2=0\) against \(H_1:\beta_2\ne0\) at \(\alpha=0.05\). Use \(t_{0.025,12}=2.179\).`,
+    solution:String.raw`<p>The error df are \(16-3-1=12\). The standard error is \[s\sqrt{c_{22}}=2\sqrt{0.09}=0.60.\]</p><p>The statistic is \(T=(1.20-0)/0.60=2.00\). Since \(|2.00|<2.179\), do not reject \(H_0\). There is not enough evidence at 5% that \(\beta_2\ne0\), conditional on the other predictors in the model.</p>`,
+    rubric:["Use df \(12\) &mdash; <b>1 pt</b>","Compute \(\mathrm{SE}(b_2)=0.60\) &mdash; <b>2 pts</b>","Compute \(T=2.00\) &mdash; <b>1 pt</b>","Compare with \(2.179\) and do not reject &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"An individual T test is conditional on the other predictors already being included."
+  },
+  {
+    id:"Ch 29 &mdash; Q8",
+    level:"easy",
+    tags:["Confidence interval","Parameter"],
+    src:"Original. Coefficient confidence interval.",
+    problem:String.raw`Continuing Q7, construct a 95% confidence interval for \(\beta_2\). Interpret whether it agrees with the two-sided T test.`,
+    solution:String.raw`<p>The 95% interval is \[b_2\pm t_{0.025,12}s\sqrt{c_{22}}=1.20\pm2.179(0.60)=1.20\pm1.307.\]</p><p>So \(\beta_2\in[-0.107,2.507]\). The interval includes 0, so it agrees with the two-sided level-5% T test: do not reject \(H_0:\beta_2=0\).</p>`,
+    rubric:["Use the same df and standard error as Q7 &mdash; <b>2 pts</b>","Compute margin \(1.307\) &mdash; <b>2 pts</b>","Report interval containing 0 &mdash; <b>1 pt</b>","Connect to the T test decision &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"For the matching two-sided test, zero outside the CI means reject; zero inside means do not reject."
+  },
+  {
+    id:"Ch 29 &mdash; Q9",
+    level:"medium",
+    tags:["Contrast","Covariance"],
+    src:"Original. Tests equality of two slopes.",
+    problem:String.raw`In an MLR, \(b_1=2.5\), \(b_2=1.8\), \(s^2=0.04\), and the relevant entries of \(C=(X^TX)^{-1}\) are \(c_{11}=0.50\), \(c_{22}=0.40\), \(c_{12}=0.10\). With error df \(15\), test \(H_0:\beta_1=\beta_2\) at \(\alpha=0.05\). Use \(t_{0.025,15}=2.131\).`,
+    solution:String.raw`<p>Test the contrast \(D=\beta_1-\beta_2\). Its estimate is \(\hat D=2.5-1.8=0.7\).</p><p>\[\widehat{\mathrm{Var}}(\hat D)=s^2(c_{11}+c_{22}-2c_{12})=0.04(0.50+0.40-0.20)=0.028.\]</p><p>Thus \(\mathrm{SE}(\hat D)=\sqrt{0.028}=0.167\), and \(T=0.7/0.167=4.18\). Since \(4.18>2.131\), reject \(H_0\). The two slopes differ significantly.</p>`,
+    rubric:["Define the contrast \(b_1-b_2\) &mdash; <b>1 pt</b>","Use covariance term \(-2c_{12}\) &mdash; <b>3 pts</b>","Compute \(\mathrm{SE}=0.167\) and \(T=4.18\) &mdash; <b>2 pts</b>","Reject and interpret &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"For contrasts, covariance terms matter. Ignoring \(c_{12}\) changes the standard error and can change the conclusion."
+  },
+  {
+    id:"Ch 29 &mdash; Q10",
+    level:"medium",
+    tags:["Mean interval","Matrix"],
+    src:"Original. Confidence interval for mean response.",
+    problem:String.raw`A fitted model is \(\hat\mu=10+2x_1-3x_2\), with \(s=1.5\), error df \(20\), and \(C=(X^TX)^{-1}\). For \(\mathbf x_0=(1,4,2)^T\), suppose \(\mathbf x_0^TC\mathbf x_0=0.20\). Construct a 95% confidence interval for the mean response at \(x_1=4,x_2=2\). Use \(t_{0.025,20}=2.086\).`,
+    solution:String.raw`<p>The fitted mean is \(\hat\mu_0=10+2(4)-3(2)=12\).</p><p>The standard error for the estimated mean is \(s\sqrt{\mathbf x_0^TC\mathbf x_0}=1.5\sqrt{0.20}=0.671\). The margin is \(2.086(0.671)=1.40\). Therefore the 95% confidence interval for the mean response is \([10.60,13.40]\).</p>`,
+    rubric:["Compute fitted mean \(12\) &mdash; <b>1 pt</b>","Use \(s\sqrt{x_0^TCx_0}\) for a mean interval &mdash; <b>2 pts</b>","Compute margin \(1.40\) &mdash; <b>2 pts</b>","State the interval as mean response, not new observation &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The leading 1 in \(\mathbf x_0\) is the intercept coordinate. Do not omit it in matrix formulas."
+  },
+  {
+    id:"Ch 29 &mdash; Q11",
+    level:"medium",
+    tags:["Prediction interval","New observation"],
+    src:"Original. Prediction interval counterpart to Q10.",
+    problem:String.raw`Using the same fitted model and point as Q10, construct a 95% prediction interval for a new observation \(Y_{\mathrm{new}}\) at \(x_1=4,x_2=2\).`,
+    solution:String.raw`<p>The fitted value is still \(\hat y_0=12\). For a new observation, include the extra noise term:</p><p>\[\mathrm{SE}_{\mathrm{pred}}=s\sqrt{1+\mathbf x_0^TC\mathbf x_0}=1.5\sqrt{1.20}=1.643.\]</p><p>The margin is \(2.086(1.643)=3.43\). Therefore the prediction interval is \([8.57,15.43]\).</p>`,
+    rubric:["Use the same fitted value \(12\) &mdash; <b>1 pt</b>","Use \(s\sqrt{1+x_0^TCx_0}\), not \(s\sqrt{x_0^TCx_0}\) &mdash; <b>3 pts</b>","Compute margin \(3.43\) &mdash; <b>2 pts</b>","Identify the interval as for one new \(Y\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Prediction intervals are wider because they include both uncertainty in the mean and irreducible observation-to-observation error."
+  },
+  {
+    id:"Ch 29 &mdash; Q12",
+    level:"easy",
+    tags:["Mean vs prediction","Interpretation"],
+    src:"Original. Conceptual interval comparison.",
+    problem:String.raw`A 95% confidence interval for \(\mu_{Y|\mathbf x_0}\) is \([18.2,21.0]\), while the 95% prediction interval for a new \(Y\) at the same \(\mathbf x_0\) is \([14.7,24.5]\). Explain why the second interval is wider and which interval should be used to judge whether a single future observation \(Y=23.8\) is surprising.`,
+    solution:String.raw`<p>The confidence interval estimates the unknown conditional mean \(\mu_{Y|\mathbf x_0}\). The prediction interval predicts one noisy future observation, so it includes both uncertainty in the fitted mean and the random error of the new observation.</p><p>To judge a single future observation, use the prediction interval. Since \(23.8\in[14.7,24.5]\), it is not unusual relative to a 95% prediction band. Comparing \(23.8\) with the mean CI would be the wrong diagnostic.</p>`,
+    rubric:["State what the confidence interval covers &mdash; <b>2 pts</b>","State what the prediction interval covers &mdash; <b>2 pts</b>","Choose the prediction interval for a single future observation &mdash; <b>1 pt</b>","Conclude \(23.8\) is inside the PI &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Do not use a mean-response confidence interval as if it were a prediction interval for raw observations."
+  },
+  {
+    id:"Ch 29 &mdash; Q13",
+    level:"medium",
+    tags:["Partial F","Nested models"],
+    src:"Original. Block test from SSE values.",
+    problem:String.raw`A full model with \(n=32\) and \(p_F=5\) predictors has \(\mathrm{SSE}_F=120\). A reduced model that drops two predictors has \(\mathrm{SSE}_R=150\). Test the joint contribution of the dropped predictors at \(\alpha=0.05\). Use \(f_{0.05,2,26}=3.37\).`,
+    solution:String.raw`<p>The numerator df are \(p_F-p_R=2\). The denominator df use the full model: \(n-p_F-1=32-5-1=26\).</p><p>\[F=\frac{(\mathrm{SSE}_R-\mathrm{SSE}_F)/2}{\mathrm{SSE}_F/26}=\frac{(150-120)/2}{120/26}=\frac{15}{4.615}=3.25.\]</p><p>Since \(3.25<3.37\), do not reject. The two dropped predictors do not add significant explanatory power at the 5% level, given the predictors retained in the reduced model.</p>`,
+    rubric:["Use nested-model SSE difference &mdash; <b>2 pts</b>","Use numerator df \(2\) &mdash; <b>1 pt</b>","Use full-model error df \(26\) &mdash; <b>2 pts</b>","Compute \(F=3.25\) and do not reject &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"The denominator is always the full-model MSE, not the reduced-model MSE."
+  },
+  {
+    id:"Ch 29 &mdash; Q14",
+    level:"medium",
+    tags:["Partial F","Categorical predictors"],
+    src:"Original. Joint test for a factor.",
+    problem:String.raw`A model includes two continuous predictors and a four-level material type coded with three dummy variables. The full model has all five predictors and \(\mathrm{SSE}_F=84\) with \(n=28\). The reduced model without material type has \(\mathrm{SSE}_R=111\). Test whether material type matters after adjusting for the two continuous predictors. Use \(f_{0.05,3,22}=3.05\).`,
+    solution:String.raw`<p>The three dummy variables must be tested jointly: \(H_0\) says all three material coefficients are zero. The full model has \(p_F=5\), so full error df are \(28-5-1=22\).</p><p>\[F=\frac{(111-84)/3}{84/22}=\frac{9}{3.818}=2.36.\]</p><p>Since \(2.36<3.05\), do not reject. There is not enough evidence that material type changes the mean response after adjusting for the continuous predictors.</p>`,
+    rubric:["Recognize a four-level factor contributes three coefficients &mdash; <b>2 pts</b>","Use a joint partial F, not three separate unadjusted decisions &mdash; <b>2 pts</b>","Compute denominator df \(22\) and \(F=2.36\) &mdash; <b>2 pts</b>","State the conclusion conditionally on other predictors &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"A multi-level factor is a block of dummy variables. Dropping the factor means dropping the entire block."
+  },
+  {
+    id:"Ch 29 &mdash; Q15",
+    level:"medium",
+    tags:["T squared","Partial F"],
+    src:"Original. Equivalence for dropping one coefficient.",
+    problem:String.raw`A full model has error df \(18\). Testing \(H_0:\beta_3=0\) from the coefficient table gives \(T=-2.40\). The reduced model drops only \(x_3\). What is the corresponding partial F statistic and its degrees of freedom? Does it reject at \(\alpha=0.05\) if \(f_{0.05,1,18}=4.41\)?`,
+    solution:String.raw`<p>When exactly one coefficient is dropped, the partial F test is equivalent to the two-sided T test and \(F=T^2\).</p><p>Thus \(F=(-2.40)^2=5.76\) on \((1,18)\) degrees of freedom. Since \(5.76>4.41\), reject \(H_0:\beta_3=0\).</p>`,
+    rubric:["State the one-parameter equivalence \(F=T^2\) &mdash; <b>2 pts</b>","Compute \(F=5.76\) &mdash; <b>1 pt</b>","Report df \((1,18)\) &mdash; <b>1 pt</b>","Reject at 5% &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The equivalence is for one coefficient only. For two or more dropped coefficients, use the partial F directly."
+  },
+  {
+    id:"Ch 29 &mdash; Q16",
+    level:"medium",
+    tags:["Overall F","Individual T","Diagnosis"],
+    src:"Original. Classic multicollinearity interpretation.",
+    problem:String.raw`A regression with three predictors has \(F=18.4\) for the overall significance test, so the regression is highly significant. However, the three individual T tests have P-values \(0.18\), \(0.24\), and \(0.31\). Give two plausible explanations and explain what you would check next.`,
+    solution:String.raw`<p>One likely explanation is multicollinearity: the predictors jointly explain \(Y\), but their individual effects are hard to separate, inflating coefficient standard errors. Another possibility is that the useful signal is in a joint block or contrast, not in any single coefficient under the chosen coding.</p><p>Next, inspect scatterplots and correlations among predictors, check whether the design matrix is ill-conditioned, compare nested models with partial F tests, and examine residual diagnostics. The correct conclusion is not "the model is useless"; the overall F already rejects that.</p>`,
+    rubric:["State that overall F and individual T tests answer different hypotheses &mdash; <b>2 pts</b>","Name multicollinearity or shared predictor information &mdash; <b>2 pts</b>","Suggest appropriate next checks &mdash; <b>2 pts</b>","Avoid concluding that no predictor matters at all &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Overall F can reject while every individual T fails. That pattern is a warning about separability of effects, not a contradiction."
+  },
+  {
+    id:"Ch 29 &mdash; Q17",
+    level:"easy",
+    tags:["Coefficient interpretation","MLR"],
+    src:"Original. Interpretation in the presence of other predictors.",
+    problem:String.raw`A fitted model for fuel consumption is \(\hat\mu=7.2+0.15x_1-0.04x_2\), where \(x_1\) is vehicle mass in hundreds of kg and \(x_2\) is highway speed in km/h. Interpret \(b_1=0.15\) carefully.`,
+    solution:String.raw`<p>Holding highway speed \(x_2\) fixed, increasing vehicle mass by one unit of \(x_1\), meaning 100 kg, is associated with an estimated increase of \(0.15\) units in the mean fuel consumption response.</p><p>The phrase "holding \(x_2\) fixed" is essential. In MLR, \(b_1\) is a conditional slope, not the marginal effect of mass after speed is allowed to vary.</p>`,
+    rubric:["Mention a one-unit increase in \(x_1\) means 100 kg &mdash; <b>1 pt</b>","Interpret the change in mean response as \(0.15\) &mdash; <b>2 pts</b>","Explicitly hold \(x_2\) fixed &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"Most interpretation errors come from forgetting the conditional phrase: all other predictors held fixed."
+  },
+  {
+    id:"Ch 29 &mdash; Q18",
+    level:"medium",
+    tags:["Extrapolation","Prediction diagnosis"],
+    src:"Original. Final-style prediction caveat.",
+    problem:String.raw`A fitted MLR was trained on \(2\le x_1\le8\) and \(10\le x_2\le30\). A student asks for a 95% prediction interval at \(x_1=14,x_2=12\), obtains a finite interval from the formula, and says the prediction is reliable because the formula worked. Diagnose the statement.`,
+    solution:String.raw`<p>The computation may be algebraically valid, but the reliability claim is not. The point \(x_1=14\) is outside the observed training range, so the prediction extrapolates in the \(x_1\) direction. The linear mean assumption has not been checked there.</p><p>Also, \(x_0^TCx_0\) often grows for points far from the design center, widening the interval. Even a wide interval may fail if the linear model is wrong outside the data range. The answer should report the extrapolation caveat and avoid presenting the prediction as routine.</p>`,
+    rubric:["Identify extrapolation in \(x_1\) &mdash; <b>2 pts</b>","Explain why formula availability does not guarantee model validity &mdash; <b>2 pts</b>","Mention leverage or increased \(x_0^TCx_0\) as a warning sign &mdash; <b>1 pt</b>","Recommend reporting a caveat &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Regression formulas do not protect against asking the model outside the region where it was trained."
+  },
+  {
+    id:"Ch 29 &mdash; Q19",
+    level:"medium",
+    tags:["Printout","T tests","CI"],
+    src:"Original. Coefficient table interpretation.",
+    problem:String.raw`A coefficient table for a model with error df \(20\) is shown below. Test each slope at \(\alpha=0.05\), and construct a 95% CI for \(\beta_2\). Use \(t_{0.025,20}=2.086\).<table class="data"><tr><th>Term</th><th>Estimate</th><th>SE</th></tr><tr><td>Intercept</td><td>4.10</td><td>1.20</td></tr><tr><td>\(x_1\)</td><td>0.80</td><td>0.30</td></tr><tr><td>\(x_2\)</td><td>-1.50</td><td>0.70</td></tr><tr><td>\(x_3\)</td><td>0.25</td><td>0.40</td></tr></table>`,
+    solution:String.raw`<p>The T statistics for the slopes are: \(x_1:0.80/0.30=2.67\), \(x_2:-1.50/0.70=-2.14\), and \(x_3:0.25/0.40=0.625\).</p><p>At 5%, \(|T|>2.086\) rejects. Thus \(x_1\) and \(x_2\) are individually significant; \(x_3\) is not.</p><p>The 95% CI for \(\beta_2\) is \[-1.50\pm2.086(0.70)=-1.50\pm1.46=[-2.96,-0.04].\]</p>`,
+    rubric:["Compute three T statistics &mdash; <b>3 pts</b>","Use the correct two-sided cutoff &mdash; <b>1 pt</b>","Identify \(x_1,x_2\) significant and \(x_3\) not significant &mdash; <b>2 pts</b>","Compute CI for \(\beta_2\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"A coefficient barely significant by T will have a confidence interval barely excluding zero."
+  },
+  {
+    id:"Ch 29 &mdash; Q20",
+    level:"medium",
+    tags:["ANOVA reconstruction","F test"],
+    src:"Original. Reverse-engineering from partial printout.",
+    problem:String.raw`An MLR printout gives \(n=21\), \(p=3\), \(\mathrm{MSE}=2.5\), and overall \(F=8.0\). Reconstruct \(\mathrm{SSE}\), \(\mathrm{MSR}\), \(\mathrm{SSR}\), \(\mathrm{SST}\), and \(R^2\).`,
+    solution:String.raw`<p>Error df are \(21-3-1=17\), so \(\mathrm{SSE}=\mathrm{MSE}\cdot17=2.5(17)=42.5\).</p><p>Since \(F=\mathrm{MSR}/\mathrm{MSE}=8.0\), \(\mathrm{MSR}=8(2.5)=20.0\). With regression df \(3\), \(\mathrm{SSR}=3(20.0)=60.0\).</p><p>Thus \(\mathrm{SST}=60.0+42.5=102.5\), and \(R^2=60.0/102.5=0.585\).</p>`,
+    rubric:["Compute error df \(17\) and \(\mathrm{SSE}=42.5\) &mdash; <b>2 pts</b>","Compute \(\mathrm{MSR}=20.0\) &mdash; <b>1 pt</b>","Compute \(\mathrm{SSR}=60.0\) &mdash; <b>2 pts</b>","Compute \(\mathrm{SST}=102.5\) and \(R^2=0.585\) &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"The ANOVA table can be rebuilt from surprisingly few entries if you keep the df identities straight."
+  },
+  {
+    id:"Ch 29 &mdash; Q21",
+    level:"medium",
+    tags:["Variance-covariance matrix","Scaling"],
+    src:"Original. Conceptual covariance-matrix interpretation.",
+    problem:String.raw`Two versions of the same model are fit. Model A uses \(x_1\) measured in meters; Model B uses \(z_1=100x_1\) measured in centimeters. What happens to the numerical coefficient, its standard error, and its T statistic for that predictor?`,
+    solution:String.raw`<p>If \(z_1=100x_1\), then the slope per centimeter is \(1/100\) of the slope per meter: \(b_{z}=b_x/100\). Its standard error also scales by \(1/100\), because the corresponding diagonal entry in the coefficient covariance matrix scales the same way.</p><p>The T statistic \(b/\mathrm{SE}(b)\) is unchanged. The fitted values, SSE, \(R^2\), and overall F are unchanged. Only the units of the coefficient and its reported standard error change.</p>`,
+    rubric:["State coefficient scales by \(1/100\) &mdash; <b>2 pts</b>","State standard error scales by \(1/100\) &mdash; <b>2 pts</b>","State T statistic and fitted model quality are unchanged &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Changing units should not change statistical evidence; it changes coefficient units."
+  },
+  {
+    id:"Ch 29 &mdash; Q22",
+    level:"medium",
+    tags:["Linear combination","CI"],
+    src:"Original. Interval for a linear combination of parameters.",
+    problem:String.raw`Suppose \(b_1=3.0\), \(b_2=-1.0\), \(s^2=1.44\), \(c_{11}=0.25\), \(c_{22}=0.16\), \(c_{12}=-0.05\), and error df \(18\). Construct a 95% CI for \(\beta_1+2\beta_2\). Use \(t_{0.025,18}=2.101\).`,
+    solution:String.raw`<p>The estimate is \(b_1+2b_2=3.0+2(-1.0)=1.0\).</p><p>The variance multiplier is \[c_{11}+4c_{22}+4c_{12}=0.25+4(0.16)+4(-0.05)=0.69.\]</p><p>Estimated variance is \(1.44(0.69)=0.9936\), so \(\mathrm{SE}=0.997\). The margin is \(2.101(0.997)=2.09\), giving \([-1.09,3.09]\).</p>`,
+    rubric:["Compute the estimate \(1.0\) &mdash; <b>1 pt</b>","Use \(a^TCa\) with \(a=(0,1,2)\) &mdash; <b>3 pts</b>","Include the covariance term \(4c_{12}\) &mdash; <b>2 pts</b>","Compute the final interval &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"For \(b_1+2b_2\), the covariance term is \(2(1)(2)c_{12}=4c_{12}\)."
+  },
+  {
+    id:"Ch 29 &mdash; Q23",
+    level:"hard",
+    tags:["SSR distribution","Independence","Overall F"],
+    src:"Original. Distribution theory for regression sums of squares.",
+    problem:String.raw`Under the normal linear model with \(p\) predictors and an intercept, state the distributions of \(\mathrm{SSE}/\sigma^2\) and \(\mathrm{SSR}/\sigma^2\) under \(H_0:\beta_1=\cdots=\beta_p=0\). Are they independent? Use this to justify the overall F test.`,
+    solution:String.raw`<p>Under the normal linear model, \(\mathrm{SSE}/\sigma^2\sim\chi^2_{n-p-1}\). Under the all-slopes-zero null, \(\mathrm{SSR}/\sigma^2\sim\chi^2_p\). These two quadratic forms are independent because they project the response vector onto orthogonal regression and residual subspaces.</p><p>Therefore \[\frac{(\mathrm{SSR}/\sigma^2)/p}{(\mathrm{SSE}/\sigma^2)/(n-p-1)}=\frac{\mathrm{MSR}}{\mathrm{MSE}}\sim F_{p,n-p-1}\] under \(H_0\). This is the significance-of-regression test.</p>`,
+    rubric:["State \(\mathrm{SSE}/\sigma^2\sim\chi^2_{n-p-1}\) &mdash; <b>2 pts</b>","State null distribution \(\mathrm{SSR}/\sigma^2\sim\chi^2_p\) &mdash; <b>2 pts</b>","State independence and projection idea &mdash; <b>2 pts</b>","Form the F ratio &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"SSR has the central chi-squared distribution only under the all-slopes-zero null. Under alternatives it becomes noncentral."
+  },
+  {
+    id:"Ch 29 &mdash; Q24",
+    level:"medium",
+    tags:["Intercept","Confidence interval"],
+    src:"Original. Intercept inference.",
+    problem:String.raw`A model has \(b_0=5.6\), \(s=2.0\), \(c_{00}=0.36\), and error df \(10\). Construct a 95% CI for \(\beta_0\). Use \(t_{0.025,10}=2.228\). Then state one reason the intercept may be scientifically uninteresting even if the interval is precise.`,
+    solution:String.raw`<p>\(\mathrm{SE}(b_0)=s\sqrt{c_{00}}=2(0.6)=1.2\). The interval is \[5.6\pm2.228(1.2)=5.6\pm2.674=[2.93,8.27].\]</p><p>The intercept is the mean response when all predictors equal zero. If that predictor combination is outside the observed data range or has no physical meaning, the intercept may be a mathematical anchor rather than a scientifically meaningful quantity.</p>`,
+    rubric:["Compute \(\mathrm{SE}(b_0)=1.2\) &mdash; <b>2 pts</b>","Compute the CI endpoints &mdash; <b>2 pts</b>","Interpret the intercept as all predictors zero &mdash; <b>1 pt</b>","Give a valid caveat about extrapolation or physical meaning &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"The intercept often matters algebraically more than substantively."
+  },
+  {
+    id:"Ch 29 &mdash; Q25",
+    level:"hard",
+    tags:["Partial F","R squared"],
+    src:"Original. Nested models using \(R^2\).",
+    problem:String.raw`A reduced model with \(p_R=2\) predictors has \(R_R^2=0.50\). A full model with \(p_F=5\) predictors has \(R_F^2=0.68\). Both are fit to the same \(n=40\) observations with an intercept. Compute the partial F statistic for the three added predictors.`,
+    solution:String.raw`<p>For nested models on the same data, \[\frac{\mathrm{SSE}_R-\mathrm{SSE}_F}{\mathrm{SSE}_F}=\frac{(1-R_R^2)-(1-R_F^2)}{1-R_F^2}=\frac{R_F^2-R_R^2}{1-R_F^2}.\]</p><p>The numerator df are \(5-2=3\), and the full-model error df are \(40-5-1=34\). Thus \[F=\frac{(0.68-0.50)/3}{(1-0.68)/34}=\frac{0.06}{0.009412}=6.38.\]</p>`,
+    rubric:["Use the nested \(R^2\) partial-F formula &mdash; <b>3 pts</b>","Use numerator df \(3\) &mdash; <b>1 pt</b>","Use full-model denominator df \(34\) &mdash; <b>2 pts</b>","Compute \(F=6.38\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Because the models use the same SST, \(R^2\) differences can replace SSE differences."
+  },
+  {
+    id:"Ch 29 &mdash; Q26",
+    level:"medium",
+    tags:["Matrix interval","Off-diagonal terms"],
+    src:"Original. Computes \(x_0^TCx_0\) explicitly.",
+    problem:String.raw`For a model with intercept and two predictors, \(C=(X^TX)^{-1}=\begin{pmatrix}0.30&-0.04&0.02\\-0.04&0.05&-0.01\\0.02&-0.01&0.04\end{pmatrix}\). Compute \(\mathbf x_0^TC\mathbf x_0\) for \(\mathbf x_0=(1,2,3)^T\).`,
+    solution:String.raw`<p>Use all diagonal and off-diagonal terms:</p><p>\[
+\begin{aligned}
+\mathbf x_0^TC\mathbf x_0
+&=0.30(1)^2+0.05(2)^2+0.04(3)^2\\
+&\quad+2(-0.04)(1)(2)+2(0.02)(1)(3)+2(-0.01)(2)(3)\\
+&=0.30+0.20+0.36-0.16+0.12-0.12=0.70.
+\end{aligned}
+\]</p>`,
+    rubric:["Include diagonal terms correctly &mdash; <b>2 pts</b>","Include all three off-diagonal doubled terms &mdash; <b>3 pts</b>","Compute final value \(0.70\) &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The off-diagonal entries appear twice in \(x_0^TCx_0\). Omitting them is a common prediction-interval error."
+  },
+  {
+    id:"Ch 29 &mdash; Q27",
+    level:"hard",
+    tags:["Mean interval","Prediction interval","Matrix"],
+    src:"Original. Full interval calculation from matrix pieces.",
+    problem:String.raw`A fitted model is \(\hat\mu=3+1.5x_1+0.5x_2\). Let \(s^2=2.25\), error df \(16\), and for \(\mathbf x_0=(1,2,3)^T\), \(\mathbf x_0^TC\mathbf x_0=0.70\). Construct both a 95% confidence interval for the mean response and a 95% prediction interval for a new observation at \(x_1=2,x_2=3\). Use \(t_{0.025,16}=2.120\).`,
+    solution:String.raw`<p>The fitted value is \(\hat y_0=3+1.5(2)+0.5(3)=7.5\), and \(s=\sqrt{2.25}=1.5\).</p><p>Mean-response SE: \(1.5\sqrt{0.70}=1.255\). Margin: \(2.120(1.255)=2.66\). Mean CI: \([4.84,10.16]\).</p><p>Prediction SE: \(1.5\sqrt{1+0.70}=1.956\). Margin: \(2.120(1.956)=4.15\). Prediction interval: \([3.35,11.65]\).</p>`,
+    rubric:["Compute fitted value \(7.5\) &mdash; <b>1 pt</b>","Compute mean-response interval &mdash; <b>3 pts</b>","Compute prediction interval with \(1+x_0^TCx_0\) &mdash; <b>3 pts</b>","Keep the two intervals conceptually distinct &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Same center, different standard errors. The prediction interval should be wider."
+  },
+  {
+    id:"Ch 29 &mdash; Q28",
+    level:"medium",
+    tags:["Assumptions","Inference validity"],
+    src:"Original. Model assumption diagnosis.",
+    problem:String.raw`For each diagnostic pattern, name the regression assumption most directly threatened and the consequence for Chapter 29 inference: (i) residuals fan out as fitted values increase; (ii) residuals follow a curved trend against \(x_1\); (iii) observations are collected hourly and residuals alternate in long positive and negative runs; (iv) QQ plot has extreme heavy tails.`,
+    solution:String.raw`<p><b>(i)</b> Nonconstant variance. Standard errors, T tests, F tests, and intervals may be unreliable.</p><p><b>(ii)</b> Wrong mean structure or nonlinearity. Coefficient interpretations and predictions can be biased because the model omits curvature or interactions.</p><p><b>(iii)</b> Lack of independence or autocorrelation. The usual covariance formulas for \(\mathbf b\) and F/T reference distributions are not valid.</p><p><b>(iv)</b> Non-normal errors or outliers. Small-sample T/F/chi-squared inferences may be inaccurate, and prediction intervals may undercover in the tails.</p>`,
+    rubric:["Identify heteroscedasticity in (i) &mdash; <b>1 pt</b>","Identify nonlinearity in (ii) &mdash; <b>1 pt</b>","Identify dependence in (iii) &mdash; <b>1 pt</b>","Identify non-normality/heavy tails in (iv) &mdash; <b>1 pt</b>","State consequences for Chapter 29 inference &mdash; <b>3 pts</b>"],
+    total:"7 pts",
+    tip:"A significant F test is not a license to ignore residual diagnostics. Inference relies on the model assumptions."
+  },
+  {
+    id:"Ch 29 &mdash; Q29",
+    level:"hard",
+    tags:["Final-style","Interpretation","Diagnosis"],
+    src:"Original. Comprehensive final-style interpretation.",
+    problem:String.raw`A model for product strength uses temperature \(x_1\), pressure \(x_2\), and catalyst level \(x_3\). The overall F test has P-value \(0.0004\). Individual coefficient P-values are \(x_1:0.003\), \(x_2:0.41\), \(x_3:0.048\). A residual plot shows a strong funnel pattern, and the largest pressure values occur only at the largest temperatures. Write a concise final-exam interpretation and recommendation.`,
+    solution:String.raw`<p>The regression is significant as a whole, so the predictors jointly explain product strength better than the intercept-only model. Conditional on the current model, \(x_1\) is clearly significant and \(x_3\) is marginally significant at 5%; \(x_2\) is not individually significant.</p><p>However, the funnel residual pattern threatens the constant-variance assumption, so the reported standard errors, T tests, F tests, and intervals may not be trustworthy. The fact that high pressure only appears with high temperature suggests collinearity or design confounding, which can inflate standard errors and make the pressure effect hard to isolate.</p><p>Recommendation: do not report the coefficient table as final without qualification. Inspect predictor correlations, consider transformation or weighted least squares for nonconstant variance, and use partial F tests to compare scientifically meaningful nested models before dropping pressure.</p>`,
+    rubric:["Interpret overall F correctly &mdash; <b>2 pts</b>","Interpret individual P-values conditionally &mdash; <b>2 pts</b>","Diagnose heteroscedasticity and its inference consequence &mdash; <b>2 pts</b>","Diagnose collinearity/design confounding &mdash; <b>1 pt</b>","Give a practical recommendation &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"Final-style questions reward disciplined caveats. Say what the numbers imply, then say which assumptions make those numbers fragile."
+  },
+  {
+    id:"Ch 29 &mdash; Q30",
+    level:"hard",
+    tags:["Partial F","Model hierarchy","Interactions"],
+    src:"Original. Joint test for interaction terms.",
+    problem:String.raw`A full model is \(\mu=\beta_0+\beta_1x+\beta_2I_B+\beta_3I_C+\beta_4xI_B+\beta_5xI_C\), fitted to \(n=36\) observations with \(\mathrm{SSE}_F=72\). The reduced parallel-lines model drops \(xI_B\) and \(xI_C\), giving \(\mathrm{SSE}_R=88\). Test whether the three group-specific slopes are equal at \(\alpha=0.05\). Use \(f_{0.05,2,30}=3.32\).`,
+    solution:String.raw`<p>Group A has slope \(\beta_1\), group B has slope \(\beta_1+\beta_4\), and group C has slope \(\beta_1+\beta_5\). Equal slopes mean \(H_0:\beta_4=\beta_5=0\).</p><p>The full model has \(p_F=5\), so denominator df are \(36-5-1=30\). The numerator df are \(2\). \[F=\frac{(88-72)/2}{72/30}=\frac{8}{2.4}=3.33.\]</p><p>Since \(3.33\) is just above \(3.32\), reject at the 5% level, barely. There is weak evidence that at least one group slope differs.</p>`,
+    rubric:["Translate equal slopes into \(\beta_4=\beta_5=0\) &mdash; <b>2 pts</b>","Use the reduced parallel-lines model &mdash; <b>1 pt</b>","Compute df \((2,30)\) &mdash; <b>2 pts</b>","Compute \(F=3.33\) and make the borderline rejection &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Interaction terms are usually tested as a block. Do not delete main effects while testing interactions."
+  },
+  {
+    id:"Ch 29 &mdash; Q31",
+    level:"medium",
+    tags:["Distribution","Error variance","Concept"],
+    src:"Original. Distinguishes \(s^2\) and \(\sigma^2\).",
+    problem:String.raw`In an MLR with \(n=14\) and \(p=4\), a student writes \(s^2=\mathrm{SSE}/14\) and \(\mathrm{SSE}/s^2\sim\chi^2_{14}\). Identify both errors and write the correct statements.`,
+    solution:String.raw`<p>The error df are \(n-p-1=14-4-1=9\), not 14. Thus \[s^2=\frac{\mathrm{SSE}}{9}.\]</p><p>The chi-squared pivot uses the true unknown variance in the denominator: \[\frac{\mathrm{SSE}}{\sigma^2}\sim\chi^2_9.\]</p><p>\(\mathrm{SSE}/s^2=9\) by definition, so it is not a chi-squared random variable.</p>`,
+    rubric:["Correct df to \(9\) &mdash; <b>2 pts</b>","Correct \(s^2=\mathrm{SSE}/9\) &mdash; <b>1 pt</b>","Use \(\sigma^2\), not \(s^2\), in the chi-squared pivot &mdash; <b>2 pts</b>","Explain why \(\mathrm{SSE}/s^2\) is fixed &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Estimated variance goes in \(s^2\); true variance goes in the distributional pivot."
+  },
+  {
+    id:"Ch 29 &mdash; Q32",
+    level:"hard",
+    tags:["Comprehensive","ANOVA","Intervals","Partial F"],
+    src:"Original. Full Chapter 29 synthesis problem.",
+    problem:String.raw`A full model with \(n=26\), \(p=4\), \(\mathrm{SST}=300\), and \(\mathrm{SSE}_F=84\) has \(b_3=1.40\), \(c_{33}=0.0625\). A reduced model dropping \(x_3\) and \(x_4\) has \(\mathrm{SSE}_R=108\). (a) Build the full-model ANOVA summary; (b) test overall significance; (c) test \(H_0:\beta_3=0\); (d) test the joint contribution of \(x_3,x_4\). Use \(t_{0.025,21}=2.080\), \(f_{0.05,4,21}=2.84\), and \(f_{0.05,2,21}=3.47\).`,
+    solution:String.raw`<p><b>(a)</b> Full-model error df are \(26-4-1=21\), so \(\mathrm{MSE}=84/21=4\). \(\mathrm{SSR}=300-84=216\), regression df \(=4\), and \(\mathrm{MSR}=216/4=54\). \(R^2=216/300=0.72\).</p><p><b>(b)</b> Overall \(F=54/4=13.5\). Since \(13.5>2.84\), reject the all-slopes-zero null.</p><p><b>(c)</b> \(s=\sqrt4=2\), so \(\mathrm{SE}(b_3)=2\sqrt{0.0625}=0.50\). \(T=1.40/0.50=2.80\). Since \(2.80>2.080\), reject \(H_0:\beta_3=0\). A 95% CI would be \(1.40\pm2.080(0.50)=[0.36,2.44]\).</p><p><b>(d)</b> The partial F for dropping \(x_3,x_4\) is \[F=\frac{(108-84)/2}{84/21}=\frac{12}{4}=3.00.\] Since \(3.00<3.47\), do not reject the joint null that both added coefficients are zero at 5%.</p><p>The apparently different conclusions in (c) and (d) are possible because (c) tests only \(x_3\), while (d) tests the pair \(x_3,x_4\) as a block with two numerator df.</p>`,
+    rubric:["Build ANOVA quantities with correct df &mdash; <b>4 pts</b>","Perform overall F test correctly &mdash; <b>2 pts</b>","Perform T test and optional CI for \(\beta_3\) &mdash; <b>3 pts</b>","Perform partial F for the two-predictor block &mdash; <b>3 pts</b>","Explain why the T and block-F conclusions can differ &mdash; <b>1 pt</b>"],
+    total:"13 pts",
+    tip:"This is the final-exam pattern: identify the hypothesis first, then choose overall F, individual T, or partial F."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

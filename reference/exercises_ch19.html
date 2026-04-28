@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 19</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 19</h1>
+  <nav class="tabs">
+    <button class="active">Ch 19 &mdash; Single Sample Tests</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch19" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 19 &mdash; Single Sample Tests for the Mean and Variance</h2>
+    <p>Topics covered: hypotheses, test statistics, rejection regions, P-values, known-variance Z tests for a mean, unknown-variance T tests for a mean, chi-squared tests for variance and standard deviation, one-sided and two-sided alternatives, assumptions, critical values, power and sample-size planning, and diagnose-the-error final-style problems. The main exam traps are using \(s\) with a Z critical value, using \(s/n\) instead of \(s/\sqrt n\), reversing one-sided alternatives, doubling a one-sided P-value incorrectly, forgetting \(n-1\) degrees of freedom, and applying chi-squared variance tests without normality.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch19')">Expand all solutions</button>
+    <button onclick="collapseAll('ch19')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 19 &mdash; Q1",
+    level:"easy",
+    tags:["Known variance","Z test","Two-sided"],
+    src:"Original. Direct application of the one-sample Z test.",
+    problem:String.raw`A machine is calibrated to produce parts with mean length \(50\) mm. The population standard deviation is known to be \(\sigma=8\) mm. A sample of \(n=64\) parts has \(\bar x=52.1\). Test \(H_0:\mu=50\) against \(H_1:\mu\ne50\) at level \(\alpha=0.05\).`,
+    solution:String.raw`<p>Use the known-variance statistic \[Z=\frac{\bar X-\mu_0}{\sigma/\sqrt n}.\]</p><p>Here \(Z=(52.1-50)/(8/\sqrt{64})=2.10\). For a two-sided level-5% test, reject if \(|Z|>z_{0.025}=1.96\). Since \(2.10>1.96\), reject \(H_0\).</p><p>The two-sided P-value is \(2P(Z\ge2.10)\approx0.0358\), also below 0.05.</p>`,
+    rubric:["State the two-sided hypotheses &mdash; <b>1 pt</b>","Use the known-variance Z statistic &mdash; <b>2 pts</b>","Compute \(Z=2.10\) &mdash; <b>1 pt</b>","Compare with \(1.96\) or compute the P-value &mdash; <b>2 pts</b>","Conclude reject in context &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Known population standard deviation means the denominator is \(\sigma/\sqrt n\), not \(s/\sqrt n\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q2",
+    level:"easy",
+    tags:["Known variance","Z test","One-sided"],
+    src:"Original. Right-tailed P-value practice.",
+    problem:String.raw`A chemical process has known \(\sigma=1.5\). From \(n=36\) runs, \(\bar x=10.32\). Test \(H_0:\mu=10.0\) against \(H_1:\mu>10.0\). Report the P-value and the decision at \(\alpha=0.05\).`,
+    solution:String.raw`<p>The statistic is \[Z=\frac{10.32-10.0}{1.5/\sqrt{36}}=\frac{0.32}{0.25}=1.28.\]</p><p>For \(H_1:\mu>10\), the P-value is the upper-tail probability \(P(Z\ge1.28)\approx0.1003\). Since \(0.1003>0.05\), do not reject \(H_0\).</p>`,
+    rubric:["Use a right-tailed alternative &mdash; <b>1 pt</b>","Compute standard error \(1.5/6=0.25\) &mdash; <b>1 pt</b>","Compute \(Z=1.28\) &mdash; <b>1 pt</b>","Use an upper-tail P-value &mdash; <b>2 pts</b>","Make the correct no-reject decision &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Do not double the P-value for a one-sided test."
+  },
+  {
+    id:"Ch 19 &mdash; Q3",
+    level:"easy",
+    tags:["Unknown variance","T test","Two-sided"],
+    src:"Original. Direct application of the one-sample T test.",
+    problem:String.raw`A normal population is sampled with \(n=16\), \(\bar x=101.8\), and \(s=3.2\). Test \(H_0:\mu=100\) against \(H_1:\mu\ne100\) at \(\alpha=0.05\).`,
+    solution:String.raw`<p>Since \(\sigma\) is unknown and the population is normal, use \[T=\frac{\bar X-\mu_0}{S/\sqrt n}\sim t_{n-1}\quad\text{under }H_0.\]</p><p>The observed value is \(t=(101.8-100)/(3.2/\sqrt{16})=1.8/0.8=2.25\), with \(df=15\). The critical value is \(t_{0.025,15}\approx2.131\). Since \(|2.25|>2.131\), reject \(H_0\). The P-value is about \(0.040\).</p>`,
+    rubric:["Choose T instead of Z &mdash; <b>2 pts</b>","Use \(df=15\) &mdash; <b>1 pt</b>","Compute \(t=2.25\) &mdash; <b>1 pt</b>","Use a two-sided critical value or P-value &mdash; <b>2 pts</b>","State the decision &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"If \(s\) is used in a small-sample mean test, the reference distribution is T under the normal model."
+  },
+  {
+    id:"Ch 19 &mdash; Q4",
+    level:"easy",
+    tags:["Unknown variance","T test","Left-tailed"],
+    src:"Original. One-sided T-test practice.",
+    problem:String.raw`A battery vendor claims the mean lifetime is \(78\) hours. In a normal sample of \(n=12\), \(\bar x=74.2\) and \(s=5.1\). Test \(H_0:\mu=78\) against \(H_1:\mu<78\). Give the conclusion at 5% and at 1%.`,
+    solution:String.raw`<p>The test statistic is \[t=\frac{74.2-78}{5.1/\sqrt{12}}\approx\frac{-3.8}{1.472}=-2.58,\qquad df=11.\]</p><p>The left-tailed P-value is approximately \(0.013\). Therefore reject at the 5% level, but do not reject at the 1% level.</p>`,
+    rubric:["Set up a left-tailed T test &mdash; <b>2 pts</b>","Use \(df=11\) &mdash; <b>1 pt</b>","Compute \(t\approx-2.58\) &mdash; <b>1 pt</b>","Compare the P-value with both significance levels &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"A result can be significant at 5% but not at 1%; significance is not an all-or-nothing property independent of \(\alpha\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q5",
+    level:"easy",
+    tags:["Variance test","Chi-squared","Right-tailed"],
+    src:"Original. Direct application of the variance test.",
+    problem:String.raw`A normal process is acceptable only if its variance is no more than \(9\). From \(n=21\) observations, \(s^2=14.4\). Test \(H_0:\sigma^2=9\) against \(H_1:\sigma^2>9\) at \(\alpha=0.05\). Use \(\chi^2_{0.05,20}=31.41\), where the subscript denotes right-tail area.`,
+    solution:String.raw`<p>For a normal sample, \[\chi^2=\frac{(n-1)S^2}{\sigma_0^2}\sim\chi^2_{n-1}\quad\text{under }H_0.\]</p><p>The observed statistic is \(\chi^2=20(14.4)/9=32.0\), with \(df=20\). For \(H_1:\sigma^2>9\), reject for large values. Since \(32.0>31.41\), reject \(H_0\). The P-value is about \(0.04\).</p>`,
+    rubric:["Use the chi-squared variance statistic &mdash; <b>2 pts</b>","Use \(df=20\) &mdash; <b>1 pt</b>","Compute \(\chi^2=32.0\) &mdash; <b>1 pt</b>","Reject in the correct right tail &mdash; <b>2 pts</b>","Mention the normality requirement &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Large sample variance gives a large chi-squared statistic, so right-tailed alternatives reject in the upper tail."
+  },
+  {
+    id:"Ch 19 &mdash; Q6",
+    level:"easy",
+    tags:["Standard deviation test","Chi-squared","Two-sided"],
+    src:"Original. Standard-deviation null phrased as variance test.",
+    problem:String.raw`A normal measurement system is advertised to have standard deviation \(\sigma=0.50\). A sample of \(n=16\) measurements gives \(s=0.72\). Test \(H_0:\sigma=0.50\) against \(H_1:\sigma\ne0.50\) at \(\alpha=0.05\). Use \(\chi^2_{0.025,15}=27.49\) and \(\chi^2_{0.975,15}=6.26\), in right-tail notation.`,
+    solution:String.raw`<p>Testing a standard deviation is done through the variance. Under \(H_0\), \(\sigma_0^2=0.25\), so \[\chi^2=\frac{15(0.72)^2}{0.25}=31.10,\qquad df=15.\]</p><p>A two-sided 5% test rejects if \(\chi^2>27.49\) or \(\chi^2<6.26\). Since \(31.10>27.49\), reject \(H_0\). The evidence suggests the standard deviation differs from, and in this sample exceeds, \(0.50\).</p>`,
+    rubric:["Square the null standard deviation &mdash; <b>1 pt</b>","Use \(df=15\) &mdash; <b>1 pt</b>","Compute \(\chi^2\approx31.10\) &mdash; <b>2 pts</b>","Use both tails for the two-sided alternative &mdash; <b>2 pts</b>","State the contextual conclusion &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"The null may be written using \(\sigma\), but the chi-squared statistic uses \(\sigma_0^2\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q7",
+    level:"easy",
+    tags:["Assumptions","Method selection"],
+    src:"Original. Assumption checklist.",
+    problem:String.raw`For each test, state the key population assumption for the exact small-sample version: (i) Z test for \(\mu\) with known \(\sigma\); (ii) T test for \(\mu\) with unknown \(\sigma\); (iii) chi-squared test for \(\sigma^2\).`,
+    solution:String.raw`<p><b>(i)</b> Exact Z testing assumes a normal population when \(n\) is small; for large \(n\), the CLT can justify an approximate Z test.</p><p><b>(ii)</b> The exact one-sample T test assumes a normal population. Large samples are more forgiving for testing a mean, but the exact theorem is normal.</p><p><b>(iii)</b> The chi-squared variance test requires a normal population. This test is sensitive to non-normality.</p>`,
+    rubric:["Separate exact and large-sample approximate logic &mdash; <b>2 pts</b>","State the normality condition for the T test &mdash; <b>1 pt</b>","State the normality condition for chi-squared variance tests &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"Variance tests based on \((n-1)S^2/\sigma^2\) are usually the least robust to non-normal data."
+  },
+  {
+    id:"Ch 19 &mdash; Q8",
+    level:"easy",
+    tags:["P-value","Interpretation"],
+    src:"Original. Conceptual P-value interpretation.",
+    problem:String.raw`A test of \(H_0:\mu=20\) against \(H_1:\mu>20\) gives P-value \(0.032\). Which interpretation is correct? Explain briefly.<ol type="a"><li>There is a 3.2% probability that \(H_0\) is true.</li><li>If \(H_0\) were true, the probability of a result at least as favorable to \(H_1\) as the observed one is 3.2%.</li><li>The probability of a Type I error is 3.2%.</li></ol>`,
+    solution:String.raw`<p>The correct interpretation is <b>(b)</b>. A P-value is computed under the assumption that \(H_0\) is true and measures tail extremeness in the direction of the alternative.</p><p>Statement (a) treats the hypothesis as random without a Bayesian model. Statement (c) confuses the observed P-value with the pre-chosen significance level \(\alpha\).</p>`,
+    rubric:["Choose statement (b) &mdash; <b>2 pts</b>","Explain conditioning on \(H_0\) &mdash; <b>2 pts</b>","Distinguish P-value from Type I error probability &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The Type I error rate is controlled by the rejection rule before seeing the data; the P-value is computed after seeing the data."
+  },
+  {
+    id:"Ch 19 &mdash; Q9",
+    level:"easy",
+    tags:["Critical value","Z test","One-sided"],
+    src:"Original. Critical-value decision without P-value.",
+    problem:String.raw`For a known-variance Z test of \(H_0:\mu=30\) against \(H_1:\mu>30\), the observed statistic is \(z=2.05\). At \(\alpha=0.01\), should \(H_0\) be rejected?`,
+    solution:String.raw`<p>For a right-tailed Z test at \(\alpha=0.01\), the critical value is \(z_{0.01}=2.326\). The rejection rule is \(Z>2.326\).</p><p>Since \(2.05<2.326\), do not reject \(H_0\) at the 1% level.</p>`,
+    rubric:["Identify the right-tailed rejection rule &mdash; <b>2 pts</b>","Use \(z_{0.01}=2.326\) &mdash; <b>1 pt</b>","Make the correct no-reject decision &mdash; <b>2 pts</b>"],
+    total:"5 pts",
+    tip:"A statistic that would reject at 5% may fail to reject at 1%."
+  },
+  {
+    id:"Ch 19 &mdash; Q10",
+    level:"easy",
+    tags:["Critical value","T test","Left-tailed"],
+    src:"Original. Sign of the rejection region.",
+    problem:String.raw`A one-sample T test has \(df=8\), observed \(t=-2.00\), and alternative \(H_1:\mu<\mu_0\). At \(\alpha=0.05\), use \(t_{0.05,8}=1.860\) to make the decision.`,
+    solution:String.raw`<p>Because the alternative is left-tailed, the rejection rule is \(T<-t_{0.05,8}=-1.860\).</p><p>The observed value \(-2.00<-1.860\), so reject \(H_0\) at the 5% level.</p>`,
+    rubric:["Use the left-tail critical value \(-1.860\) &mdash; <b>2 pts</b>","Compare the sign correctly &mdash; <b>2 pts</b>","State reject \(H_0\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The table usually reports positive upper-tail cutoffs. For a left-tailed test, put the minus sign on the cutoff."
+  },
+  {
+    id:"Ch 19 &mdash; Q11",
+    level:"easy",
+    tags:["Confidence intervals","Test duality"],
+    src:"Original. Link between two-sided tests and intervals.",
+    problem:String.raw`A 95% confidence interval for \(\mu\), computed using the same assumptions as a two-sided one-sample test, is \([12.4,15.7]\). Without recomputing the statistic, state whether a level-5% two-sided test rejects \(H_0:\mu=16\). What about \(H_0:\mu=14\)?`,
+    solution:String.raw`<p>For the matching two-sided test, reject exactly those null values outside the 95% confidence interval.</p><p>The value \(16\) is outside \([12.4,15.7]\), so reject \(H_0:\mu=16\) at \(\alpha=0.05\). The value \(14\) lies inside the interval, so do not reject \(H_0:\mu=14\).</p>`,
+    rubric:["State the matching CI/test duality &mdash; <b>2 pts</b>","Reject for \(\mu_0=16\) &mdash; <b>1 pt</b>","Do not reject for \(\mu_0=14\) &mdash; <b>1 pt</b>","Specify this is for the matching two-sided test &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"This shortcut does not automatically apply to one-sided alternatives or mismatched confidence levels."
+  },
+  {
+    id:"Ch 19 &mdash; Q12",
+    level:"easy",
+    tags:["Method selection","Z/T/Chi-squared"],
+    src:"Original. Basic test selection.",
+    problem:String.raw`Choose the correct test statistic for each scenario: (i) known \(\sigma\), test for \(\mu\); (ii) unknown \(\sigma\), normal population, test for \(\mu\); (iii) normal population, test for \(\sigma^2\).`,
+    solution:String.raw`<p><b>(i)</b> Use \(Z=(\bar X-\mu_0)/(\sigma/\sqrt n)\).</p><p><b>(ii)</b> Use \(T=(\bar X-\mu_0)/(S/\sqrt n)\), with \(df=n-1\).</p><p><b>(iii)</b> Use \(\chi^2=(n-1)S^2/\sigma_0^2\), with \(df=n-1\).</p>`,
+    rubric:["Choose Z for known \(\sigma\) mean testing &mdash; <b>1 pt</b>","Choose T for unknown \(\sigma\) mean testing &mdash; <b>2 pts</b>","Choose chi-squared for variance testing &mdash; <b>2 pts</b>","Include \(n-1\) degrees of freedom where needed &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Most Chapter 19 mistakes start before arithmetic: the wrong test statistic is selected."
+  },
+  {
+    id:"Ch 19 &mdash; Q13",
+    level:"medium",
+    tags:["Raw data","T test","Right-tailed"],
+    src:"Original. Computation from raw observations.",
+    problem:String.raw`The ten observations below are from a normal population: \(23.4,21.9,22.7,24.1,22.5,23.0,21.8,22.2,23.6,22.9\). Test \(H_0:\mu=22.0\) against \(H_1:\mu>22.0\) at \(\alpha=0.01\).`,
+    solution:String.raw`<p>From the data, \(n=10\), \(\bar x=22.81\), and \(s\approx0.746\). The statistic is \[t=\frac{22.81-22.0}{0.746/\sqrt{10}}\approx3.43,\qquad df=9.\]</p><p>For a right-tailed level-1% test, \(t_{0.01,9}\approx2.821\). Since \(3.43>2.821\), reject \(H_0\). The P-value is below 0.01.</p>`,
+    rubric:["Compute \(\bar x\) and \(s\) from raw data &mdash; <b>2 pts</b>","Use a one-sample T statistic with \(df=9\) &mdash; <b>2 pts</b>","Compute \(t\approx3.43\) &mdash; <b>1 pt</b>","Use the right-tailed 1% critical value &mdash; <b>1 pt</b>","Conclude reject &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Raw data questions often hide whether the denominator should use \(s\) or \(s^2\). For a mean test, use \(s/\sqrt n\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q14",
+    level:"medium",
+    tags:["Power","Known variance","Z test"],
+    src:"Original. Power calculation for a right-tailed Z test.",
+    problem:String.raw`A right-tailed known-variance test uses \(H_0:\mu=100\) versus \(H_1:\mu>100\), with \(\alpha=0.05\), known \(\sigma=12\), and \(n=36\). Find the rejection rule in terms of \(\bar X\), then approximate the power when the true mean is \(\mu=106\).`,
+    solution:String.raw`<p>The standard error is \(12/\sqrt{36}=2\). The level-5% right-tailed rule is \[Z=\frac{\bar X-100}{2}>1.645,\] so reject when \(\bar X>100+1.645(2)=103.29\).</p><p>If \(\mu=106\), then \(\bar X\sim N(106,2^2)\). The power is \[P_{\mu=106}(\bar X>103.29)=P\left(Z>\frac{103.29-106}{2}\right)=P(Z>-1.355)\approx0.912.\]</p>`,
+    rubric:["Find the standard error &mdash; <b>1 pt</b>","Translate the Z critical value into a rule for \(\bar X\) &mdash; <b>2 pts</b>","Evaluate probability under \(\mu=106\), not under \(H_0\) &mdash; <b>3 pts</b>","Report power about 0.91 &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Power is computed under an alternative value, while the critical cutoff is chosen to control \(\alpha\) under \(H_0\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q15",
+    level:"medium",
+    tags:["Sample size","Power","Known variance"],
+    src:"Original. One-sided Z-test design.",
+    problem:String.raw`For a right-tailed Z test of \(H_0:\mu=\mu_0\) with known \(\sigma=10\), how large should \(n\) be to have significance level \(0.05\) and power at least \(0.90\) when \(\mu=\mu_0+3\)?`,
+    solution:String.raw`<p>For a one-sided Z test, the usual planning approximation is \[n\ge\left(\frac{(z_\alpha+z_\beta)\sigma}{\delta}\right)^2,\] where \(\delta=3\), \(\alpha=0.05\), and \(\beta=0.10\).</p><p>Using \(z_{0.05}=1.645\) and \(z_{0.10}=1.282\), \[n\ge\left(\frac{(1.645+1.282)10}{3}\right)^2=95.2.\] Round up to \(n=96\).</p>`,
+    rubric:["Identify \(\beta=1-\text{power}=0.10\) &mdash; <b>1 pt</b>","Use the one-sided sample-size formula &mdash; <b>3 pts</b>","Use \(\delta=3\) &mdash; <b>1 pt</b>","Round up to 96 &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Sample size must be rounded up; rounding down would miss the requested power."
+  },
+  {
+    id:"Ch 19 &mdash; Q16",
+    level:"medium",
+    tags:["Sample size","Power","Two-sided"],
+    src:"Original. Approximate two-sided planning problem.",
+    problem:String.raw`Using a normal approximation, estimate the sample size needed for a two-sided known-variance test at \(\alpha=0.05\) to have power \(0.80\) for detecting \(|\mu-\mu_0|=2\), when \(\sigma=6\).`,
+    solution:String.raw`<p>For a two-sided planning approximation, use \[n\ge\left(\frac{(z_{\alpha/2}+z_\beta)\sigma}{\delta}\right)^2.\]</p><p>Here \(z_{0.025}=1.96\), \(z_{0.20}=0.842\), \(\sigma=6\), and \(\delta=2\). Thus \[n\ge\left(\frac{(1.96+0.842)6}{2}\right)^2=70.66.\] Round up to \(n=71\).</p>`,
+    rubric:["Use \(z_{\alpha/2}\) for two-sided testing &mdash; <b>2 pts</b>","Use \(z_\beta\) with \(\beta=0.20\) &mdash; <b>1 pt</b>","Compute the sample-size expression &mdash; <b>2 pts</b>","Round up to 71 &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Two-sided tests need a larger cutoff than one-sided tests at the same \(\alpha\), so they usually need more observations for the same target power."
+  },
+  {
+    id:"Ch 19 &mdash; Q17",
+    level:"medium",
+    tags:["Variance test","Chi-squared","Left-tailed"],
+    src:"Original. Lower-variance alternative.",
+    problem:String.raw`A normal process is claimed to have variance \(4\). A sample of \(n=25\) gives \(s^2=2.7\). Test \(H_0:\sigma^2=4\) against \(H_1:\sigma^2<4\) at \(\alpha=0.05\). Use \(\chi^2_{0.95,24}=13.85\), in right-tail notation.`,
+    solution:String.raw`<p>The statistic is \[\chi^2=\frac{24(2.7)}{4}=16.2,\qquad df=24.\]</p><p>For \(H_1:\sigma^2<4\), reject for small values of the statistic. In right-tail notation, the lower 5% cutoff is \(\chi^2_{0.95,24}=13.85\). Since \(16.2>13.85\), do not reject \(H_0\).</p>`,
+    rubric:["Use the variance test statistic &mdash; <b>2 pts</b>","Recognize the left-tailed rejection region is small \(\chi^2\) &mdash; <b>2 pts</b>","Use \(df=24\) &mdash; <b>1 pt</b>","Make the correct no-reject decision &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"A smaller observed \(s^2\) is not automatically significant; it must be small enough relative to the chi-squared lower-tail cutoff."
+  },
+  {
+    id:"Ch 19 &mdash; Q18",
+    level:"medium",
+    tags:["Standard deviation test","Chi-squared","Right-tailed"],
+    src:"Original. Testing a standard-deviation requirement.",
+    problem:String.raw`A supplier promises a normal production process has standard deviation at most \(0.35\). From \(n=31\), \(s=0.44\). Test \(H_0:\sigma=0.35\) against \(H_1:\sigma>0.35\) at \(\alpha=0.05\). Use \(\chi^2_{0.05,30}=43.77\).`,
+    solution:String.raw`<p>Use the variance form with \(\sigma_0^2=0.35^2=0.1225\): \[\chi^2=\frac{30(0.44)^2}{0.1225}=\frac{5.808}{0.1225}=47.41.\]</p><p>The right-tailed 5% cutoff is \(43.77\). Since \(47.41>43.77\), reject \(H_0\). The data provide evidence that the standard deviation exceeds \(0.35\).</p>`,
+    rubric:["Convert the standard deviation null into variance form &mdash; <b>1 pt</b>","Compute \(\chi^2\approx47.41\) &mdash; <b>2 pts</b>","Use \(df=30\) &mdash; <b>1 pt</b>","Reject in the right tail &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"For a greater-than standard deviation alternative, large \(s\) produces a large chi-squared statistic."
+  },
+  {
+    id:"Ch 19 &mdash; Q19",
+    level:"medium",
+    tags:["Type I error","Type II error","Concept"],
+    src:"Original. Error interpretation.",
+    problem:String.raw`In a test of \(H_0:\mu=50\) against \(H_1:\mu>50\), describe a Type I error and a Type II error in words. If the test has \(\alpha=0.05\), what probability is controlled at 0.05?`,
+    solution:String.raw`<p>A Type I error is rejecting \(H_0\) when the true mean is actually \(50\) under the null model. A Type II error is failing to reject \(H_0\) when the true mean is greater than \(50\).</p><p>The significance level \(\alpha=0.05\) controls the probability of a Type I error, not the probability of a Type II error. The Type II error probability depends on the true alternative mean, sample size, variance, and rejection rule.</p>`,
+    rubric:["Define Type I error in context &mdash; <b>2 pts</b>","Define Type II error in context &mdash; <b>2 pts</b>","Identify \(\alpha\) as the Type I error control &mdash; <b>1 pt</b>","State that Type II error depends on the alternative &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"Never say \(\alpha\) is the probability that \(H_0\) is false; it is a conditional error probability under \(H_0\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q20",
+    level:"medium",
+    tags:["P-value","Decision rule"],
+    src:"Original. Comparing one P-value to several levels.",
+    problem:String.raw`A two-sided test reports P-value \(0.032\). State the decision at \(\alpha=0.10\), \(0.05\), and \(0.01\).`,
+    solution:String.raw`<p>Reject \(H_0\) when \(\text{P-value}\le\alpha\). Since \(0.032\le0.10\) and \(0.032\le0.05\), reject at the 10% and 5% levels. Since \(0.032>0.01\), do not reject at the 1% level.</p>`,
+    rubric:["Use the rule P-value \(\le\alpha\) &mdash; <b>2 pts</b>","Reject at 10% &mdash; <b>1 pt</b>","Reject at 5% &mdash; <b>1 pt</b>","Do not reject at 1% &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"A P-value is the smallest conventional significance level at which the observed result would begin to reject."
+  },
+  {
+    id:"Ch 19 &mdash; Q21",
+    level:"medium",
+    tags:["Alternative direction","P-value","T test"],
+    src:"Original. Direction-of-alternative trap.",
+    problem:String.raw`A normal sample has \(n=20\), \(\bar x=4.8\), \(s=1.5\). Test \(H_0:\mu=5\) against \(H_1:\mu>5\). A student computes \(t=-0.596\) and says the P-value is about \(0.28\), so the result is close to significant. Diagnose the statement.`,
+    solution:String.raw`<p>The statistic is correct: \(t=(4.8-5)/(1.5/\sqrt{20})\approx-0.596\), with \(df=19\). But the P-value for \(H_1:\mu>5\) is an upper-tail probability: \[P(T_{19}\ge -0.596)\approx0.72,\] not \(0.28\).</p><p>The observed mean is below the null mean, which is opposite the direction of the alternative. There is no evidence for \(\mu>5\).</p>`,
+    rubric:["Confirm or recompute the statistic &mdash; <b>1 pt</b>","Use the upper tail because \(H_1:\mu>5\) &mdash; <b>2 pts</b>","Explain why the negative statistic is opposite the alternative &mdash; <b>2 pts</b>","Conclude no rejection &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"For a one-sided test, the sign of the statistic matters as much as its magnitude."
+  },
+  {
+    id:"Ch 19 &mdash; Q22",
+    level:"medium",
+    tags:["Assumptions","Non-normal data","Variance test"],
+    src:"Original. Assumption diagnosis.",
+    problem:String.raw`A sample of \(n=18\) waiting times is strongly right-skewed. A classmate applies the chi-squared test for \(H_0:\sigma^2=4\) and says it is exact because the statistic has \(17\) degrees of freedom. Diagnose the claim.`,
+    solution:String.raw`<p>The claim is incomplete and misleading. The degrees of freedom would be \(n-1=17\) only if the chi-squared theorem applies, but \((n-1)S^2/\sigma^2\sim\chi^2_{n-1}\) is an exact result for normal populations.</p><p>Strongly right-skewed waiting times violate the normality condition, so the chi-squared variance test is not justified as exact. A transformed model, a model suited to waiting times, or a resampling method may be more appropriate depending on course rules.</p>`,
+    rubric:["State that \(df=17\) alone is not enough &mdash; <b>2 pts</b>","Name the missing normality assumption &mdash; <b>2 pts</b>","Explain why skewness matters for variance tests &mdash; <b>1 pt</b>","Suggest a reasonable caveat or alternative &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"For means, large samples can soften non-normality concerns; for chi-squared variance tests, non-normality remains a serious issue."
+  },
+  {
+    id:"Ch 19 &mdash; Q23",
+    level:"medium",
+    tags:["Known variance","Distractor data","Z test"],
+    src:"Original. Method-selection trap.",
+    problem:String.raw`A problem states that a normal population has known \(\sigma=4\). A sample of \(n=25\) has \(\bar x=18.9\) and sample standard deviation \(s=5.1\). Test \(H_0:\mu=20\) against \(H_1:\mu<20\) at \(\alpha=0.05\). Which standard deviation belongs in the test statistic?`,
+    solution:String.raw`<p>Use the known population standard deviation \(\sigma=4\), not the sample standard deviation \(s=5.1\). The statistic is \[z=\frac{18.9-20}{4/\sqrt{25}}=\frac{-1.1}{0.8}=-1.375.\]</p><p>For a left-tailed 5% Z test, reject if \(z<-1.645\). Since \(-1.375>-1.645\), do not reject \(H_0\).</p>`,
+    rubric:["Use \(\sigma=4\), not \(s=5.1\) &mdash; <b>2 pts</b>","Compute \(z=-1.375\) &mdash; <b>1 pt</b>","Use a left-tailed critical value &mdash; <b>2 pts</b>","Make the correct no-reject decision &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"If the problem says \(\sigma\) is known, an extra reported \(s\) may be a distractor."
+  },
+  {
+    id:"Ch 19 &mdash; Q24",
+    level:"medium",
+    tags:["Paired data","Single-sample T test"],
+    src:"Original. Paired-difference one-sample test.",
+    problem:String.raw`Eight subjects are measured before and after a treatment. Let \(D=\text{after}-\text{before}\). The differences have \(\bar d=2.4\), \(s_d=3.0\), and are approximately normal. Test whether the mean change is positive: \(H_0:\mu_D=0\) versus \(H_1:\mu_D>0\), at \(\alpha=0.05\).`,
+    solution:String.raw`<p>This is a one-sample T test on the differences. The statistic is \[t=\frac{2.4-0}{3.0/\sqrt8}=2.26,\qquad df=7.\]</p><p>For a right-tailed 5% test, \(t_{0.05,7}\approx1.895\). Since \(2.26>1.895\), reject \(H_0\). There is evidence of a positive mean change.</p>`,
+    rubric:["Recognize paired data reduce to one sample of differences &mdash; <b>2 pts</b>","Use \(s_d/\sqrt n\) &mdash; <b>1 pt</b>","Use \(df=7\) &mdash; <b>1 pt</b>","Compute and compare the statistic correctly &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Paired data are not a two-sample problem after taking differences; Chapter 19 tools apply to the single sample \(D_1,\ldots,D_n\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q25",
+    level:"hard",
+    tags:["Derivation","T test","P-value"],
+    src:"Original. Deriving the two-sided T-test rule.",
+    problem:String.raw`For a normal sample with unknown \(\sigma\), derive the two-sided level-\(\alpha\) T-test rejection rule for \(H_0:\mu=\mu_0\) versus \(H_1:\mu\ne\mu_0\), and write the corresponding P-value formula.`,
+    solution:String.raw`<p>Under \(H_0\), \[T=\frac{\bar X-\mu_0}{S/\sqrt n}\sim t_{n-1}.\]</p><p>A two-sided level-\(\alpha\) test puts \(\alpha/2\) probability in each tail, so the rejection rule is \[|T|>t_{\alpha/2,n-1}.\]</p><p>If the observed value is \(t_{\text{obs}}\), then the P-value is \[2P(T_{n-1}\ge |t_{\text{obs}}|).\]</p>`,
+    rubric:["State the T statistic under \(H_0\) &mdash; <b>2 pts</b>","Use \(n-1\) degrees of freedom &mdash; <b>1 pt</b>","Split \(\alpha\) across two tails &mdash; <b>2 pts</b>","Write the two-sided P-value formula &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"The absolute value belongs in the two-sided rule because departures in either direction count as evidence."
+  },
+  {
+    id:"Ch 19 &mdash; Q26",
+    level:"hard",
+    tags:["Error diagnosis","T test","Multiple mistakes"],
+    src:"Original. Final-style diagnose-the-solution.",
+    problem:String.raw`A student writes: "For \(n=9\), \(\bar x=68\), \(s=6\), test \(H_0:\mu=70\) versus \(H_1:\mu<70\). The statistic is \(z=(68-70)/(6/9)=-3\), so reject at 5%." Identify at least three errors and give the correct conclusion, assuming normality.`,
+    solution:String.raw`<p>Errors include: (1) \(\sigma\) is unknown, so use T, not Z. (2) The standard error is \(s/\sqrt n\), not \(s/n\). (3) The degrees of freedom are \(n-1=8\). A fourth issue is that the conclusion must use the left-tail T reference distribution.</p><p>The correct statistic is \[t=\frac{68-70}{6/\sqrt9}=\frac{-2}{2}=-1.00,\qquad df=8.\]</p><p>For a 5% left-tailed test, the cutoff is \(-t_{0.05,8}=-1.860\). Since \(-1.00>-1.860\), do not reject \(H_0\).</p>`,
+    rubric:["Identify Z instead of T &mdash; <b>2 pts</b>","Identify \(s/n\) instead of \(s/\sqrt n\) &mdash; <b>2 pts</b>","Use \(df=8\) &mdash; <b>1 pt</b>","Compute \(t=-1.00\) and conclude no rejection &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"Diagnose the method error before recomputing; otherwise a wrong denominator can create fake significance."
+  },
+  {
+    id:"Ch 19 &mdash; Q27",
+    level:"hard",
+    tags:["Error diagnosis","Variance test","Two-sided"],
+    src:"Original. Final-style chi-squared error diagnosis.",
+    problem:String.raw`A student tests \(H_0:\sigma^2=16\) versus \(H_1:\sigma^2\ne16\) from a normal sample with \(n=12\), \(s=5\). They compute \(\chi^2=12(25)/16=18.75\) and reject because it exceeds the right-tail 5% cutoff \(21.03\). Diagnose the errors and give the correct decision. Use \(\chi^2_{0.025,11}=21.92\) and \(\chi^2_{0.975,11}=3.82\).`,
+    solution:String.raw`<p>There are several errors. The numerator should be \((n-1)s^2\), not \(ns^2\), so the statistic is \[\chi^2=\frac{11(25)}{16}=17.19,\qquad df=11.\]</p><p>The alternative is two-sided, so a level-5% test uses both tails: reject if \(\chi^2>21.92\) or \(\chi^2<3.82\). Since \(17.19\) is between the two cutoffs, do not reject \(H_0\).</p><p>The student's sentence also contradicts itself: \(18.75\) does not exceed \(21.03\).</p>`,
+    rubric:["Use \(n-1\), not \(n\), in the statistic &mdash; <b>2 pts</b>","Use \(df=11\) &mdash; <b>1 pt</b>","Use two critical values for a two-sided test &mdash; <b>2 pts</b>","Make the correct no-reject decision &mdash; <b>2 pts</b>","Note the numerical comparison inconsistency &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Two-sided variance tests have two rejection regions: one for unusually small \(s^2\) and one for unusually large \(s^2\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q28",
+    level:"hard",
+    tags:["Power","Decision threshold","Known variance"],
+    src:"Original. Power as a function of the true mean.",
+    problem:String.raw`A left-tailed known-variance Z test has \(H_0:\mu=40\), \(H_1:\mu<40\), \(\sigma=5\), \(n=25\), and \(\alpha=0.01\). Find the rejection threshold for \(\bar X\), then compute the power when \(\mu=37\).`,
+    solution:String.raw`<p>The standard error is \(5/\sqrt{25}=1\). For a left-tailed 1% Z test, reject when \[Z=\frac{\bar X-40}{1}<-z_{0.01}=-2.326,\] so reject when \(\bar X<37.674\).</p><p>If \(\mu=37\), then \(\bar X\sim N(37,1^2)\). The power is \[P_{\mu=37}(\bar X<37.674)=P(Z<0.674)\approx0.75.\]</p>`,
+    rubric:["Use the left-tailed 1% cutoff &mdash; <b>2 pts</b>","Translate the cutoff to \(\bar X<37.674\) &mdash; <b>2 pts</b>","Compute probability under \(\mu=37\) &mdash; <b>3 pts</b>","Report power about 0.75 &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"For left-tailed tests, power increases as the true mean moves farther below \(\mu_0\)."
+  },
+  {
+    id:"Ch 19 &mdash; Q29",
+    level:"hard",
+    tags:["P-value","Alternative direction","Two-sided"],
+    src:"Original. Tail-area construction.",
+    problem:String.raw`A known-variance Z test gives \(z_{\text{obs}}=-2.14\). Compute the P-value for each alternative: (i) \(H_1:\mu<\mu_0\); (ii) \(H_1:\mu>\mu_0\); (iii) \(H_1:\mu\ne\mu_0\).`,
+    solution:String.raw`<p><b>(i)</b> For \(H_1:\mu<\mu_0\), \(p=P(Z\le-2.14)\approx0.0162\).</p><p><b>(ii)</b> For \(H_1:\mu>\mu_0\), \(p=P(Z\ge-2.14)\approx0.9838\).</p><p><b>(iii)</b> For \(H_1:\mu\ne\mu_0\), \(p=2P(Z\ge2.14)\approx2(0.0162)=0.0324\).</p>`,
+    rubric:["Use the left tail for \(H_1:\mu<\mu_0\) &mdash; <b>2 pts</b>","Use the upper tail for \(H_1:\mu>\mu_0\) &mdash; <b>2 pts</b>","Double the smaller tail for the two-sided test &mdash; <b>2 pts</b>","Keep the sign logic consistent &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"The same observed statistic can be strong evidence for one one-sided alternative and almost no evidence for the opposite one."
+  },
+  {
+    id:"Ch 19 &mdash; Q30",
+    level:"hard",
+    tags:["Comprehensive","Method selection","Assumptions"],
+    src:"Original. Final-style mixed selection.",
+    problem:String.raw`For each scenario, choose the correct Chapter 19 test and write the statistic, but do not compute a numerical decision.<ol type="i"><li>\(n=40\), known \(\sigma\), test \(H_0:\mu=\mu_0\).</li><li>\(n=11\), normal population, unknown \(\sigma\), test \(H_0:\mu=\mu_0\).</li><li>\(n=30\), normal population, test \(H_0:\sigma=\sigma_0\).</li><li>\(n=22\), strongly skewed population, test \(H_0:\sigma^2=\sigma_0^2\).</li></ol>`,
+    solution:String.raw`<p><b>(i)</b> Use a Z test: \[Z=\frac{\bar X-\mu_0}{\sigma/\sqrt{40}}.\]</p><p><b>(ii)</b> Use a T test: \[T=\frac{\bar X-\mu_0}{S/\sqrt{11}},\qquad df=10.\]</p><p><b>(iii)</b> Use a chi-squared test on variance: \[\chi^2=\frac{29S^2}{\sigma_0^2},\qquad df=29.\] If the null is written with \(\sigma_0\), square it in the denominator.</p><p><b>(iv)</b> The exact chi-squared variance test is not justified because the population is strongly skewed. State that normality is missing or use another method if allowed.</p>`,
+    rubric:["Choose Z for known-\(\sigma\) mean test &mdash; <b>1 pt</b>","Choose T with \(df=10\) for unknown-\(\sigma\) normal mean test &mdash; <b>2 pts</b>","Choose chi-squared with \(df=29\) for normal variance or standard-deviation test &mdash; <b>2 pts</b>","Reject exact chi-squared testing under strong skew without qualification &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"The test statistic is determined by the parameter being tested and whether the variance is known, not just by the sample size."
+  },
+  {
+    id:"Ch 19 &mdash; Q31",
+    level:"hard",
+    tags:["Two tests","T test","Variance test"],
+    src:"Original. Final-style combined mean and variance problem.",
+    problem:String.raw`A normal sample has \(n=25\), \(\bar x=47.6\), and \(s=4.8\). Conduct both tests: (a) \(H_0:\mu=50\) versus \(H_1:\mu\ne50\) at \(\alpha=0.01\); (b) \(H_0:\sigma^2=16\) versus \(H_1:\sigma^2>16\) at \(\alpha=0.05\). Use \(t_{0.005,24}=2.797\) and \(\chi^2_{0.05,24}=36.42\).`,
+    solution:String.raw`<p><b>(a)</b> Since \(\sigma\) is unknown, use \[t=\frac{47.6-50}{4.8/\sqrt{25}}=\frac{-2.4}{0.96}=-2.50,\qquad df=24.\] For a two-sided 1% test, reject if \(|t|>2.797\). Since \(2.50<2.797\), do not reject \(H_0:\mu=50\) at the 1% level.</p><p><b>(b)</b> For the variance test, \[\chi^2=\frac{24(4.8)^2}{16}=34.56,\qquad df=24.\] The right-tailed 5% cutoff is \(36.42\). Since \(34.56<36.42\), do not reject \(H_0:\sigma^2=16\).</p>`,
+    rubric:["Use T, not Z, for the mean test &mdash; <b>2 pts</b>","Use a two-sided 1% T cutoff and no-reject decision &mdash; <b>2 pts</b>","Use the chi-squared variance statistic with \(df=24\) &mdash; <b>2 pts</b>","Use the right-tailed variance cutoff and no-reject decision &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"The same dataset can support different tests, but each test has its own statistic, degrees of freedom, and tail direction."
+  },
+  {
+    id:"Ch 19 &mdash; Q32",
+    level:"hard",
+    tags:["Error diagnosis","Comprehensive","Final-style"],
+    src:"Original. Multi-error final-style problem.",
+    problem:String.raw`A student analyzes \(n=36\), \(\bar x=12.6\), \(s=3.0\) for \(H_0:\mu=12\) versus \(H_1:\mu\ne12\). They write: "Because \(n\) is large, use \(z=(12.6-12)/3=0.20\). The P-value is \(P(Z>0.20)=0.4207\), so there is no evidence." Identify the errors and give the appropriate large-sample conclusion.`,
+    solution:String.raw`<p>The denominator is wrong: the standard error is \(s/\sqrt n=3/6=0.5\), not \(s=3\). The test is two-sided, so the P-value should use both tails. Also, since \(\sigma\) is unknown, the formal statistic is T with \(df=35\), though for \(n=36\) the Z approximation is close.</p><p>The correct statistic is \[t=\frac{12.6-12}{3/\sqrt{36}}=\frac{0.6}{0.5}=1.20.\]</p><p>The two-sided P-value is approximately \(2P(T_{35}\ge1.20)\), about \(0.24\). Thus do not reject \(H_0\) at common levels such as 5%, but the student's arithmetic and P-value construction were still incorrect.</p>`,
+    rubric:["Identify missing \(\sqrt n\) in the standard error &mdash; <b>2 pts</b>","Identify one-sided P-value used for a two-sided alternative &mdash; <b>2 pts</b>","Mention T is formal when \(\sigma\) is unknown &mdash; <b>1 pt</b>","Compute \(t=1.20\) &mdash; <b>1 pt</b>","Give the correct no-reject conclusion &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"A wrong solution can accidentally reach the same final decision. On exams, the reasoning and statistic still matter."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

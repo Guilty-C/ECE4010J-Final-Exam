@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 26</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 26</h1>
+  <nav class="tabs">
+    <button class="active">Ch 26 &mdash; Simple Linear Regression I</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch26" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 26 &mdash; Simple Linear Regression I: Basic Model and Inferences</h2>
+    <p>Topics covered: the simple linear regression model, least squares estimation, centered sums, fitted line interpretation, residuals, SSE/SST/SSR decomposition, the error variance estimate, normal-error assumptions, confidence intervals for slope and intercept, tests for slope, ANOVA identity, coefficient interpretation, residual diagnostics, and final-style computation-plus-diagnosis problems.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch26')">Expand all solutions</button>
+    <button onclick="collapseAll('ch26')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 26 &mdash; Q1",
+    level:"easy",
+    tags:["Model","Assumptions"],
+    src:"Original. Core definition check.",
+    problem:String.raw`Write the simple linear regression model for observations \((x_i,Y_i)\), state the meaning of \(\beta_0,\beta_1,\varepsilon_i\), and list the usual assumptions needed for the standard \(t\)-based inferences in this chapter.`,
+    solution:String.raw`<p>The model is \[Y_i=\beta_0+\beta_1x_i+\varepsilon_i,\qquad i=1,\ldots,n.\]</p><p>\(\beta_0\) is the mean response when \(x=0\), if that value is meaningful in context. \(\beta_1\) is the change in the conditional mean response for a one-unit increase in \(x\). The error \(\varepsilon_i\) is the random deviation from the mean line.</p><p>For the exact \(t\)-procedures, assume \(E(\varepsilon_i)=0\), constant variance \(\operatorname{Var}(\varepsilon_i)=\sigma^2\), independence, and normality: \(\varepsilon_i\sim N(0,\sigma^2)\). The \(x_i\)'s are treated as fixed or conditioned upon.</p>`,
+    rubric:["State \(Y_i=\beta_0+\beta_1x_i+\varepsilon_i\) &mdash; <b>2 pts</b>","Interpret intercept, slope, and error term &mdash; <b>3 pts</b>","List zero mean, independence, equal variance, and normality &mdash; <b>4 pts</b>","Note that \(x_i\)'s are fixed or conditioned on &mdash; <b>1 pt</b>"],
+    total:"10 pts",
+    tip:"Do not say the observed points lie on the line. The line is for the conditional mean \(E(Y\mid x)\); residuals measure deviations from it."
+  },
+  {
+    id:"Ch 26 &mdash; Q2",
+    level:"easy",
+    tags:["Least squares","Formulas"],
+    src:"Original. Formula fluency.",
+    problem:String.raw`Define \(S_{xx},S_{xy},S_{yy}\). Then give the least squares estimators \(b_1\) and \(b_0\) for the fitted line \(\hat y=b_0+b_1x\).`,
+    solution:String.raw`<p>The centered sums are \[S_{xx}=\sum_{i=1}^n(x_i-\bar x)^2,\quad S_{xy}=\sum_{i=1}^n(x_i-\bar x)(y_i-\bar y),\quad S_{yy}=\sum_{i=1}^n(y_i-\bar y)^2.\]</p><p>The least squares slope and intercept are \[b_1=\frac{S_{xy}}{S_{xx}},\qquad b_0=\bar y-b_1\bar x.\]</p><p>These formulas require \(S_{xx}>0\), meaning not all observed \(x_i\)'s are identical.</p>`,
+    rubric:["Define all three centered sums correctly &mdash; <b>3 pts</b>","Give \(b_1=S_{xy}/S_{xx}\) &mdash; <b>2 pts</b>","Give \(b_0=\bar y-b_1\bar x\) &mdash; <b>2 pts</b>","Mention the need for variation in \(x\) &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Use centered sums whenever possible; they make the algebra and sanity checks much cleaner."
+  },
+  {
+    id:"Ch 26 &mdash; Q3",
+    level:"easy",
+    tags:["Fitted line","Prediction"],
+    src:"Original. Basic coefficient interpretation.",
+    problem:String.raw`A fitted regression of exam score \(Y\) on study hours \(x\) is \(\hat y=52.4+3.1x\). Interpret \(b_0\) and \(b_1\), and compute the fitted value at \(x=8\).`,
+    solution:String.raw`<p>The slope \(3.1\) means that the fitted mean exam score increases by 3.1 points for each additional study hour, within the range where the linear model is reasonable.</p><p>The intercept \(52.4\) is the fitted mean score at zero study hours. It is meaningful only if \(x=0\) is within the relevant range and the linear relationship is plausible there.</p><p>At \(x=8\), \(\hat y=52.4+3.1(8)=77.2\).</p>`,
+    rubric:["Interpret slope as change in fitted mean per unit \(x\) &mdash; <b>3 pts</b>","Interpret intercept with contextual caution &mdash; <b>2 pts</b>","Compute \(\hat y(8)=77.2\) &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Say 'mean response' or 'fitted response,' not that every individual score rises by exactly 3.1 points."
+  },
+  {
+    id:"Ch 26 &mdash; Q4",
+    level:"easy",
+    tags:["Residuals","Fitted values"],
+    src:"Original. Residual basics.",
+    problem:String.raw`For the fitted line \(\hat y=4+2x\), an observation has \(x=6\) and \(y=13\). Compute its fitted value and residual. State whether the point lies above or below the fitted line.`,
+    solution:String.raw`<p>The fitted value is \(\hat y=4+2(6)=16\). The residual is \[e=y-\hat y=13-16=-3.\]</p><p>Because the residual is negative, the observed point lies below the fitted line.</p>`,
+    rubric:["Compute fitted value correctly &mdash; <b>2 pts</b>","Use \(e_i=y_i-\hat y_i\), not the reverse &mdash; <b>2 pts</b>","Interpret the negative residual correctly &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"The sign convention is important: residual equals observed minus fitted."
+  },
+  {
+    id:"Ch 26 &mdash; Q5",
+    level:"easy",
+    tags:["ANOVA","Sums of squares"],
+    src:"Original. Decomposition definitions.",
+    problem:String.raw`Define \(\mathrm{SST}\), \(\mathrm{SSR}\), and \(\mathrm{SSE}\) in simple linear regression. State the decomposition relating them and the degrees of freedom for each.`,
+    solution:String.raw`<p>The total sum of squares is \(\mathrm{SST}=\sum(y_i-\bar y)^2=S_{yy}\). The regression sum of squares is \(\mathrm{SSR}=\sum(\hat y_i-\bar y)^2\). The error sum of squares is \(\mathrm{SSE}=\sum(y_i-\hat y_i)^2\).</p><p>With an intercept in the model, \[\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}.\]</p><p>The degrees of freedom are total \(n-1\), regression \(1\), and error \(n-2\).</p>`,
+    rubric:["Define SST, SSR, and SSE &mdash; <b>3 pts</b>","State \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\) &mdash; <b>2 pts</b>","Give df \(n-1,1,n-2\) &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"The decomposition depends on fitting an intercept. Do not casually use the same identity for no-intercept regression."
+  },
+  {
+    id:"Ch 26 &mdash; Q6",
+    level:"medium",
+    tags:["Least squares","Computation"],
+    src:"Original. Small hand computation.",
+    problem:String.raw`Fit \(\mu_{Y\mid x}=\beta_0+\beta_1x\) to the data below. Compute \(S_{xx},S_{xy},S_{yy}\), the least squares line, \(\mathrm{SSE}\), \(s^2\), and \(R^2\).<table class="data"><tr><th>\(x_i\)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><th>\(y_i\)</th><td>2</td><td>4</td><td>5</td><td>7</td><td>9</td></tr></table>`,
+    solution:String.raw`<p>\(\bar x=3\) and \(\bar y=5.4\). The centered sums are \[S_{xx}=10,\qquad S_{xy}=17.0,\qquad S_{yy}=29.20.\]</p><p>Thus \(b_1=17/10=1.7\) and \(b_0=5.4-1.7(3)=0.3\). The fitted line is \[\hat y=0.3+1.7x.\]</p><p>Use \(\mathrm{SSE}=S_{yy}-b_1S_{xy}=29.20-1.7(17)=0.30\). Since \(n=5\), \(s^2=\mathrm{SSE}/(n-2)=0.30/3=0.10\). Finally, \[R^2=1-\frac{\mathrm{SSE}}{\mathrm{SST}}=1-\frac{0.30}{29.20}=0.9897.\]</p>`,
+    rubric:["Compute centered sums &mdash; <b>4 pts</b>","Compute \(b_1,b_0\), and fitted line &mdash; <b>3 pts</b>","Compute SSE and \(s^2\) with df \(n-2\) &mdash; <b>3 pts</b>","Compute \(R^2\) &mdash; <b>2 pts</b>"],
+    total:"12 pts",
+    tip:"\(\mathrm{SSE}=S_{yy}-b_1S_{xy}\) is faster and less error-prone than summing five squared residuals."
+  },
+  {
+    id:"Ch 26 &mdash; Q7",
+    level:"medium",
+    tags:["Slope test","Confidence interval"],
+    src:"Original. Continues Q6.",
+    problem:String.raw`Using Q6's fit, \(b_1=1.7\), \(s^2=0.10\), \(S_{xx}=10\), and \(n=5\). Test \(H_0:\beta_1=0\) against \(H_1:\beta_1\ne0\) at \(\alpha=0.05\), and construct a 95% confidence interval for \(\beta_1\).`,
+    solution:String.raw`<p>The standard error is \[\operatorname{SE}(B_1)=\frac{s}{\sqrt{S_{xx}}}=\frac{\sqrt{0.10}}{\sqrt{10}}=0.10.\]</p><p>The test statistic is \(t=(1.7-0)/0.10=17.0\) with \(df=n-2=3\). Since \(t_{0.025,3}=3.182\), reject \(H_0\).</p><p>The 95% confidence interval is \[1.7\pm 3.182(0.10)=[1.382,2.018].\]</p>`,
+    rubric:["Compute \(\operatorname{SE}(B_1)\) &mdash; <b>2 pts</b>","Use \(df=n-2=3\) &mdash; <b>1 pt</b>","Compute and compare the \(t\) statistic &mdash; <b>3 pts</b>","Construct the slope interval &mdash; <b>3 pts</b>"],
+    total:"9 pts",
+    tip:"The slope test and slope confidence interval are dual: zero is rejected exactly when zero is outside the two-sided interval."
+  },
+  {
+    id:"Ch 26 &mdash; Q8",
+    level:"medium",
+    tags:["ANOVA","SSR"],
+    src:"Original. Continues Q6.",
+    problem:String.raw`Continuing Q6, use \(S_{yy}=29.20\), \(\mathrm{SSE}=0.30\), \(b_1=1.7\), \(S_{xy}=17.0\), and \(n=5\). Compute \(\mathrm{SSR}\) two ways and build the simple linear regression ANOVA table.`,
+    solution:String.raw`<p>First, \(\mathrm{SSR}=\mathrm{SST}-\mathrm{SSE}=29.20-0.30=28.90\). Also, for SLR with an intercept, \(\mathrm{SSR}=b_1S_{xy}=1.7(17.0)=28.90\).</p><table class="data"><tr><th>Source</th><th>df</th><th>SS</th><th>MS</th><th>F</th></tr><tr><td>Regression</td><td>1</td><td>28.90</td><td>28.90</td><td>289.0</td></tr><tr><td>Error</td><td>3</td><td>0.30</td><td>0.10</td><td></td></tr><tr><td>Total</td><td>4</td><td>29.20</td><td></td><td></td></tr></table><p>The \(F\) statistic is \(28.90/0.10=289.0\).</p>`,
+    rubric:["Compute SSR as SST minus SSE &mdash; <b>2 pts</b>","Compute SSR as \(b_1S_{xy}\) &mdash; <b>2 pts</b>","Fill df and SS in the ANOVA table &mdash; <b>3 pts</b>","Compute MS and \(F\) &mdash; <b>3 pts</b>"],
+    total:"10 pts",
+    tip:"In SLR, the ANOVA \(F\) test for regression equals the square of the usual two-sided slope \(t\) statistic."
+  },
+  {
+    id:"Ch 26 &mdash; Q9",
+    level:"easy",
+    tags:["Variance estimate","Degrees of freedom"],
+    src:"Original. Error variance estimate.",
+    problem:String.raw`A simple linear regression with \(n=18\) observations has \(\mathrm{SSE}=64.0\). Compute the unbiased estimate \(s^2\) of \(\sigma^2\) and the residual standard error \(s\).`,
+    solution:String.raw`<p>The regression fits two parameters, so the error degrees of freedom are \(n-2=16\). Therefore \[s^2=\frac{\mathrm{SSE}}{n-2}=\frac{64.0}{16}=4.0,\qquad s=\sqrt{4.0}=2.0.\]</p>`,
+    rubric:["Use \(n-2\) error degrees of freedom &mdash; <b>2 pts</b>","Compute \(s^2=4.0\) &mdash; <b>2 pts</b>","Compute \(s=2.0\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Regression spends two fitted parameters, \(b_0\) and \(b_1\), so the denominator is not \(n-1\)."
+  },
+  {
+    id:"Ch 26 &mdash; Q10",
+    level:"medium",
+    tags:["Intercept CI","Standard error"],
+    src:"Original. Intercept inference.",
+    problem:String.raw`A regression has \(n=12\), \(\bar x=10\), \(S_{xx}=80\), \(s=3.0\), and \(b_0=5.5\). Construct a 95% confidence interval for \(\beta_0\). Use \(t_{0.025,10}=2.228\).`,
+    solution:String.raw`<p>The standard error of the intercept is \[\operatorname{SE}(B_0)=s\sqrt{\frac1n+\frac{\bar x^2}{S_{xx}}}=3\sqrt{\frac1{12}+\frac{100}{80}}.\]</p><p>The quantity under the square root is \(0.0833+1.25=1.3333\), so \(\operatorname{SE}(B_0)=3(1.1547)=3.464\).</p><p>The 95% confidence interval is \[5.5\pm2.228(3.464)=5.5\pm7.72=[-2.22,13.22].\]</p>`,
+    rubric:["Use the correct intercept SE formula &mdash; <b>3 pts</b>","Use \(df=n-2=10\) &mdash; <b>1 pt</b>","Compute the margin correctly &mdash; <b>2 pts</b>","State the interval &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Intercept intervals can be wide when \(x=0\) is far from the observed \(x\)'s; the \(\bar x^2/S_{xx}\) term is the warning sign."
+  },
+  {
+    id:"Ch 26 &mdash; Q11",
+    level:"medium",
+    tags:["Slope CI","Nonzero null"],
+    src:"Original. Calibration-style test.",
+    problem:String.raw`A calibration regression of measured concentration \(Y\) on true concentration \(x\) should ideally have \(\beta_1=1\). A sample gives \(n=15\), \(b_1=0.92\), and \(\operatorname{SE}(B_1)=0.05\). Test \(H_0:\beta_1=1\) versus \(H_1:\beta_1\ne1\) at \(\alpha=0.05\), and give a 95% confidence interval for \(\beta_1\). Use \(t_{0.025,13}=2.160\).`,
+    solution:String.raw`<p>The test statistic is \[t=\frac{0.92-1}{0.05}=-1.60,\qquad df=13.\]</p><p>Because \(|-1.60|<2.160\), do not reject \(H_0\) at the 5% level. The data do not show a significant departure from slope 1.</p><p>The confidence interval is \[0.92\pm2.160(0.05)=[0.812,1.028].\] It contains 1, agreeing with the test.</p>`,
+    rubric:["Test against the hypothesized value 1, not 0 &mdash; <b>2 pts</b>","Use \(df=13\) and the correct critical value &mdash; <b>2 pts</b>","Make the correct test decision &mdash; <b>2 pts</b>","Construct and interpret the CI &mdash; <b>3 pts</b>"],
+    total:"9 pts",
+    tip:"The slope test is \(t=(b_1-c)/\operatorname{SE}(B_1)\) for any hypothesized slope \(c\)."
+  },
+  {
+    id:"Ch 26 &mdash; Q12",
+    level:"medium",
+    tags:["Raw sums","Sanity check"],
+    src:"Original. Summary-statistics computation.",
+    problem:String.raw`A sample of \(n=20\) has \(\sum x_i=120\), \(\sum y_i=240\), \(\sum x_i^2=820\), \(\sum y_i^2=3260\), and \(\sum x_iy_i=1660\). Compute \(S_{xx},S_{xy},S_{yy}\). Then decide whether these summaries are internally consistent for a real dataset.`,
+    solution:String.raw`<p>\(\bar x=120/20=6\) and \(\bar y=240/20=12\). Thus \[S_{xx}=820-20(6^2)=100,\quad S_{xy}=1660-20(6)(12)=220,\quad S_{yy}=3260-20(12^2)=380.\]</p><p>However, the Cauchy-Schwarz inequality requires \(S_{xy}^2\le S_{xx}S_{yy}\). Here \[220^2=48400>100(380)=38000.\]</p><p>So the given summary statistics are impossible for any real dataset. If one tried to compute \(R^2=S_{xy}^2/(S_{xx}S_{yy})\), it would exceed 1.</p>`,
+    rubric:["Compute centered sums from raw sums &mdash; <b>4 pts</b>","Apply \(S_{xy}^2\le S_{xx}S_{yy}\) &mdash; <b>3 pts</b>","Conclude the summaries are inconsistent &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"A negative SSE or \(R^2>1\) is not a surprising result; it is a red flag that the inputs cannot all be correct."
+  },
+  {
+    id:"Ch 26 &mdash; Q13",
+    level:"medium",
+    tags:["Correlation","R squared"],
+    src:"Original. Link between \(r\), \(R^2\), and slope.",
+    problem:String.raw`For a simple linear regression with an intercept, suppose \(S_{xx}=25\), \(S_{yy}=100\), and \(S_{xy}=-40\). Compute \(b_1\), the sample correlation \(r\), and \(R^2\). Interpret the sign of the relationship.`,
+    solution:String.raw`<p>The slope is \(b_1=S_{xy}/S_{xx}=-40/25=-1.6\).</p><p>The sample correlation is \[r=\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}=\frac{-40}{\sqrt{25(100)}}=\frac{-40}{50}=-0.8.\]</p><p>Thus \(R^2=r^2=0.64\). The relationship is negative: larger \(x\) values are associated with smaller fitted mean \(Y\) values.</p>`,
+    rubric:["Compute \(b_1\) &mdash; <b>2 pts</b>","Compute \(r\) with sign &mdash; <b>3 pts</b>","Compute \(R^2=0.64\) &mdash; <b>2 pts</b>","Interpret the negative association &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"\(R^2\) has no sign. Use the slope or correlation to recover direction."
+  },
+  {
+    id:"Ch 26 &mdash; Q14",
+    level:"easy",
+    tags:["Residual identities","Least squares"],
+    src:"Original. Algebraic properties.",
+    problem:String.raw`In simple linear regression with an intercept, state two residual identities that hold for the least squares fit. Why are they useful for checking arithmetic?`,
+    solution:String.raw`<p>The least squares residuals satisfy \[\sum_{i=1}^n e_i=0,\qquad \sum_{i=1}^n x_ie_i=0.\]</p><p>Equivalently, the residual vector is orthogonal to the fitted intercept column and the predictor column. These identities are useful because a hand-computed set of fitted values and residuals should nearly satisfy both, up to rounding.</p>`,
+    rubric:["State \(\sum e_i=0\) &mdash; <b>2 pts</b>","State \(\sum x_ie_i=0\) &mdash; <b>2 pts</b>","Explain their role as arithmetic checks &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"These are exact for the fitted model with an intercept before rounding. If they fail badly, some residual or coefficient is wrong."
+  },
+  {
+    id:"Ch 26 &mdash; Q15",
+    level:"medium",
+    tags:["Centering","Reparameterization"],
+    src:"Original. Centered predictor exercise.",
+    problem:String.raw`Let \(z_i=x_i-\bar x\) and regress \(Y\) on \(z\) instead of \(x\). Show that the slope is unchanged and that the new intercept equals \(\bar y\).`,
+    solution:String.raw`<p>Because \(\bar z=0\), \[S_{zz}=\sum(z_i-0)^2=S_{xx},\qquad S_{zy}=\sum z_i(y_i-\bar y)=S_{xy}.\]</p><p>Therefore the centered-predictor slope is \(b_1^{(z)}=S_{zy}/S_{zz}=S_{xy}/S_{xx}=b_1\).</p><p>The intercept in the \(z\)-model is \[b_0^{(z)}=\bar y-b_1^{(z)}\bar z=\bar y.\]</p><p>Predictions and residuals do not change; only the parameterization changes.</p>`,
+    rubric:["Show \(S_{zz}=S_{xx}\) and \(S_{zy}=S_{xy}\) &mdash; <b>3 pts</b>","Conclude the slope is unchanged &mdash; <b>2 pts</b>","Show the centered intercept is \(\bar y\) &mdash; <b>2 pts</b>","Mention predictions/residuals are unchanged &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Centering is often the fastest way to make the intercept interpretable."
+  },
+  {
+    id:"Ch 26 &mdash; Q16",
+    level:"medium",
+    tags:["Variance CI","Chi-squared"],
+    src:"Original. Error variance interval.",
+    problem:String.raw`In an SLR with \(n=12\), \(\mathrm{SSE}=22.5\). Construct a 95% confidence interval for \(\sigma^2\). Use \(\chi^2_{0.025,10}=20.48\) and \(\chi^2_{0.975,10}=3.247\), where subscripts denote right-tail areas.`,
+    solution:String.raw`<p>The pivot is \[\frac{\mathrm{SSE}}{\sigma^2}=\frac{(n-2)s^2}{\sigma^2}\sim\chi^2_{n-2}.\]</p><p>Here \(df=10\). Under the stated right-tail notation, \[\sigma^2\in\left[\frac{\mathrm{SSE}}{\chi^2_{0.025,10}},\frac{\mathrm{SSE}}{\chi^2_{0.975,10}}\right]=\left[\frac{22.5}{20.48},\frac{22.5}{3.247}\right]=[1.10,6.93].\]</p>`,
+    rubric:["Use the regression variance pivot &mdash; <b>3 pts</b>","Use \(df=n-2=10\) &mdash; <b>2 pts</b>","Invert chi-squared endpoints correctly &mdash; <b>3 pts</b>","Compute endpoints &mdash; <b>2 pts</b>"],
+    total:"10 pts",
+    tip:"The bigger chi-squared value goes in the denominator of the lower endpoint."
+  },
+  {
+    id:"Ch 26 &mdash; Q17",
+    level:"medium",
+    tags:["F test","T squared"],
+    src:"Original. Equivalence of tests.",
+    problem:String.raw`A regression with \(n=25\) has \(R^2=0.716\). Compute the ANOVA \(F\) statistic for testing \(H_0:\beta_1=0\), and state its relationship to the slope \(t\) statistic.`,
+    solution:String.raw`<p>For SLR with one predictor, \[F=\frac{\mathrm{MSR}}{\mathrm{MSE}}=\frac{R^2/1}{(1-R^2)/(n-2)}=\frac{(n-2)R^2}{1-R^2}.\]</p><p>Thus \[F=\frac{23(0.716)}{1-0.716}=\frac{16.468}{0.284}=57.99.\]</p><p>For testing \(H_0:\beta_1=0\), \(F_{1,n-2}=T_{n-2}^2\). The \(F\) test and the two-sided slope \(t\) test give the same \(p\)-value.</p>`,
+    rubric:["Use the \(R^2\)-to-\(F\) formula &mdash; <b>3 pts</b>","Use \(n-2=23\) error df &mdash; <b>1 pt</b>","Compute \(F\approx57.99\) &mdash; <b>2 pts</b>","State \(F=T^2\) for the slope test &mdash; <b>3 pts</b>"],
+    total:"9 pts",
+    tip:"The \(F\) statistic loses the sign. The corresponding \(t\) statistic has the sign of \(b_1\)."
+  },
+  {
+    id:"Ch 26 &mdash; Q18",
+    level:"hard",
+    tags:["Derivation","Normal equations"],
+    src:"Original. Least squares derivation.",
+    problem:String.raw`Derive the least squares normal equations for minimizing \(Q(b_0,b_1)=\sum_{i=1}^n(y_i-b_0-b_1x_i)^2\), and solve them to obtain \(b_1=S_{xy}/S_{xx}\) and \(b_0=\bar y-b_1\bar x\).`,
+    solution:String.raw`<p>Differentiate \(Q\): \[\frac{\partial Q}{\partial b_0}=-2\sum(y_i-b_0-b_1x_i),\qquad \frac{\partial Q}{\partial b_1}=-2\sum x_i(y_i-b_0-b_1x_i).\]</p><p>Setting these equal to zero gives the normal equations \[\sum y_i=nb_0+b_1\sum x_i,\qquad \sum x_iy_i=b_0\sum x_i+b_1\sum x_i^2.\]</p><p>From the first equation, \(b_0=\bar y-b_1\bar x\). Substitute into the second and simplify: \[\sum(x_i-\bar x)(y_i-\bar y)=b_1\sum(x_i-\bar x)^2,\] so \(b_1=S_{xy}/S_{xx}\).</p>`,
+    rubric:["Differentiate \(Q\) with respect to both parameters &mdash; <b>3 pts</b>","Write the two normal equations &mdash; <b>3 pts</b>","Solve for \(b_0=\bar y-b_1\bar x\) &mdash; <b>2 pts</b>","Derive \(b_1=S_{xy}/S_{xx}\) &mdash; <b>4 pts</b>"],
+    total:"12 pts",
+    tip:"The first normal equation proves the fitted line passes through \((\bar x,\bar y)\)."
+  },
+  {
+    id:"Ch 26 &mdash; Q19",
+    level:"hard",
+    tags:["Distribution theory","Unbiasedness"],
+    src:"Original. Inference foundation.",
+    problem:String.raw`Under the normal-error SLR model with fixed \(x_i\)'s, state the sampling distribution of \(B_1\), its standard error estimate, and the resulting pivotal statistic for testing \(H_0:\beta_1=\beta_{1,0}\).`,
+    solution:String.raw`<p>Because \(B_1=\sum c_iY_i\) is a linear combination of normal responses, \[B_1\sim N\left(\beta_1,\frac{\sigma^2}{S_{xx}}\right).\]</p><p>The estimated standard error is \[\widehat{\operatorname{SE}}(B_1)=\frac{s}{\sqrt{S_{xx}}},\qquad s^2=\frac{\mathrm{SSE}}{n-2}.\]</p><p>Replacing \(\sigma\) by \(s\) gives the pivotal statistic \[T=\frac{B_1-\beta_{1,0}}{s/\sqrt{S_{xx}}}\sim t_{n-2}\] under \(H_0\).</p>`,
+    rubric:["State mean and variance of \(B_1\) &mdash; <b>4 pts</b>","Give the estimated standard error &mdash; <b>2 pts</b>","Use \(s^2=\mathrm{SSE}/(n-2)\) &mdash; <b>2 pts</b>","State the \(t_{n-2}\) pivot &mdash; <b>3 pts</b>"],
+    total:"11 pts",
+    tip:"The degrees of freedom come from estimating both \(\beta_0\) and \(\beta_1\)."
+  },
+  {
+    id:"Ch 26 &mdash; Q20",
+    level:"medium",
+    tags:["Prediction caution","Interpolation"],
+    src:"Original. Interpretation and extrapolation.",
+    problem:String.raw`A fitted line for house price in thousands of dollars is \(\hat y=120+18x\), where \(x\) is floor area in thousands of square feet. The observed \(x\)-values range from 0.8 to 3.0. Interpret the slope, and explain why using the line at \(x=6.0\) is risky.`,
+    solution:String.raw`<p>The slope \(18\) means the fitted mean price increases by 18 thousand dollars for each additional thousand square feet, within the range where the model was fit.</p><p>Using \(x=6.0\) is extrapolation because 6.0 is far outside the observed range 0.8 to 3.0. The linear trend, error variance, and population comparability may not hold there.</p>`,
+    rubric:["Interpret slope with correct units &mdash; <b>3 pts</b>","Identify \(x=6.0\) as extrapolation &mdash; <b>2 pts</b>","Explain why extrapolation is risky &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"A regression equation is not a law of nature; it is an empirical summary over the observed design region."
+  },
+  {
+    id:"Ch 26 &mdash; Q21",
+    level:"medium",
+    tags:["Diagnostics","Assumptions"],
+    src:"Original. Residual plot diagnosis.",
+    problem:String.raw`A residual-versus-\(x\) plot shows residuals tightly clustered near zero for small \(x\), but much more spread out for large \(x\). Which SLR assumption is most directly threatened? What practical response might be considered?`,
+    solution:String.raw`<p>The pattern threatens the constant-variance assumption, also called homoscedasticity: \(\operatorname{Var}(\varepsilon_i)=\sigma^2\) should not systematically change with \(x\).</p><p>Possible responses include transforming \(Y\), using a variance-stabilizing transformation, considering weighted least squares, or using inference methods robust to unequal variances if appropriate for the course context.</p>`,
+    rubric:["Identify unequal variance as the issue &mdash; <b>3 pts</b>","Connect the diagnosis to the residual-versus-\(x\) plot &mdash; <b>2 pts</b>","Name at least one reasonable response &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"A funnel-shaped residual plot is the classic visual cue for nonconstant variance."
+  },
+  {
+    id:"Ch 26 &mdash; Q22",
+    level:"medium",
+    tags:["Diagnostics","Linearity"],
+    src:"Original. Curvature diagnosis.",
+    problem:String.raw`A residual plot from an SLR fit shows a clear U-shape: residuals are positive at small and large \(x\), but negative near the middle. Which modeling assumption is questioned, and what model change is suggested?`,
+    solution:String.raw`<p>The U-shape questions the linear mean assumption \(E(Y\mid x)=\beta_0+\beta_1x\). The residuals are not random scatter around zero; they show systematic curvature.</p><p>A natural next model is to add a quadratic term, such as \(E(Y\mid x)=\beta_0+\beta_1x+\beta_2x^2\), or to transform variables if justified by the scientific setting.</p>`,
+    rubric:["Identify violation of linear mean structure &mdash; <b>3 pts</b>","Explain the residual pattern is systematic &mdash; <b>2 pts</b>","Suggest a quadratic term or suitable transformation &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Random scatter is acceptable; a visible curve in residuals is model information you have not used."
+  },
+  {
+    id:"Ch 26 &mdash; Q23",
+    level:"hard",
+    tags:["ANOVA table","Missing entries"],
+    src:"Original. Final-style table completion.",
+    problem:String.raw`Complete the ANOVA table for an SLR with \(n=16\), \(\mathrm{SST}=250\), and \(\mathrm{SSE}=90\). Then compute \(R^2\) and test whether the slope is zero at \(\alpha=0.05\). Use \(F_{0.05,1,14}=4.60\).`,
+    solution:String.raw`<p>\(\mathrm{SSR}=250-90=160\). The degrees of freedom are regression 1, error \(16-2=14\), total 15. Thus \(\mathrm{MSR}=160\) and \(\mathrm{MSE}=90/14=6.429\). The \(F\) statistic is \(160/6.429=24.89\).</p><table class="data"><tr><th>Source</th><th>df</th><th>SS</th><th>MS</th><th>F</th></tr><tr><td>Regression</td><td>1</td><td>160</td><td>160</td><td>24.89</td></tr><tr><td>Error</td><td>14</td><td>90</td><td>6.429</td><td></td></tr><tr><td>Total</td><td>15</td><td>250</td><td></td><td></td></tr></table><p>\(R^2=160/250=0.64\). Since \(24.89>4.60\), reject \(H_0:\beta_1=0\).</p>`,
+    rubric:["Compute SSR and all df &mdash; <b>4 pts</b>","Compute MSR, MSE, and F &mdash; <b>4 pts</b>","Compute \(R^2\) &mdash; <b>2 pts</b>","Make the correct test decision &mdash; <b>2 pts</b>"],
+    total:"12 pts",
+    tip:"If the table is right, the three SS entries and the three df entries each add vertically."
+  },
+  {
+    id:"Ch 26 &mdash; Q24",
+    level:"hard",
+    tags:["Comprehensive computation","Inference"],
+    src:"Original. Final-style computation.",
+    problem:String.raw`A dataset has \(n=8\), \(\bar x=4\), \(\bar y=10\), \(S_{xx}=42\), \(S_{xy}=84\), and \(S_{yy}=210\). Compute the fitted line, \(\mathrm{SSE}\), \(s^2\), \(R^2\), and a 95% confidence interval for \(\beta_1\). Use \(t_{0.025,6}=2.447\).`,
+    solution:String.raw`<p>The slope is \(b_1=84/42=2\), and the intercept is \(b_0=10-2(4)=2\). Thus \(\hat y=2+2x\).</p><p>\(\mathrm{SSE}=S_{yy}-b_1S_{xy}=210-2(84)=42\). Therefore \(s^2=42/(8-2)=7\).</p><p>\(R^2=1-\mathrm{SSE}/S_{yy}=1-42/210=0.80\).</p><p>The slope standard error is \(\sqrt{s^2/S_{xx}}=\sqrt{7/42}=\sqrt{1/6}=0.4082\). The 95% interval is \[2\pm2.447(0.4082)=2\pm0.999=[1.001,2.999].\]</p>`,
+    rubric:["Compute the fitted line &mdash; <b>3 pts</b>","Compute SSE and \(s^2\) &mdash; <b>3 pts</b>","Compute \(R^2\) &mdash; <b>2 pts</b>","Compute slope SE and CI &mdash; <b>4 pts</b>"],
+    total:"12 pts",
+    tip:"When \(S_{xy}\), \(S_{xx}\), and \(S_{yy}\) are given, nearly every regression summary follows from three formulas."
+  },
+  {
+    id:"Ch 26 &mdash; Q25",
+    level:"medium",
+    tags:["Intercept interpretation","Context"],
+    src:"Original. Coefficient caution.",
+    problem:String.raw`A regression of annual electricity cost \(Y\) on household size \(x\) gives \(\hat y=310+145x\), using data only from households with 2 to 6 people. Explain what the intercept does and does not mean.`,
+    solution:String.raw`<p>Mathematically, the intercept \(310\) is the fitted value when \(x=0\). It is also needed so that the fitted line is positioned correctly over the observed data range.</p><p>Substantively, it should not be interpreted as a reliable estimate of the annual electricity cost for a zero-person household, because \(x=0\) is outside the observed range and may not be meaningful for the population studied.</p>`,
+    rubric:["State the mathematical meaning of the intercept &mdash; <b>2 pts</b>","Explain why the contextual interpretation is weak &mdash; <b>3 pts</b>","Mention extrapolation/outside observed range &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Bad intercept interpretation is one of the easiest points to lose on conceptual regression questions."
+  },
+  {
+    id:"Ch 26 &mdash; Q26",
+    level:"medium",
+    tags:["Predicted values","Residual checks"],
+    src:"Original. Residual table.",
+    problem:String.raw`For the fitted line \(\hat y=1+0.5x\), compute the residuals for the data below and verify \(\sum e_i=0\).<table class="data"><tr><th>\(x_i\)</th><td>0</td><td>2</td><td>4</td><td>6</td></tr><tr><th>\(y_i\)</th><td>0</td><td>3</td><td>2</td><td>5</td></tr></table>`,
+    solution:String.raw`<p>The fitted values are \(1,2,3,4\). The residuals \(e_i=y_i-\hat y_i\) are \(-1,1,-1,1\).</p><p>The sum is \((-1)+1+(-1)+1=0\), as expected for a least squares fit with an intercept. The SSE is also \(1+1+1+1=4\), though it was not required.</p>`,
+    rubric:["Compute all fitted values &mdash; <b>2 pts</b>","Compute residuals using observed minus fitted &mdash; <b>4 pts</b>","Verify the residual sum &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"If a provided fitted line is claimed to be least squares with an intercept, \(\sum e_i=0\) should hold up to rounding."
+  },
+  {
+    id:"Ch 26 &mdash; Q27",
+    level:"hard",
+    tags:["Proof","SSE formula"],
+    src:"Original. Algebra shortcut proof.",
+    problem:String.raw`Prove the shortcut \(\mathrm{SSE}=S_{yy}-b_1S_{xy}\) for simple linear regression with an intercept. Also show why this equals \(S_{yy}-S_{xy}^2/S_{xx}\).`,
+    solution:String.raw`<p>The fitted deviations satisfy \(\hat y_i-\bar y=b_1(x_i-\bar x)\). Hence \[\mathrm{SSR}=\sum(\hat y_i-\bar y)^2=b_1^2S_{xx}.\]</p><p>Since \(b_1=S_{xy}/S_{xx}\), \(\mathrm{SSR}=b_1^2S_{xx}=b_1S_{xy}=S_{xy}^2/S_{xx}\).</p><p>Using \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\) and \(\mathrm{SST}=S_{yy}\), \[\mathrm{SSE}=S_{yy}-\mathrm{SSR}=S_{yy}-b_1S_{xy}=S_{yy}-\frac{S_{xy}^2}{S_{xx}}.\]</p>`,
+    rubric:["Use \(\hat y_i-\bar y=b_1(x_i-\bar x)\) &mdash; <b>3 pts</b>","Derive \(\mathrm{SSR}=b_1S_{xy}\) &mdash; <b>4 pts</b>","Use SST = SSR + SSE &mdash; <b>2 pts</b>","Substitute \(b_1=S_{xy}/S_{xx}\) &mdash; <b>2 pts</b>"],
+    total:"11 pts",
+    tip:"This proof also explains why \(\mathrm{SSE}\ge0\) is equivalent to \(S_{xy}^2\le S_{xx}S_{yy}\)."
+  },
+  {
+    id:"Ch 26 &mdash; Q28",
+    level:"hard",
+    tags:["Diagnosis","Student solution"],
+    src:"Original. Final-style error diagnosis.",
+    problem:String.raw`A student analyzes an SLR with \(n=10\), \(b_1=2.4\), \(S_{xx}=36\), and \(\mathrm{SSE}=72\). They write: "The slope SE is \(72/\sqrt{36}=12\), so \(t=2.4/12=0.20\) with \(9\) degrees of freedom." Identify at least three errors and give the correct test statistic for \(H_0:\beta_1=0\).`,
+    solution:String.raw`<p>Errors include: (1) \(\mathrm{SSE}\) is not \(s\); first compute \(s^2=\mathrm{SSE}/(n-2)\). (2) The slope SE is \(s/\sqrt{S_{xx}}\), not \(\mathrm{SSE}/\sqrt{S_{xx}}\). (3) The degrees of freedom are \(n-2=8\), not \(n-1=9\).</p><p>Correctly, \(s^2=72/8=9\), so \(s=3\). Then \[\operatorname{SE}(B_1)=3/\sqrt{36}=0.5,\qquad t=\frac{2.4}{0.5}=4.8,\] with \(8\) degrees of freedom.</p>`,
+    rubric:["Identify SSE versus \(s\) confusion &mdash; <b>2 pts</b>","Identify wrong slope SE formula &mdash; <b>2 pts</b>","Identify wrong df &mdash; <b>2 pts</b>","Compute correct \(s\), SE, and \(t\) &mdash; <b>4 pts</b>"],
+    total:"10 pts",
+    tip:"Always convert SSE to MSE before using it as a variance estimate."
+  },
+  {
+    id:"Ch 26 &mdash; Q29",
+    level:"hard",
+    tags:["Assumptions","Inference validity"],
+    src:"Original. Inference diagnosis.",
+    problem:String.raw`A dataset shows a strong positive slope and a small \(p\)-value for \(H_0:\beta_1=0\). However, the observations were collected as a time series and adjacent residuals tend to have the same sign for long runs. Which assumption is threatened? How does this affect the usual slope test?`,
+    solution:String.raw`<p>The threatened assumption is independence of errors. Long runs of residuals with the same sign in time order suggest autocorrelation.</p><p>The usual \(t\)-test relies on the standard error formula derived under independent errors. If errors are correlated, the reported standard error and \(p\)-value may be misleading, often too optimistic. One should consider a time-series or correlated-error model, or another inference method appropriate for dependent data.</p>`,
+    rubric:["Identify lack of independence/autocorrelation &mdash; <b>3 pts</b>","Connect runs in residual signs to the diagnosis &mdash; <b>2 pts</b>","Explain why the usual standard error and \(p\)-value are unreliable &mdash; <b>3 pts</b>","Suggest an appropriate modeling response &mdash; <b>1 pt</b>"],
+    total:"9 pts",
+    tip:"A small \(p\)-value is only as trustworthy as the assumptions behind its standard error."
+  },
+  {
+    id:"Ch 26 &mdash; Q30",
+    level:"hard",
+    tags:["Comprehensive","Final-style"],
+    src:"Original. Full computation and diagnosis.",
+    problem:String.raw`A lab studies response \(Y\) versus dose \(x\). Summary statistics are \(n=10\), \(\bar x=5\), \(\bar y=20\), \(S_{xx}=50\), \(S_{xy}=125\), and \(S_{yy}=400\). <ol type="a"><li>Fit the least squares line.</li><li>Compute \(\mathrm{SSR}\), \(\mathrm{SSE}\), \(s^2\), and \(R^2\).</li><li>Test \(H_0:\beta_1=0\) at \(\alpha=0.05\). Use \(t_{0.025,8}=2.306\).</li><li>Construct a 95% CI for \(\beta_0\).</li><li>The residual plot shows variance increasing with dose. State the concern.</li></ol>`,
+    solution:String.raw`<p><b>(a)</b> \(b_1=S_{xy}/S_{xx}=125/50=2.5\), and \(b_0=\bar y-b_1\bar x=20-2.5(5)=7.5\). The line is \(\hat y=7.5+2.5x\).</p><p><b>(b)</b> \(\mathrm{SSR}=b_1S_{xy}=2.5(125)=312.5\). \(\mathrm{SSE}=S_{yy}-\mathrm{SSR}=400-312.5=87.5\). \(s^2=87.5/(10-2)=10.9375\). \(R^2=312.5/400=0.78125\).</p><p><b>(c)</b> \(\operatorname{SE}(B_1)=s/\sqrt{S_{xx}}=\sqrt{10.9375}/\sqrt{50}=0.4677\). Thus \(t=2.5/0.4677=5.35\), with \(df=8\). Since \(5.35>2.306\), reject \(H_0\).</p><p><b>(d)</b> \(\operatorname{SE}(B_0)=s\sqrt{1/n+\bar x^2/S_{xx}}=\sqrt{10.9375}\sqrt{0.1+25/50}=2.5617\). The 95% CI is \(7.5\pm2.306(2.5617)=7.5\pm5.91=[1.59,13.41]\).</p><p><b>(e)</b> Increasing residual spread suggests nonconstant error variance. The standard errors and tests from the basic homoscedastic SLR model should be treated cautiously.</p>`,
+    rubric:["Fit the line correctly &mdash; <b>3 pts</b>","Compute SSR, SSE, \(s^2\), and \(R^2\) &mdash; <b>5 pts</b>","Carry out the slope test with correct SE and df &mdash; <b>5 pts</b>","Construct the intercept CI &mdash; <b>4 pts</b>","Diagnose nonconstant variance from the residual plot &mdash; <b>3 pts</b>"],
+    total:"20 pts",
+    tip:"Final problems often mix arithmetic with assumptions. Do not stop after rejecting the slope test if the residual diagnostics undermine the model."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

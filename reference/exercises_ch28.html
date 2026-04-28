@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 28</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 28</h1>
+  <nav class="tabs">
+    <button class="active">Ch 28 &mdash; Multiple Linear Regression I</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch28" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 28 &mdash; Multiple Linear Regression I: Basic Model</h2>
+    <p>Topics covered: model matrices, normal equations, least-squares estimator \(\mathbf b=(X^TX)^{-1}X^T\mathbf y\), fitted values, residuals, the hat matrix, SSE/SSR/SST decomposition, \(R^2\), polynomial regression as a linear model, dummy-variable designs, rank and collinearity, and projection geometry. The main exam traps are losing the intercept column, using \(n-p\) instead of \(n-p-1\), treating polynomial regression as nonlinear in the parameters, trusting \(R^2\) without checking residuals, and ignoring singular \(X^TX\).</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch28')">Expand all solutions</button>
+    <button onclick="collapseAll('ch28')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 28 &mdash; Q1",
+    level:"easy",
+    tags:["Model matrix","Dimensions"],
+    src:"Original. Direct setup question.",
+    problem:String.raw`Four observations have two predictors:
+<table class="data"><tr><th>obs</th><th>\(x_1\)</th><th>\(x_2\)</th><th>\(y\)</th></tr><tr><td>1</td><td>1</td><td>2</td><td>5</td></tr><tr><td>2</td><td>2</td><td>1</td><td>4</td></tr><tr><td>3</td><td>3</td><td>3</td><td>9</td></tr><tr><td>4</td><td>4</td><td>2</td><td>8</td></tr></table>
+Construct \(X\) with an intercept column, compute \(X^TX\) and \(X^T\mathbf y\), and state all dimensions.`,
+    solution:String.raw`<p>\[
+X=\begin{pmatrix}1&1&2\\1&2&1\\1&3&3\\1&4&2\end{pmatrix},\qquad
+\mathbf y=\begin{pmatrix}5\\4\\9\\8\end{pmatrix}.
+\]
+Here \(X\) is \(4\times3\) because \(n=4\) and \(p=2\) predictors plus the intercept.</p>
+<p>The required sums are \(\sum x_1=10\), \(\sum x_2=8\), \(\sum x_1^2=30\), \(\sum x_2^2=18\), and \(\sum x_1x_2=21\). Thus
+\[
+X^TX=\begin{pmatrix}4&10&8\\10&30&21\\8&21&18\end{pmatrix}.
+\]
+Also \(\sum y=26\), \(\sum x_1y=72\), and \(\sum x_2y=57\), so
+\[
+X^T\mathbf y=\begin{pmatrix}26\\72\\57\end{pmatrix}.
+\]</p>`,
+    rubric:["Include the intercept column &mdash; <b>2 pts</b>","Compute \(X^TX\) entries from sums and cross-products &mdash; <b>3 pts</b>","Compute \(X^T\mathbf y\) correctly &mdash; <b>2 pts</b>","State dimensions &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The first row and column of \(X^TX\) are the counts and predictor sums. Use this as a quick intercept-column sanity check."
+  },
+  {
+    id:"Ch 28 &mdash; Q2",
+    level:"easy",
+    tags:["Least squares","Matrix product"],
+    src:"Original. Bare-handed application of \((X^TX)^{-1}X^T\mathbf y\).",
+    problem:String.raw`Given
+\[
+(X^TX)^{-1}=\begin{pmatrix}0.500&-0.040&-0.060\\-0.040&0.020&0.005\\-0.060&0.005&0.030\end{pmatrix},\quad
+X^T\mathbf y=\begin{pmatrix}120\\360\\240\end{pmatrix},
+\]
+with \(n=10\), \(p=2\), \(\mathrm{SST}=200\), and \(\mathrm{SSE}=20\), compute \(\mathbf b\), \(s^2\), \(R^2\), and the fitted equation.`,
+    solution:String.raw`<p>Multiply:
+\[
+\begin{aligned}
+b_0&=0.5(120)-0.04(360)-0.06(240)=31.2,\\
+b_1&=-0.04(120)+0.02(360)+0.005(240)=3.6,\\
+b_2&=-0.06(120)+0.005(360)+0.03(240)=1.8.
+\end{aligned}
+\]
+So \(\mathbf b=(31.2,3.6,1.8)^T\).</p>
+<p>The error degrees of freedom are \(n-p-1=10-2-1=7\), so
+\[
+s^2=\frac{\mathrm{SSE}}{n-p-1}=\frac{20}{7}=2.857.
+\]
+Also
+\[
+R^2=1-\frac{\mathrm{SSE}}{\mathrm{SST}}=1-\frac{20}{200}=0.90.
+\]
+The fitted equation is \(\hat y=31.2+3.6x_1+1.8x_2\).</p>`,
+    rubric:["Compute the matrix-vector product correctly &mdash; <b>4 pts</b>","Use \(n-p-1\) error df &mdash; <b>2 pts</b>","Compute \(R^2\) from SSE/SST &mdash; <b>1 pt</b>","Write the fitted equation &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Once \((X^TX)^{-1}\) is supplied, MLR fitting is just one matrix-vector multiplication plus df bookkeeping."
+  },
+  {
+    id:"Ch 28 &mdash; Q3",
+    level:"easy",
+    tags:["Fitted values","Residuals"],
+    src:"Original. Small fitted-value computation.",
+    problem:String.raw`For \(x=(0,1,2)^T\) and \(y=(1,3,2)^T\), fit the simple linear regression model using \(X=\begin{pmatrix}1&0\\1&1\\1&2\end{pmatrix}\). Compute \(\mathbf b\), \(\hat{\mathbf y}\), and \(\mathbf e=\mathbf y-\hat{\mathbf y}\).`,
+    solution:String.raw`<p>Here \(\bar x=1\), \(\bar y=2\), \(S_{xx}=2\), and \(S_{xy}=1\). Thus \(b_1=S_{xy}/S_{xx}=1/2\), and \(b_0=\bar y-b_1\bar x=2-1/2=3/2\).</p>
+<p>The fitted values are
+\[
+\hat{\mathbf y}=X\mathbf b=\begin{pmatrix}1.5\\2.0\\2.5\end{pmatrix}.
+\]
+Therefore
+\[
+\mathbf e=\mathbf y-\hat{\mathbf y}=\begin{pmatrix}-0.5\\1.0\\-0.5\end{pmatrix}.
+\]
+Notice \(\sum e_i=0\), as expected when the intercept is included.</p>`,
+    rubric:["Compute \(b_0,b_1\) correctly &mdash; <b>3 pts</b>","Compute fitted values \(X\mathbf b\) &mdash; <b>2 pts</b>","Compute residuals with correct sign &mdash; <b>2 pts</b>","Check residual sum zero &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Residuals are observed minus fitted, not fitted minus observed."
+  },
+  {
+    id:"Ch 28 &mdash; Q4",
+    level:"easy",
+    tags:["Degrees of freedom","Notation"],
+    src:"Original. Basic model bookkeeping.",
+    problem:String.raw`An MLR has \(n=24\) observations and \(p=4\) predictors, with an intercept. State the dimensions of \(X\), \(\mathbf b\), \(\hat{\mathbf y}\), \(H\), \(X^TX\), and \((X^TX)^{-1}\). Also give the error degrees of freedom used in \(s^2\).`,
+    solution:String.raw`<p>With an intercept, there are \(p+1=5\) regression coefficients. Thus
+\[
+X:24\times5,\quad \mathbf b:5\times1,\quad \hat{\mathbf y}:24\times1,\quad H:24\times24,
+\]
+and
+\[
+X^TX:5\times5,\qquad (X^TX)^{-1}:5\times5.
+\]
+The error degrees of freedom are \(n-p-1=24-4-1=19\), so \(s^2=\mathrm{SSE}/19\).</p>`,
+    rubric:["Use \(p+1\) coefficients because of the intercept &mdash; <b>2 pts</b>","State matrix/vector dimensions correctly &mdash; <b>4 pts</b>","Give \(n-p-1\) error df &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Most Chapter 28 arithmetic errors are really dimension errors. Write the shape before multiplying."
+  },
+  {
+    id:"Ch 28 &mdash; Q5",
+    level:"easy",
+    tags:["Polynomial regression","Design matrix"],
+    src:"Original. Polynomial regression as linear regression.",
+    problem:String.raw`Fit the cubic polynomial model \(Y=\beta_0+\beta_1x+\beta_2x^2+\beta_3x^3+\epsilon\) at \(x=1,2,3,4,5\). Write the design matrix \(X\), state \(p\), and give the df for \(s^2\). Why is this still called linear regression?`,
+    solution:String.raw`<p>The design matrix is
+\[
+X=\begin{pmatrix}
+1&1&1&1\\
+1&2&4&8\\
+1&3&9&27\\
+1&4&16&64\\
+1&5&25&125
+\end{pmatrix}.
+\]
+There are \(p=3\) predictors after the intercept: \(x,x^2,x^3\). With \(n=5\), the error df are \(n-p-1=1\).</p>
+<p>The model is linear in the parameters \(\beta_0,\beta_1,\beta_2,\beta_3\). The curve is nonlinear in \(x\), but the columns of \(X\) are fixed known transformations of \(x\), so OLS applies unchanged.</p>`,
+    rubric:["Construct the cubic design matrix &mdash; <b>3 pts</b>","State \(p=3\) and df \(=1\) &mdash; <b>2 pts</b>","Explain linearity in parameters &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"Linear regression means linear in \(\beta\), not necessarily straight-line in the original predictor."
+  },
+  {
+    id:"Ch 28 &mdash; Q6",
+    level:"easy",
+    tags:["Coefficient interpretation","Conditional effect"],
+    src:"Original. Plain-English interpretation.",
+    problem:String.raw`A fitted model for house price \(Y\), in thousands of dollars, is
+\[
+\hat y=50+1.2x_1-0.8x_2,
+\]
+where \(x_1\) is size in square meters and \(x_2\) is age in years. Interpret \(b_1\) and \(b_2\), and explain why the phrase "holding the other predictor fixed" is necessary.`,
+    solution:String.raw`<p>\(b_1=1.2\) means that, among houses of the same age, one additional square meter is associated with an average price increase of \(1.2\) thousand dollars, or $1200.</p>
+<p>\(b_2=-0.8\) means that, among houses of the same size, one additional year of age is associated with an average price decrease of \(0.8\) thousand dollars, or $800.</p>
+<p>The holding-fixed phrase is essential because MLR coefficients are partial effects. They describe the change in \(\hat y\) when one predictor changes while the other columns in the model stay unchanged.</p>`,
+    rubric:["Correctly interpret \(b_1\) with units &mdash; <b>2 pts</b>","Correctly interpret \(b_2\) with units &mdash; <b>2 pts</b>","Use conditional/holding-fixed language &mdash; <b>2 pts</b>","Avoid causal overstatement &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"An MLR coefficient is not the same thing as the slope from a separate SLR using only that predictor."
+  },
+  {
+    id:"Ch 28 &mdash; Q7",
+    level:"easy",
+    tags:["Normal equations","Residual orthogonality"],
+    src:"Original. Core least-squares identity.",
+    problem:String.raw`Starting from \(\mathrm{SSE}(\mathbf b)=(\mathbf y-X\mathbf b)^T(\mathbf y-X\mathbf b)\), derive the normal equations and state what they imply about residuals.`,
+    solution:String.raw`<p>Expand:
+\[
+\mathrm{SSE}=\mathbf y^T\mathbf y-2\mathbf b^TX^T\mathbf y+\mathbf b^TX^TX\mathbf b.
+\]
+Taking the gradient with respect to \(\mathbf b\) gives
+\[
+-2X^T\mathbf y+2X^TX\mathbf b=0.
+\]
+Therefore the normal equations are
+\[
+X^TX\mathbf b=X^T\mathbf y.
+\]</p>
+<p>If \(X^TX\) is invertible, \(\mathbf b=(X^TX)^{-1}X^T\mathbf y\). The residual vector \(\mathbf e=\mathbf y-X\mathbf b\) satisfies
+\[
+X^T\mathbf e=X^T(\mathbf y-X\mathbf b)=0,
+\]
+so residuals are orthogonal to every column of \(X\).</p>`,
+    rubric:["Expand SSE correctly &mdash; <b>2 pts</b>","Differentiate and get \(X^TX\mathbf b=X^T\mathbf y\) &mdash; <b>3 pts</b>","State the invertible-case estimator &mdash; <b>1 pt</b>","State \(X^T\mathbf e=0\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"The normal equations are a geometry statement: the error vector is perpendicular to the fitted column space."
+  },
+  {
+    id:"Ch 28 &mdash; Q8",
+    level:"medium",
+    tags:["Hat matrix","Leverage"],
+    src:"Original. Small hat-matrix computation.",
+    problem:String.raw`For \(X=\begin{pmatrix}1&1\\1&2\\1&3\end{pmatrix}\), compute
+\[
+H=X(X^TX)^{-1}X^T.
+\]
+Verify \(H\mathbf 1=\mathbf 1\), identify the leverages, and state \(\operatorname{tr}(H)\).`,
+    solution:String.raw`<p>First,
+\[
+X^TX=\begin{pmatrix}3&6\\6&14\end{pmatrix},\qquad
+(X^TX)^{-1}=\frac{1}{6}\begin{pmatrix}14&-6\\-6&3\end{pmatrix}.
+\]
+Multiplying gives
+\[
+H=\begin{pmatrix}
+5/6&1/3&-1/6\\
+1/3&1/3&1/3\\
+-1/6&1/3&5/6
+\end{pmatrix}.
+\]</p>
+<p>The row sums are all 1, so \(H\mathbf 1=\mathbf 1\). The leverages are the diagonal entries:
+\[
+h_{11}=5/6,\quad h_{22}=1/3,\quad h_{33}=5/6.
+\]
+The trace is \(5/6+1/3+5/6=2\), matching \(p+1=2\).</p>`,
+    rubric:["Compute \((X^TX)^{-1}\) &mdash; <b>2 pts</b>","Compute \(H\) correctly &mdash; <b>3 pts</b>","Verify row sums or \(H\mathbf 1=\mathbf 1\) &mdash; <b>1 pt</b>","Identify leverages and trace &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"High-leverage observations are unusual in the \(X\)-space, not necessarily large in \(Y\)."
+  },
+  {
+    id:"Ch 28 &mdash; Q9",
+    level:"medium",
+    tags:["SSE","SSR","SST"],
+    src:"Original. Decomposition from fitted values.",
+    problem:String.raw`For \(y=(2,4,6,8)^T\) and fitted values \(\hat y=(2.5,3.5,6.5,7.5)^T\), compute \(\mathrm{SSE}\), \(\mathrm{SST}\), \(\mathrm{SSR}\), and \(R^2\). Verify \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\).`,
+    solution:String.raw`<p>The mean is \(\bar y=5\). Residuals are \((-0.5,0.5,-0.5,0.5)^T\), so
+\[
+\mathrm{SSE}=0.25+0.25+0.25+0.25=1.
+\]
+The total sum of squares is
+\[
+\mathrm{SST}=(-3)^2+(-1)^2+1^2+3^2=20.
+\]
+The regression sum of squares is
+\[
+\mathrm{SSR}=\sum(\hat y_i-\bar y)^2=(-2.5)^2+(-1.5)^2+1.5^2+2.5^2=17.
+\]
+But \(\mathrm{SSR}+\mathrm{SSE}=18\), not 20.</p>
+<p>Therefore these fitted values cannot come from an OLS model with an intercept for this \(y\). For an intercept OLS fit, \(\hat{\mathbf y}-\bar y\mathbf 1\) and \(\mathbf e\) must be orthogonal, which forces the decomposition exactly.</p>`,
+    rubric:["Compute SSE &mdash; <b>2 pts</b>","Compute SST &mdash; <b>2 pts</b>","Compute SSR &mdash; <b>2 pts</b>","Notice decomposition failure and diagnose non-OLS/non-intercept issue &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Do not force the ANOVA identity onto arbitrary fitted values. It is an OLS-with-intercept projection identity."
+  },
+  {
+    id:"Ch 28 &mdash; Q10",
+    level:"medium",
+    tags:["ANOVA table","Overall F"],
+    src:"Original. Overall regression decomposition.",
+    problem:String.raw`An MLR fit has \(\mathrm{SST}=500\), \(\mathrm{SSE}=80\), \(n=20\), and \(p=3\). Compute \(\mathrm{SSR}\), \(R^2\), \(s^2\), and the ANOVA table with df, SS, MS, and \(F\).`,
+    solution:String.raw`<p>\[
+\mathrm{SSR}=\mathrm{SST}-\mathrm{SSE}=500-80=420,\qquad
+R^2=\frac{420}{500}=0.84.
+\]
+The error df are \(n-p-1=20-3-1=16\), so
+\[
+s^2=\mathrm{MSE}=80/16=5.
+\]</p>
+<table class="data"><tr><th>Source</th><th>df</th><th>SS</th><th>MS</th><th>F</th></tr><tr><td>Regression</td><td>3</td><td>420</td><td>140</td><td>28</td></tr><tr><td>Error</td><td>16</td><td>80</td><td>5</td><td></td></tr><tr><td>Total</td><td>19</td><td>500</td><td></td><td></td></tr></table>
+<p>The overall \(F\)-statistic is \(140/5=28\) on \((3,16)\) df.</p>`,
+    rubric:["Compute SSR and \(R^2\) &mdash; <b>2 pts</b>","Use correct df \(p,n-p-1,n-1\) &mdash; <b>3 pts</b>","Compute MSR, MSE, and \(F\) &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"The regression df is \(p\), not \(p+1\), because the intercept is not counted as an explanatory predictor in the overall test."
+  },
+  {
+    id:"Ch 28 &mdash; Q11",
+    level:"easy",
+    tags:["R squared","Interpretation"],
+    src:"Original. Conceptual interpretation.",
+    problem:String.raw`A model reports \(R^2=0.78\). Give a correct interpretation. Then name two things this number does not prove.`,
+    solution:String.raw`<p>A correct interpretation is: 78% of the sample variation in \(y\), measured by \(\mathrm{SST}=\sum(y_i-\bar y)^2\), is explained by the fitted regression model through \(\mathrm{SSR}\).</p>
+<p>It does not prove causation. It also does not prove that the linear model assumptions are satisfied. A high \(R^2\) can coexist with curvature, outliers, heteroscedasticity, dependence, or a badly extrapolated model.</p>`,
+    rubric:["Interpret \(R^2\) as sample variation explained &mdash; <b>3 pts</b>","Mention it is not causation &mdash; <b>1 pt</b>","Mention it does not validate assumptions/model form &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"\(R^2\) is descriptive, not a diagnostic certificate."
+  },
+  {
+    id:"Ch 28 &mdash; Q12",
+    level:"medium",
+    tags:["Projection geometry","Orthogonality"],
+    src:"Original. Geometry of least squares.",
+    problem:String.raw`Explain the geometric meaning of \(\hat{\mathbf y}=H\mathbf y\), where \(H=X(X^TX)^{-1}X^T\). What subspace is \(\hat{\mathbf y}\) in? What is perpendicular to what?`,
+    solution:String.raw`<p>The columns of \(X\) span a subspace \(\mathcal C(X)\) of \(\mathbb R^n\). The fitted vector \(\hat{\mathbf y}=X\mathbf b=H\mathbf y\) is the orthogonal projection of \(\mathbf y\) onto \(\mathcal C(X)\).</p>
+<p>Thus \(\hat{\mathbf y}\in\mathcal C(X)\), while the residual vector \(\mathbf e=\mathbf y-\hat{\mathbf y}\) is perpendicular to that subspace:
+\[
+X^T\mathbf e=0.
+\]
+Equivalently, \(\mathbf e\) is orthogonal to every column of \(X\). This is why least squares minimizes the residual length \(\|\mathbf e\|^2\).</p>`,
+    rubric:["Identify \(\mathcal C(X)\) as the fitted subspace &mdash; <b>2 pts</b>","State \(\hat{\mathbf y}\) is the projection of \(\mathbf y\) &mdash; <b>2 pts</b>","State residual orthogonality \(X^T\mathbf e=0\) &mdash; <b>3 pts</b>","Connect to minimizing SSE &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Think of OLS as dropping a perpendicular from \(\mathbf y\) to the model plane."
+  },
+  {
+    id:"Ch 28 &mdash; Q13",
+    level:"medium",
+    tags:["Hat matrix","Properties"],
+    src:"Original. Proof-style properties.",
+    problem:String.raw`Prove that the hat matrix \(H=X(X^TX)^{-1}X^T\) is symmetric and idempotent, assuming \(X^TX\) is invertible. What is the practical consequence of idempotence?`,
+    solution:String.raw`<p>Symmetry:
+\[
+H^T=\left[X(X^TX)^{-1}X^T\right]^T=X\left[(X^TX)^{-1}\right]^TX^T=H,
+\]
+because \(X^TX\) and its inverse are symmetric.</p>
+<p>Idempotence:
+\[
+H^2=X(X^TX)^{-1}X^TX(X^TX)^{-1}X^T=X(X^TX)^{-1}X^T=H.
+\]</p>
+<p>The practical consequence is that projecting twice does nothing new: \(H\hat{\mathbf y}=H(H\mathbf y)=H\mathbf y=\hat{\mathbf y}\). Once a vector is in the fitted column space, another projection leaves it unchanged.</p>`,
+    rubric:["Prove symmetry with transpose rules &mdash; <b>3 pts</b>","Prove idempotence with cancellation of \(X^TX\) &mdash; <b>3 pts</b>","State projection-twice consequence &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Symmetric plus idempotent is the algebraic signature of an orthogonal projection matrix."
+  },
+  {
+    id:"Ch 28 &mdash; Q14",
+    level:"medium",
+    tags:["Residual sums","Intercept"],
+    src:"Original. Consequences of the intercept column.",
+    problem:String.raw`Assume an OLS model includes an intercept. Prove \(\sum_i e_i=0\) and \(\sum_i \hat y_i=\sum_i y_i\). Does the result necessarily hold if the intercept is omitted?`,
+    solution:String.raw`<p>Because the intercept column \(\mathbf 1\) is a column of \(X\), the residual orthogonality condition \(X^T\mathbf e=0\) includes
+\[
+\mathbf 1^T\mathbf e=\sum_i e_i=0.
+\]
+Since \(e_i=y_i-\hat y_i\), this implies
+\[
+0=\sum_i(y_i-\hat y_i)=\sum_i y_i-\sum_i \hat y_i,
+\]
+so \(\sum_i \hat y_i=\sum_i y_i\).</p>
+<p>If the intercept is omitted, \(\mathbf 1\) may not be in the column space of \(X\), so this conclusion need not hold.</p>`,
+    rubric:["Use \(X^T\mathbf e=0\) &mdash; <b>2 pts</b>","Connect intercept column to \(\mathbf 1^T\mathbf e=0\) &mdash; <b>3 pts</b>","Derive equality of fitted and observed sums &mdash; <b>2 pts</b>","State no-intercept caveat &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Many familiar regression identities silently assume the intercept column is present."
+  },
+  {
+    id:"Ch 28 &mdash; Q15",
+    level:"medium",
+    tags:["Centering","Reparameterization"],
+    src:"Original. Centered predictors in MLR.",
+    problem:String.raw`Let \(z_j=x_j-\bar x_j\) for every predictor column in an MLR with intercept. Explain what happens to fitted values, residuals, SSE, and the intercept after replacing \(x_j\) by \(z_j\).`,
+    solution:String.raw`<p>Centering changes the coordinate system but not the fitted subspace, because each original predictor column can be recovered from the centered column plus a multiple of the intercept column. Therefore \(\hat{\mathbf y}\), residuals, and SSE are unchanged.</p>
+<p>The slope coefficients are unchanged in simple additive centering when all predictors are centered without interactions; the intercept changes. In the centered model, the intercept is the fitted value at the average predictor profile:
+\[
+\hat\beta_0^{(centered)}=\hat\mu(\bar x_1,\ldots,\bar x_p).
+\]
+This is often more interpretable than the response at all predictors equal to zero.</p>`,
+    rubric:["State fitted values/residuals/SSE unchanged &mdash; <b>3 pts</b>","Explain column-space/reparameterization reason &mdash; <b>3 pts</b>","Interpret centered intercept &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Centering usually changes coefficient labels, not predictions."
+  },
+  {
+    id:"Ch 28 &mdash; Q16",
+    level:"medium",
+    tags:["Collinearity","Singular matrix"],
+    src:"Original. Exact linear dependence diagnosis.",
+    problem:String.raw`A student includes both temperature in Fahrenheit \(F\) and temperature in Celsius \(C\) as predictors, with an intercept. Since \(F=1.8C+32\), show why \(X^TX\) is singular and state the practical fix.`,
+    solution:String.raw`<p>Let the columns of \(X\) be \(\mathbf 1\), \(\mathbf F\), and \(\mathbf C\). The relationship
+\[
+\mathbf F=32\mathbf 1+1.8\mathbf C
+\]
+shows that one column of \(X\) is an exact linear combination of two others. Thus the columns of \(X\) are linearly dependent, \(\operatorname{rank}(X)<3\), and \(X^TX\) is singular.</p>
+<p>The least-squares coefficients are not uniquely identifiable: many coefficient triples give the same fitted values. The fix is to drop one redundant temperature scale and fit with either Fahrenheit or Celsius, not both.</p>`,
+    rubric:["Write the column dependence correctly &mdash; <b>3 pts</b>","Conclude \(X^TX\) singular/non-invertible &mdash; <b>2 pts</b>","Explain non-unique coefficients &mdash; <b>2 pts</b>","Give practical fix &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Exact collinearity is not a weak statistical warning; it is an algebraic impossibility for the inverse formula."
+  },
+  {
+    id:"Ch 28 &mdash; Q17",
+    level:"medium",
+    tags:["Dummy variables","Categorical predictor"],
+    src:"Original. Indicator coding setup.",
+    problem:String.raw`A model uses continuous curing time \(x\) and a three-level brand variable \(A,B,C\). Write the design matrix columns for a parallel-lines model with different intercepts but common slope. Then write the columns for a model with brand-specific slopes. Why not include all three brand indicators with an intercept?`,
+    solution:String.raw`<p>Use one brand as the baseline, say \(A\). A parallel-lines model has columns
+\[
+1,\quad x,\quad I_B,\quad I_C,
+\]
+and mean function
+\[
+\mu=b_0+b_1x+b_2I_B+b_3I_C.
+\]
+Brand \(A\) has intercept \(b_0\), brand \(B\) has intercept \(b_0+b_2\), and brand \(C\) has intercept \(b_0+b_3\). All have slope \(b_1\).</p>
+<p>For brand-specific slopes, add interactions:
+\[
+1,\quad x,\quad I_B,\quad I_C,\quad xI_B,\quad xI_C.
+\]
+Then \(B\)'s slope is \(b_1+b_4\), and \(C\)'s slope is \(b_1+b_5\).</p>
+<p>Including \(I_A,I_B,I_C\) with an intercept is impossible because \(I_A+I_B+I_C=1\), duplicating the intercept column and making \(X^TX\) singular.</p>`,
+    rubric:["Set up baseline indicator columns for parallel lines &mdash; <b>3 pts</b>","Add interaction columns for different slopes &mdash; <b>2 pts</b>","Explain dummy-variable trap &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"For a categorical variable with \(g\) levels and an intercept, use \(g-1\) indicators."
+  },
+  {
+    id:"Ch 28 &mdash; Q18",
+    level:"medium",
+    tags:["No intercept","R squared"],
+    src:"Original. Regression through origin warning.",
+    problem:String.raw`A fitted regression through the origin omits the intercept column. State the least-squares formula, the error df, and why the usual centered \(R^2=1-\mathrm{SSE}/\sum(y_i-\bar y)^2\) can be misleading or fail to behave like the standard intercept-model \(R^2\).`,
+    solution:String.raw`<p>The algebraic estimator is still
+\[
+\mathbf b=(X^TX)^{-1}X^T\mathbf y,
+\]
+but now \(X\) contains only the predictor columns. If there are \(p\) coefficients, the error df are \(n-p\), not \(n-p-1\).</p>
+<p>The usual centered \(R^2\) decomposition relies on the intercept model and the projection of \(\mathbf y\) around the grand mean. Without an intercept, residuals need not sum to zero, \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\) need not hold in the usual centered form, and software may report an uncentered \(R^2=1-\mathrm{SSE}/\sum y_i^2\). That value is not comparable to the standard intercept-model \(R^2\).</p>`,
+    rubric:["State same estimator formula with modified \(X\) &mdash; <b>2 pts</b>","Use df \(n-p\) &mdash; <b>2 pts</b>","Explain loss of centered decomposition/residual-sum property &mdash; <b>3 pts</b>","Warn about comparability &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Default to an intercept unless theory forces the response to be zero when all predictors are zero."
+  },
+  {
+    id:"Ch 28 &mdash; Q19",
+    level:"medium",
+    tags:["Prediction","Dot product"],
+    src:"Original. Prediction from fitted coefficient vector.",
+    problem:String.raw`For \(\hat y=31.2+3.6x_1+1.8x_2\), predict the response at \(x_1=5\), \(x_2=10\). Write the computation as \(x_0^T\mathbf b\).`,
+    solution:String.raw`<p>Include the intercept entry:
+\[
+x_0=\begin{pmatrix}1\\5\\10\end{pmatrix},\qquad
+\mathbf b=\begin{pmatrix}31.2\\3.6\\1.8\end{pmatrix}.
+\]
+Then
+\[
+\hat y_0=x_0^T\mathbf b=1(31.2)+5(3.6)+10(1.8)=31.2+18+18=67.2.
+\]</p>`,
+    rubric:["Include leading 1 in \(x_0\) &mdash; <b>2 pts</b>","Write dot product correctly &mdash; <b>2 pts</b>","Compute numerical prediction &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"The new-row vector must have the same column order as the original design matrix."
+  },
+  {
+    id:"Ch 28 &mdash; Q20",
+    level:"medium",
+    tags:["Normal equations","Solve coefficients"],
+    src:"Original. Final-style matrix solve.",
+    problem:String.raw`Suppose
+\[
+X^TX=\begin{pmatrix}5&0&0\\0&10&2\\0&2&4\end{pmatrix},\qquad
+X^T\mathbf y=\begin{pmatrix}15\\26\\14\end{pmatrix}.
+\]
+Solve the normal equations for \(\mathbf b\).`,
+    solution:String.raw`<p>The first equation gives \(5b_0=15\), so \(b_0=3\). The remaining equations are
+\[
+10b_1+2b_2=26,\qquad 2b_1+4b_2=14.
+\]
+Divide the first by 2: \(5b_1+b_2=13\), so \(b_2=13-5b_1\). Substitute into the second:
+\[
+2b_1+4(13-5b_1)=14 \Rightarrow -18b_1=-38 \Rightarrow b_1=\frac{19}{9}.
+\]
+Then
+\[
+b_2=13-5(19/9)=\frac{22}{9}.
+\]
+Thus
+\[
+\mathbf b=\begin{pmatrix}3\\19/9\\22/9\end{pmatrix}.
+\]</p>`,
+    rubric:["Set up normal equations &mdash; <b>2 pts</b>","Solve \(b_0\) &mdash; <b>1 pt</b>","Solve the \(2\times2\) slope system &mdash; <b>4 pts</b>","Present vector in correct order &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"You do not always need to compute the full inverse; solving the linear system is often cleaner."
+  },
+  {
+    id:"Ch 28 &mdash; Q21",
+    level:"medium",
+    tags:["Impossible output","Diagnostics"],
+    src:"Original. Sanity-check problem.",
+    problem:String.raw`A model with an intercept reports \(\mathrm{SST}=120\), \(\mathrm{SSE}=150\), and says \(R^2=0.25\). Diagnose all problems you can identify.`,
+    solution:String.raw`<p>For an OLS model with an intercept,
+\[
+R^2=1-\frac{\mathrm{SSE}}{\mathrm{SST}}=1-\frac{150}{120}=-0.25.
+\]
+So the reported \(R^2=0.25\) is arithmetically inconsistent with the reported sums of squares.</p>
+<p>Also, in a standard intercept OLS model, SSE should not exceed SST, because the fitted regression includes the intercept-only model as a special case. The full model can always do at least as well as predicting \(\bar y\). Thus \(\mathrm{SSE}=150>\mathrm{SST}=120\) signals either no intercept, non-OLS fitted values, or a reporting/computation error.</p>`,
+    rubric:["Compute \(1-\mathrm{SSE}/\mathrm{SST}\) correctly &mdash; <b>2 pts</b>","Identify reported \(R^2\) inconsistency &mdash; <b>2 pts</b>","State SSE should not exceed SST for intercept OLS &mdash; <b>3 pts</b>","Name plausible causes &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Before interpreting output, check invariants: \(0\le R^2\le1\) for ordinary intercept OLS."
+  },
+  {
+    id:"Ch 28 &mdash; Q22",
+    level:"hard",
+    tags:["Projection","ANOVA decomposition"],
+    src:"Original. Proof of sum-of-squares decomposition.",
+    problem:String.raw`For an OLS model with an intercept, prove
+\[
+\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE},
+\]
+where \(\mathrm{SST}=\|\mathbf y-\bar y\mathbf 1\|^2\), \(\mathrm{SSR}=\|\hat{\mathbf y}-\bar y\mathbf 1\|^2\), and \(\mathrm{SSE}=\|\mathbf y-\hat{\mathbf y}\|^2\).`,
+    solution:String.raw`<p>Decompose
+\[
+\mathbf y-\bar y\mathbf 1=(\hat{\mathbf y}-\bar y\mathbf 1)+(\mathbf y-\hat{\mathbf y})
+ =(\hat{\mathbf y}-\bar y\mathbf 1)+\mathbf e.
+\]
+The vector \(\hat{\mathbf y}-\bar y\mathbf 1\) lies in \(\mathcal C(X)\), since both \(\hat{\mathbf y}\) and \(\mathbf 1\) lie in \(\mathcal C(X)\) when the intercept is included. The residual vector \(\mathbf e\) is orthogonal to \(\mathcal C(X)\).</p>
+<p>Therefore the cross-term is zero:
+\[
+(\hat{\mathbf y}-\bar y\mathbf 1)^T\mathbf e=0.
+\]
+By the Pythagorean theorem,
+\[
+\|\mathbf y-\bar y\mathbf 1\|^2
+=\|\hat{\mathbf y}-\bar y\mathbf 1\|^2+\|\mathbf e\|^2,
+\]
+which is exactly \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\).</p>`,
+    rubric:["Write the vector decomposition &mdash; <b>2 pts</b>","Use intercept to place \(\mathbf 1\) and \(\hat{\mathbf y}\) in \(\mathcal C(X)\) &mdash; <b>2 pts</b>","Use residual orthogonality &mdash; <b>3 pts</b>","Conclude by Pythagorean theorem &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The ANOVA identity is a geometric theorem, not just algebraic bookkeeping."
+  },
+  {
+    id:"Ch 28 &mdash; Q23",
+    level:"hard",
+    tags:["Rank","Uniqueness"],
+    src:"Original. Identifiability proof.",
+    problem:String.raw`Show that if \(X^TX\) is invertible, the least-squares estimator is unique. Then explain what can still be unique when \(X^TX\) is singular.`,
+    solution:String.raw`<p>If \(X^TX\) is invertible, the normal equations
+\[
+X^TX\mathbf b=X^T\mathbf y
+\]
+have exactly one solution:
+\[
+\mathbf b=(X^TX)^{-1}X^T\mathbf y.
+\]
+Therefore the coefficient vector is unique.</p>
+<p>If \(X^TX\) is singular, the coefficient vector may not be unique. However, the fitted vector \(\hat{\mathbf y}\), the projection of \(\mathbf y\) onto \(\mathcal C(X)\), is still unique as long as the model subspace is fixed. Different coefficient vectors can represent the same fitted vector when the columns of \(X\) are redundant.</p>`,
+    rubric:["Connect invertibility to unique normal-equation solution &mdash; <b>3 pts</b>","State formula for unique estimator &mdash; <b>2 pts</b>","Explain nonunique coefficients under singularity &mdash; <b>2 pts</b>","State fitted vector/projection can remain unique &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Singular design means coefficient nonidentifiability; it does not necessarily mean predictions in the observed column space are ambiguous."
+  },
+  {
+    id:"Ch 28 &mdash; Q24",
+    level:"hard",
+    tags:["Polynomial diagnosis","Collinearity"],
+    src:"Original. Design-quality diagnosis.",
+    problem:String.raw`A student fits \(Y=\beta_0+\beta_1x+\beta_2x^2+\epsilon\) using observations at \(x=2,2,2\). Diagnose the model matrix and explain why the quadratic fit is not identifiable.`,
+    solution:String.raw`<p>The design matrix is
+\[
+X=\begin{pmatrix}
+1&2&4\\
+1&2&4\\
+1&2&4
+\end{pmatrix}.
+\]
+All rows are identical, and the three columns are multiples in the observed data: \(\mathbf x=2\mathbf 1\) and \(\mathbf x^2=4\mathbf 1\). Hence \(\operatorname{rank}(X)=1\), far below the 3 coefficients required.</p>
+<p>Thus \(X^TX\) is singular and the separate coefficients \(\beta_0,\beta_1,\beta_2\) cannot be identified. The data contain only one design point, so they can estimate at most the mean response at \(x=2\), not slope or curvature.</p>`,
+    rubric:["Write or describe the design matrix &mdash; <b>2 pts</b>","Identify column dependence/rank 1 &mdash; <b>3 pts</b>","Conclude \(X^TX\) singular &mdash; <b>1 pt</b>","Explain inability to estimate slope/curvature &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"A polynomial model needs variation in \(x\). Repeated \(x\)-values help estimate noise, not curvature."
+  },
+  {
+    id:"Ch 28 &mdash; Q25",
+    level:"hard",
+    tags:["Final-style computation","Matrix diagnosis"],
+    src:"Original. Comprehensive matrix computation.",
+    problem:String.raw`For a model with intercept and two predictors, suppose
+\[
+(X^TX)^{-1}=\begin{pmatrix}
+0.40&-0.10&0\\
+-0.10&0.08&-0.02\\
+0&-0.02&0.05
+\end{pmatrix},\quad
+X^T\mathbf y=\begin{pmatrix}50\\120\\80\end{pmatrix}.
+\]
+Also \(n=12\), \(\mathbf y^T\mathbf y=310\), and \(\bar y=4\). Compute \(\mathbf b\), \(\mathrm{SSE}\), \(\mathrm{SST}\), \(\mathrm{SSR}\), \(R^2\), and \(s^2\).`,
+    solution:String.raw`<p>First compute \(\mathbf b=(X^TX)^{-1}X^T\mathbf y\):
+\[
+\begin{aligned}
+b_0&=0.40(50)-0.10(120)+0(80)=8,\\
+b_1&=-0.10(50)+0.08(120)-0.02(80)=3,\\
+b_2&=0(50)-0.02(120)+0.05(80)=1.6.
+\end{aligned}
+\]
+So \(\mathbf b=(8,3,1.6)^T\).</p>
+<p>Use the OLS identity \(\mathrm{SSE}=\mathbf y^T\mathbf y-\mathbf b^TX^T\mathbf y\):
+\[
+\mathbf b^TX^T\mathbf y=8(50)+3(120)+1.6(80)=888.
+\]
+This exceeds \(\mathbf y^T\mathbf y=310\), giving \(\mathrm{SSE}=310-888=-578\), impossible.</p>
+<p>Therefore the supplied matrices/statistics are inconsistent; no real dataset with these values can produce a valid OLS fit. Although \(\mathrm{SST}=\mathbf y^T\mathbf y-n\bar y^2=310-12(16)=118\), the negative SSE invalidates the remaining requested quantities. The correct diagnosis is to reject the input as internally inconsistent.</p>`,
+    rubric:["Compute \(\mathbf b\) &mdash; <b>3 pts</b>","Know/use \(\mathrm{SSE}=y^Ty-b^TX^Ty\) &mdash; <b>2 pts</b>","Detect negative SSE as impossible &mdash; <b>2 pts</b>","Avoid reporting meaningless \(R^2,s^2\) from inconsistent input &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Final exams often hide an impossible summary. A negative SSE is not a surprising result; it is a stop sign."
+  },
+  {
+    id:"Ch 28 &mdash; Q26",
+    level:"medium",
+    tags:["Hat matrix","Fitted values"],
+    src:"Original. Projection from a given \(H\).",
+    problem:String.raw`Let
+\[
+H=\begin{pmatrix}
+1/2&1/2&0\\
+1/2&1/2&0\\
+0&0&1
+\end{pmatrix},\qquad \mathbf y=\begin{pmatrix}4\\6\\9\end{pmatrix}.
+\]
+Compute \(\hat{\mathbf y}=H\mathbf y\), residuals, SSE, and verify whether \(H\) is idempotent.`,
+    solution:String.raw`<p>\[
+\hat{\mathbf y}=H\mathbf y=\begin{pmatrix}5\\5\\9\end{pmatrix}.
+\]
+Thus
+\[
+\mathbf e=\mathbf y-\hat{\mathbf y}=\begin{pmatrix}-1\\1\\0\end{pmatrix},\qquad
+\mathrm{SSE}=(-1)^2+1^2+0^2=2.
+\]</p>
+<p>The top-left \(2\times2\) block averages the first two entries. Applying it twice still gives the same average, and the third coordinate is unchanged. Direct multiplication gives \(H^2=H\), so \(H\) is idempotent.</p>`,
+    rubric:["Compute \(H\mathbf y\) &mdash; <b>2 pts</b>","Compute residuals and SSE &mdash; <b>3 pts</b>","Verify or explain idempotence &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"A projection matrix replaces data by fitted coordinates; repeated projection should not move the fitted vector."
+  },
+  {
+    id:"Ch 28 &mdash; Q27",
+    level:"hard",
+    tags:["Adjusted diagnosis","Overfitting"],
+    src:"Original. Parameter-count reasoning.",
+    problem:String.raw`A model has \(n=6\) observations and tries to fit an intercept plus five predictors. Suppose \(X\) is full rank. What are the error df, SSE, and why is \(R^2\) dangerous to report as evidence of a good model?`,
+    solution:String.raw`<p>There are \(p=5\) predictors and \(p+1=6\) coefficients. With \(n=6\) and full rank, the column space of \(X\) is all of \(\mathbb R^6\). Therefore OLS can interpolate the data exactly:
+\[
+\hat{\mathbf y}=\mathbf y,\qquad \mathrm{SSE}=0.
+\]
+The error df are
+\[
+n-p-1=6-5-1=0.
+\]</p>
+<p>The standard residual variance estimate \(s^2=\mathrm{SSE}/0\) is undefined. \(R^2=1\) if \(\mathrm{SST}>0\), but this is not evidence of predictive quality; it is a saturated model with no residual degrees of freedom.</p>`,
+    rubric:["Compute zero error df &mdash; <b>2 pts</b>","Explain full-rank saturation/interpolation &mdash; <b>3 pts</b>","State SSE \(=0\) and \(R^2=1\) caveat &mdash; <b>2 pts</b>","State \(s^2\) undefined &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Perfect in-sample fit can mean no error-checking capacity, not a great model."
+  },
+  {
+    id:"Ch 28 &mdash; Q28",
+    level:"medium",
+    tags:["Residual plots","Model diagnosis"],
+    src:"Original. Residual-pattern interpretation.",
+    problem:String.raw`An MLR has \(R^2=0.91\). The residuals versus fitted values show a clear U-shaped pattern. Diagnose the problem and suggest a Chapter 28-level remedy.`,
+    solution:String.raw`<p>The U-shape indicates a violation of the linear mean structure: the model is systematically too high in some regions and too low in others. The high \(R^2\) does not remove that concern.</p>
+<p>A Chapter 28-level remedy is to add nonlinear transformations as additional linear-regression columns, such as \(x_j^2\), \(x_j^3\), or relevant interactions. This keeps the model linear in the coefficients while allowing curvature in predictors.</p>`,
+    rubric:["Identify nonlinear mean/model misspecification &mdash; <b>3 pts</b>","Explain why \(R^2\) is insufficient &mdash; <b>2 pts</b>","Suggest polynomial/interaction columns &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"Residual shape beats \(R^2\) when diagnosing model form."
+  },
+  {
+    id:"Ch 28 &mdash; Q29",
+    level:"hard",
+    tags:["Partial geometry","Nested models"],
+    src:"Original. Conceptual bridge to later inference.",
+    problem:String.raw`A reduced model has columns \(X_R\), and a full model adds one extra column \(z\), so \(X_F=[X_R\ z]\). Explain geometrically why \(\mathrm{SSE}_F\le \mathrm{SSE}_R\). When is equality possible?`,
+    solution:String.raw`<p>The reduced model projects \(\mathbf y\) onto \(\mathcal C(X_R)\). The full model projects \(\mathbf y\) onto \(\mathcal C(X_F)\). Since \(X_F\) contains all columns of \(X_R\),
+\[
+\mathcal C(X_R)\subseteq \mathcal C(X_F).
+\]
+Projecting onto a larger subspace cannot produce a longer residual vector than projecting onto a smaller subspace. Therefore \(\mathrm{SSE}_F\le\mathrm{SSE}_R\).</p>
+<p>Equality occurs if the added column \(z\) contributes no new useful fitted direction for this response. This can happen if \(z\in\mathcal C(X_R)\), so the full column space is unchanged, or if the component of \(z\) orthogonal to \(\mathcal C(X_R)\) is orthogonal to the reduced-model residual.</p>`,
+    rubric:["State nested column-space relationship &mdash; <b>3 pts</b>","Connect larger subspace to non-increasing SSE &mdash; <b>3 pts</b>","Give valid equality condition &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Adding columns never worsens training SSE. That is why training SSE alone cannot choose model complexity."
+  },
+  {
+    id:"Ch 28 &mdash; Q30",
+    level:"hard",
+    tags:["Comprehensive","Final-style"],
+    src:"Original. Matrix computation and diagnosis.",
+    problem:String.raw`A fitted MLR with intercept and two predictors has
+\[
+\mathbf b=\begin{pmatrix}2\\1\\-1\end{pmatrix},\quad
+X^TX=\begin{pmatrix}4&6&2\\6&14&4\\2&4&6\end{pmatrix},\quad
+X^T\mathbf y=\begin{pmatrix}10\\18\\2\end{pmatrix},\quad
+\mathbf y^T\mathbf y=34.
+\]
+(a) Verify whether \(\mathbf b\) satisfies the normal equations. (b) Compute SSE using \(\mathbf y^T\mathbf y-2\mathbf b^TX^T\mathbf y+\mathbf b^TX^TX\mathbf b\). (c) If \(\bar y=2.5\), compute \(R^2\).`,
+    solution:String.raw`<p>(a) Compute
+\[
+X^TX\mathbf b=
+\begin{pmatrix}
+4&6&2\\6&14&4\\2&4&6
+\end{pmatrix}
+\begin{pmatrix}2\\1\\-1\end{pmatrix}
+=\begin{pmatrix}12\\22\\2\end{pmatrix}.
+\]
+This is not \(X^T\mathbf y=(10,18,2)^T\), so the supplied \(\mathbf b\) is not the OLS solution for these summaries.</p>
+<p>(b) Still using the requested quadratic formula:
+\[
+\mathbf b^TX^T\mathbf y=2(10)+1(18)-1(2)=36,
+\]
+and
+\[
+\mathbf b^TX^TX\mathbf b=\mathbf b^T(12,22,2)^T=2(12)+1(22)-1(2)=44.
+\]
+Thus
+\[
+\mathrm{SSE}=34-2(36)+44=6.
+\]</p>
+<p>(c) With \(n=4\) from the top-left entry of \(X^TX\), 
+\[
+\mathrm{SST}=y^Ty-n\bar y^2=34-4(2.5)^2=9.
+\]
+If these were OLS fitted values, \(R^2=1-6/9=1/3\). But part (a) warns that the coefficient vector is not the OLS coefficient vector, so this is not the standard OLS \(R^2\) for the supplied design summaries.</p>`,
+    rubric:["Check normal equations correctly &mdash; <b>3 pts</b>","Compute quadratic SSE formula &mdash; <b>3 pts</b>","Compute SST and conditional \(R^2\) &mdash; <b>1 pt</b>","State diagnosis that \(\mathbf b\) is not OLS &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"A final-style problem may ask for computation and diagnosis. Verify the normal equations before treating a vector as the least-squares vector."
+  },
+  {
+    id:"Ch 28 &mdash; Q31",
+    level:"medium",
+    tags:["Model hierarchy","Interactions"],
+    src:"Original. Formula recognition.",
+    problem:String.raw`For predictors \(x_1\) and \(x_2\), write the design columns for a model with main effects and interaction. Interpret the interaction coefficient in
+\[
+\mu=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_1x_2.
+\]`,
+    solution:String.raw`<p>The design columns are
+\[
+1,\quad x_1,\quad x_2,\quad x_1x_2.
+\]
+The interaction coefficient \(\beta_3\) says that the slope with respect to \(x_1\) depends on the value of \(x_2\):
+\[
+\frac{\partial \mu}{\partial x_1}=\beta_1+\beta_3x_2.
+\]
+Equivalently,
+\[
+\frac{\partial \mu}{\partial x_2}=\beta_2+\beta_3x_1.
+\]
+So \(\beta_3\) measures departure from purely additive effects.</p>`,
+    rubric:["List correct design columns &mdash; <b>2 pts</b>","Interpret interaction as changing slope &mdash; <b>3 pts</b>","Use derivative or equivalent explanation &mdash; <b>2 pts</b>","Mention departure from additivity &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"An interaction term is still linear regression because \(x_1x_2\) is just another known column."
+  },
+  {
+    id:"Ch 28 &mdash; Q32",
+    level:"hard",
+    tags:["Comprehensive diagnosis","Exam review"],
+    src:"Original. Mixed final-style checklist.",
+    problem:String.raw`A student writes: "In MLR, \(b=(XX^T)^{-1}Xy\). Since \(R^2=0.96\), all assumptions are valid. The residual df are \(n-p\) because there are \(p\) predictors. A quadratic regression is nonlinear regression, so least squares does not apply." Identify and correct at least four errors.`,
+    solution:String.raw`<p>Error 1: the estimator is
+\[
+\mathbf b=(X^TX)^{-1}X^T\mathbf y,
+\]
+assuming \(X^TX\) is invertible. The expression \((XX^T)^{-1}X\mathbf y\) is generally dimensionally wrong for OLS coefficients.</p>
+<p>Error 2: high \(R^2\) does not validate assumptions. Residual diagnostics and subject-matter checks are still needed.</p>
+<p>Error 3: with an intercept and \(p\) predictors, residual df are \(n-p-1\), not \(n-p\).</p>
+<p>Error 4: quadratic regression \(Y=\beta_0+\beta_1x+\beta_2x^2+\epsilon\) is linear regression because it is linear in the \(\beta\)'s. Least squares applies using columns \(1,x,x^2\).</p>
+<p>A fifth possible correction is that \(X^TX\) must be nonsingular for the inverse formula; exact collinearity breaks the coefficient formula.</p>`,
+    rubric:["Correct the matrix formula &mdash; <b>2 pts</b>","Correct the \(R^2\) assumption claim &mdash; <b>2 pts</b>","Correct residual df &mdash; <b>2 pts</b>","Correct polynomial-regression classification &mdash; <b>2 pts</b>","Mention invertibility if included &mdash; <b>1 bonus pt</b>"],
+    total:"8 pts",
+    tip:"Dimension checks catch many formula errors before any statistics are involved."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

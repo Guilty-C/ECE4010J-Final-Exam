@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 16</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#163b5e;
+    color:#fff;
+    border:1px solid #224d72;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    background:#fff;
+    color:var(--accent);
+    border-color:#fff;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  section.chapter{ display:block; }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  .citebar{
+    font-size:.82em;
+    color:var(--muted);
+    border-top:1px dashed var(--rule);
+    margin-top:.6em;
+    padding-top:.4em;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 16</h1>
+  <nav class="tabs">
+    <button class="active">Ch 16 &mdash; The Fisher Test</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch16" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 16 &mdash; The Fisher Test</h2>
+    <p>Topics covered: Fisher's null hypothesis test, forming \(H_0\), one-tailed and two-tailed P-values, Z-test statistics for normal sample means with known variance, P-values as evidence against \(H_0\), rejection language, assumptions, confidence-interval/test duality, Bayesian/base-rate cautions, repeated evidence, and common final-exam pitfalls. The main traps are reversing the tail, treating a P-value as \(P(H_0\mid D)\), saying that failure to reject proves \(H_0\), doubling a one-sided P-value when the test is directional, and ignoring the model used to compute the test statistic.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch16')">Expand all solutions</button>
+    <button onclick="collapseAll('ch16')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 16 &mdash; Q1",
+    level:"easy",
+    tags:["Null hypothesis","One-tailed"],
+    src:"Based on slides 373&ndash;375.",
+    problem:String.raw`A manufacturer wants evidence that a new car design has mean mileage greater than 26 mpg. In Fisher's framework, write the null hypothesis and state which tail of the sampling distribution will produce evidence against it.`,
+    solution:String.raw`<p>The research goal is to find evidence that \(\mu>26\), so the Fisher null should contain the opposite or boundary claim:</p><p>\[H_0:\mu\le 26.\]</p><p>Large values of \(\bar X\) contradict this null, so this is an <b>upper-tailed</b> test. The P-value is computed at the boundary \(\mu=26\): \(P(\bar X\ge \bar x_{\mathrm{obs}}\mid \mu=26)\).</p>`,
+    rubric:["Write \\(H_0:\\mu\\le26\\) &mdash; <b>2 pts</b>","Identify the upper tail &mdash; <b>2 pts</b>","Explain why large sample means are evidence against the null &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"For a one-sided Fisher test, the null usually includes equality and the side opposite to the claim you hope to support."
+  },
+  {
+    id:"Ch 16 &mdash; Q2",
+    level:"easy",
+    tags:["P-value","Definition"],
+    src:"Based on slides 375 and 378.",
+    problem:String.raw`In one sentence, define the P-value for a Fisher null hypothesis test. Then say whether a smaller or larger P-value is stronger evidence against \(H_0\).`,
+    solution:String.raw`<p>The P-value is the probability, computed under the null hypothesis (usually at the boundary value), of obtaining data at least as extreme as the observed data in the direction that contradicts \(H_0\).</p><p>A <b>smaller</b> P-value is stronger evidence against \(H_0\), because the observed data would be less likely if the null model were correct.</p>`,
+    rubric:["Define the probability under \\(H_0\\) &mdash; <b>2 pts</b>","Include 'at least as extreme as observed' &mdash; <b>2 pts</b>","State that smaller P-values give stronger evidence against \\(H_0\\) &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Do not define the P-value as the probability that the null hypothesis is true. That is a posterior probability, not a Fisher P-value."
+  },
+  {
+    id:"Ch 16 &mdash; Q3",
+    level:"easy",
+    tags:["Z-test","Known sigma"],
+    src:"Adapted from the mileage example on slides 379&ndash;380.",
+    problem:String.raw`Assume car mileages are normal with known \(\sigma=5\) mpg. A sample of \(n=36\) new-design cars has \(\bar x=28.04\). Test \(H_0:\mu\le26\) by computing the one-sided Fisher P-value.`,
+    solution:String.raw`<p>Use the sample mean as the test statistic. Under the boundary \(\mu=26\),</p><p>\[Z=\frac{\bar X-26}{5/\sqrt{36}}\sim N(0,1).\]</p><p>The observed value is \(z=(28.04-26)/(5/6)=2.448\approx2.45\). Therefore</p><p>\[P=P(Z\ge2.45)\approx0.0071.\]</p><p>This is strong evidence against \(H_0\); one may reject at approximately the 0.71% level of significance.</p>`,
+    rubric:["Set up the boundary null distribution &mdash; <b>2 pts</b>","Compute \\(z\\approx2.45\\) &mdash; <b>2 pts</b>","Use the upper tail only &mdash; <b>1 pt</b>","Interpret the small P-value as evidence against \\(H_0\\) &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"The composite null \(\mu\le26\) is evaluated at \(\mu=26\), because that boundary gives the largest upper-tail probability."
+  },
+  {
+    id:"Ch 16 &mdash; Q4",
+    level:"easy",
+    tags:["Two-tailed","Z-test"],
+    src:"Adapted from the rocket-propellant example on slides 382&ndash;383.",
+    problem:String.raw`A propellant should have mean burning rate \(40\) cm/s. The population standard deviation is known to be \(\sigma=2\), and \(n=25\) specimens have \(\bar x=41.25\). Test \(H_0:\mu=40\) with a two-sided Fisher test and compute the P-value.`,
+    solution:String.raw`<p>Under \(H_0\),</p><p>\[Z=\frac{\bar X-40}{2/\sqrt{25}}\sim N(0,1).\]</p><p>The observed statistic is \(z=(41.25-40)/(2/5)=3.125\). For a two-sided test,</p><p>\[P=2P(Z\ge |3.125|)\approx2(0.0009)=0.0018.\]</p><p>There is very strong evidence that the mean burning rate is not 40 cm/s.</p>`,
+    rubric:["Use the two-sided null \\(H_0:\\mu=40\\) &mdash; <b>1 pt</b>","Compute \\(z=3.125\\) &mdash; <b>2 pts</b>","Double the one-tail probability &mdash; <b>2 pts</b>","Give the contextual conclusion &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Two-sided tests look for departures in either direction, so use \(2P(Z\ge |z_{\mathrm{obs}}|)\)."
+  },
+  {
+    id:"Ch 16 &mdash; Q5",
+    level:"easy",
+    tags:["Tail choice","Claims"],
+    src:"Original. Final-style setup drill.",
+    problem:String.raw`For each research goal, write a Fisher null hypothesis and say whether the test is upper-tailed, lower-tailed, or two-tailed.<ol type="a"><li>Evidence that \(\mu>10\).</li><li>Evidence that \(\mu<10\).</li><li>Evidence that \(\mu\neq10\).</li></ol>`,
+    solution:String.raw`<p><b>(a)</b> \(H_0:\mu\le10\), upper-tailed.</p><p><b>(b)</b> \(H_0:\mu\ge10\), lower-tailed.</p><p><b>(c)</b> \(H_0:\mu=10\), two-tailed.</p>`,
+    rubric:["Part (a): correct null and upper tail &mdash; <b>2 pts</b>","Part (b): correct null and lower tail &mdash; <b>2 pts</b>","Part (c): correct equality null and two tails &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"The alternative is not formally central in Fisher's original setup, but the research goal determines which data count as extreme."
+  },
+  {
+    id:"Ch 16 &mdash; Q6",
+    level:"easy",
+    tags:["Decision language","Interpretation"],
+    src:"Based on slide 378.",
+    problem:String.raw`A Fisher test returns \(P=0.18\). A student writes, "Therefore \(H_0\) is true." Diagnose the statement and give better wording.`,
+    solution:String.raw`<p>The statement is too strong. A large P-value means the observed data are not unusual under the null model; it does <b>not</b> prove \(H_0\).</p><p>Better wording: "The data do not provide strong evidence against \(H_0\); we fail to reject \(H_0\) based on this test."</p>`,
+    rubric:["State that \\(H_0\\) is not proved true &mdash; <b>2 pts</b>","Connect \\(P=0.18\\) to weak evidence against \\(H_0\\) &mdash; <b>2 pts</b>","Use 'fail to reject' language &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Fisher testing is asymmetric: it tries to find evidence against the null, not prove the null."
+  },
+  {
+    id:"Ch 16 &mdash; Q7",
+    level:"easy",
+    tags:["Significance level","P-value"],
+    src:"Based on slide 384.",
+    problem:String.raw`A report says "reject \(H_0\) at the 3.2% level of significance." What P-value is being reported? Would this result be called significant at the 5% level? At the 1% level?`,
+    solution:String.raw`<p>The statement reports \(P=0.032\). Since \(0.032<0.05\), it is significant at the 5% level. Since \(0.032>0.01\), it is not significant at the 1% level.</p>`,
+    rubric:["Identify \\(P=0.032\\) &mdash; <b>2 pts</b>","Compare correctly with 0.05 &mdash; <b>1 pt</b>","Compare correctly with 0.01 &mdash; <b>1 pt</b>","Use rejection/significance language consistently &mdash; <b>1 pt</b>"],
+    total:"5 pts",
+    tip:"Fisher later preferred quoting the actual P-value instead of only reporting whether it passed a fixed 5% threshold."
+  },
+  {
+    id:"Ch 16 &mdash; Q8",
+    level:"easy",
+    tags:["Assumptions","Test statistic"],
+    src:"Original. Assumption check for slides 379&ndash;383.",
+    problem:String.raw`List the assumptions needed to compute the Z-test P-value for a sample mean as \(Z=(\bar X-\mu_0)/(\sigma/\sqrt n)\) in Chapter 16.`,
+    solution:String.raw`<p>The usual Chapter 16 Z-test setup requires: a random sample, independent observations, a population model under which \(\bar X\) is normal or approximately normal, and a known population standard deviation \(\sigma\). For small samples, exact normality of the population is the standard justification. For large samples, a CLT approximation may justify the normal sampling distribution if the observations are well behaved.</p>`,
+    rubric:["Mention random sampling/independence &mdash; <b>2 pts</b>","Mention normal or approximately normal sampling distribution of \\(\\bar X\\) &mdash; <b>2 pts</b>","Mention known \\(\\sigma\\) for the Z statistic &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"A correct formula is not enough; the formula is only as valid as the sampling distribution used to calculate the tail area."
+  },
+  {
+    id:"Ch 16 &mdash; Q9",
+    level:"easy",
+    tags:["P-value vs posterior","Concept"],
+    src:"Based on slides 385&ndash;386.",
+    problem:String.raw`A test gives \(P=0.04\). Which statement is correct?<ol type="a"><li>There is a 4% probability that \(H_0\) is true.</li><li>If the null model were true, data at least this extreme would occur with probability 4%.</li><li>There is a 96% probability that the research claim is true.</li></ol>`,
+    solution:String.raw`<p>The correct statement is <b>(b)</b>. The P-value is a probability of data under the null model, not a probability of the hypothesis after observing data.</p><p>Statements (a) and (c) confuse \(P(D\mid H_0)\) with posterior probabilities such as \(P(H_0\mid D)\) or \(P(H_1\mid D)\).</p>`,
+    rubric:["Choose statement (b) &mdash; <b>2 pts</b>","Explain \\(P(D\\mid H_0)\\) versus \\(P(H_0\\mid D)\\) &mdash; <b>3 pts</b>"],
+    total:"5 pts",
+    tip:"If an interpretation says 'probability that the hypothesis is true,' it is almost certainly not a Fisher P-value interpretation."
+  },
+  {
+    id:"Ch 16 &mdash; Q10",
+    level:"easy",
+    tags:["One-sided P-value","Lower tail"],
+    src:"Original. Direct lower-tail computation.",
+    problem:String.raw`A machine is supposed to have mean output at least \(100\). You want evidence that it is underperforming. Known \(\sigma=12\), \(n=36\), and \(\bar x=96.5\). Set up \(H_0\) and compute the one-sided P-value.`,
+    solution:String.raw`<p>Underperformance means \(\mu<100\), so use \(H_0:\mu\ge100\). The evidence is in the lower tail.</p><p>At the boundary \(\mu=100\),</p><p>\[z=\frac{96.5-100}{12/\sqrt{36}}=\frac{-3.5}{2}=-1.75.\]</p><p>The P-value is \(P(Z\le -1.75)\approx0.0401\). This is moderate evidence that the mean is below 100.</p>`,
+    rubric:["Write \\(H_0:\\mu\\ge100\\) &mdash; <b>2 pts</b>","Identify lower tail &mdash; <b>1 pt</b>","Compute \\(z=-1.75\\) &mdash; <b>2 pts</b>","Compute and interpret \\(P\\approx0.040\\) &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"For lower-tailed tests, do not convert a negative \(z\) into a positive upper-tail probability unless you use symmetry correctly."
+  },
+  {
+    id:"Ch 16 &mdash; Q11",
+    level:"medium",
+    tags:["Composite null","Boundary value"],
+    src:"Based on slides 375&ndash;377.",
+    problem:String.raw`Explain why, for \(H_0:\mu\le\mu_0\) with evidence in the upper tail, the Fisher P-value is computed using \(\mu=\mu_0\), not using some smaller value such as \(\mu=\mu_0-2\).`,
+    solution:String.raw`<p>For fixed observed \(\bar x>\mu_0\), the probability \(P(\bar X\ge\bar x)\) is largest among \(\mu\le\mu_0\) when \(\mu=\mu_0\). If the true mean were smaller, the sampling distribution would shift left and the upper-tail probability would be even smaller.</p><p>Thus the boundary value gives an upper bound on the probability of seeing data this extreme under the whole composite null. That upper bound is the conservative Fisher P-value.</p>`,
+    rubric:["State that the boundary gives the largest upper-tail probability &mdash; <b>3 pts</b>","Explain the left shift for smaller \\(\\mu\\) &mdash; <b>2 pts</b>","Connect this to an upper bound for the composite null &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"For one-sided composite nulls, always ask which parameter value inside the null makes the observed evidence least surprising."
+  },
+  {
+    id:"Ch 16 &mdash; Q12",
+    level:"medium",
+    tags:["Two-sided P-value","Table lookup"],
+    src:"Original. Two-sided Z-test practice.",
+    problem:String.raw`A sample mean test produces \(z_{\mathrm{obs}}=-2.12\) for \(H_0:\mu=\mu_0\). Compute the two-sided P-value and give the rejection conclusion at the 5% level.`,
+    solution:String.raw`<p>For a two-sided Z-test,</p><p>\[P=2P(Z\ge |z_{\mathrm{obs}}|)=2P(Z\ge2.12).\]</p><p>Using a standard normal table, \(P(Z\ge2.12)\approx0.0170\), so \(P\approx0.0340\). Since \(0.0340<0.05\), reject \(H_0\) at the 5% level.</p>`,
+    rubric:["Use absolute value for the two-sided statistic &mdash; <b>2 pts</b>","Double the one-tail probability &mdash; <b>2 pts</b>","Compute \\(P\\approx0.034\\) &mdash; <b>1 pt</b>","Make the 5% decision correctly &mdash; <b>1 pt</b>"],
+    total:"6 pts",
+    tip:"The sign of \(z\) tells direction, but a two-sided P-value uses distance from zero."
+  },
+  {
+    id:"Ch 16 &mdash; Q13",
+    level:"medium",
+    tags:["Diagnose error","Wrong tail"],
+    src:"Original. Common final-exam mistake.",
+    problem:String.raw`A student tests \(H_0:\mu\le50\) after observing \(z=1.82\). They compute \(P(Z\le1.82)=0.9656\) and fail to reject. Identify the error and compute the correct P-value.`,
+    solution:String.raw`<p>The null \(H_0:\mu\le50\) is contradicted by large sample means, so the correct tail is the upper tail, not the lower tail.</p><p>The correct P-value is</p><p>\[P(Z\ge1.82)=1-0.9656=0.0344.\]</p><p>This is significant at the 5% level and provides evidence against \(H_0\).</p>`,
+    rubric:["Identify the wrong-tail error &mdash; <b>3 pts</b>","Compute \\(1-0.9656=0.0344\\) &mdash; <b>2 pts</b>","State the corrected conclusion &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"A P-value is not the cumulative area to the left by default; it is the area in the direction of evidence against \(H_0\)."
+  },
+  {
+    id:"Ch 16 &mdash; Q14",
+    level:"medium",
+    tags:["Diagnose error","Unneeded doubling"],
+    src:"Original. One-sided versus two-sided trap.",
+    problem:String.raw`A research team wants evidence that a drug increases mean response, so they test \(H_0:\mu\le0\). They observe \(z=2.05\), compute \(P(Z\ge2.05)=0.0202\), then double it to \(0.0404\). Diagnose the solution.`,
+    solution:String.raw`<p>The setup is one-sided: evidence for an increase is only in the upper tail. Therefore the correct Fisher P-value is \(0.0202\), not the doubled value.</p><p>Doubling is appropriate for \(H_0:\mu=0\) when deviations in either direction count as evidence. Here a large negative result would not support the research claim that the drug increases response.</p>`,
+    rubric:["Identify that the test is one-sided &mdash; <b>2 pts</b>","State the correct P-value \\(0.0202\\) &mdash; <b>2 pts</b>","Explain when doubling is appropriate &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Do not double merely because the null contains equality. Double only when both tails are part of the evidence definition."
+  },
+  {
+    id:"Ch 16 &mdash; Q15",
+    level:"medium",
+    tags:["Test statistic","Known sigma"],
+    src:"Original. Formula setup and arithmetic.",
+    problem:String.raw`A chemical process target is \(\mu_0=8.0\). Assume normal output with known \(\sigma=1.5\). A sample of \(n=49\) has \(\bar x=8.42\). For \(H_0:\mu=8.0\), compute the Z statistic and two-sided P-value.`,
+    solution:String.raw`<p>The standard error is \(1.5/\sqrt{49}=1.5/7=0.2143\). Therefore</p><p>\[z=\frac{8.42-8.00}{0.2143}=1.96.\]</p><p>For a two-sided test, \(P=2P(Z\ge1.96)=2(0.025)=0.050\). The result is exactly borderline at the 5% level using the usual table value.</p>`,
+    rubric:["Compute the standard error correctly &mdash; <b>2 pts</b>","Compute \\(z=1.96\\) &mdash; <b>2 pts</b>","Use two-sided P-value \\(0.050\\) &mdash; <b>2 pts</b>","Describe the borderline conclusion &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"When \(z\) lands on 1.96, the two-sided 5% conclusion depends on rounding and whether the course treats equality as rejection."
+  },
+  {
+    id:"Ch 16 &mdash; Q16",
+    level:"medium",
+    tags:["P-value bands","Tables"],
+    src:"Original. Table-based final style.",
+    problem:String.raw`Without a calculator, bracket the one-sided upper-tail P-value for \(z=2.33\) using the facts \(z_{0.025}=1.96\), \(z_{0.01}=2.326\), and \(z_{0.005}=2.576\).`,
+    solution:String.raw`<p>Since \(2.33\) is just above \(2.326=z_{0.01}\), the upper-tail probability is just below \(0.01\). Since \(2.33<2.576=z_{0.005}\), the upper-tail probability is above \(0.005\).</p><p>Thus \(0.005<P<0.01\), very close to \(0.01\).</p>`,
+    rubric:["Compare 2.33 with 2.326 &mdash; <b>2 pts</b>","Compare 2.33 with 2.576 &mdash; <b>2 pts</b>","Give the correct P-value interval &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"For upper-tail critical values, larger \(z\) means smaller tail probability."
+  },
+  {
+    id:"Ch 16 &mdash; Q17",
+    level:"medium",
+    tags:["CI duality","Two-sided test"],
+    src:"Original. Links Chapter 15 and Chapter 16.",
+    problem:String.raw`A 95% confidence interval for \(\mu\), constructed using the same normal known-\(\sigma\) model, is \([12.1,15.7]\). Use CI/test duality to decide whether a two-sided Fisher test of \(H_0:\mu=16.0\) rejects at the 5% level. What about \(H_0:\mu=14.0\)?`,
+    solution:String.raw`<p>For the matching two-sided test, reject at level \(0.05\) exactly when the null value lies outside the 95% confidence interval.</p><p>The value \(16.0\) is outside \([12.1,15.7]\), so reject \(H_0:\mu=16.0\). The value \(14.0\) is inside the interval, so fail to reject \(H_0:\mu=14.0\).</p>`,
+    rubric:["State the matching two-sided CI/test rule &mdash; <b>2 pts</b>","Reject for 16.0 &mdash; <b>2 pts</b>","Fail to reject for 14.0 &mdash; <b>2 pts</b>","Mention that the model and level must match &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"This shortcut is reliable only for matching two-sided procedures. It does not automatically solve one-sided tests."
+  },
+  {
+    id:"Ch 16 &mdash; Q18",
+    level:"medium",
+    tags:["CI duality","One-sided pitfall"],
+    src:"Original. Confidence interval pitfall.",
+    problem:String.raw`A 95% two-sided confidence interval for \(\mu\) is \([1.2,4.8]\). A student uses it to decide a one-sided 5% test of \(H_0:\mu\le1.0\) versus evidence that \(\mu>1.0\), and says "1.0 is outside the interval, so reject." Is this reasoning valid? Give the correct CI shortcut if one is used.`,
+    solution:String.raw`<p>The conclusion may be true, but the reasoning uses the wrong interval. A 95% two-sided CI corresponds to a two-sided 5% test, not a one-sided 5% test.</p><p>For a one-sided upper-tail level-5% test of \(H_0:\mu\le\mu_0\), the matching confidence object is a 95% lower confidence bound for \(\mu\). Reject when the null boundary \(\mu_0\) lies below that lower bound.</p>`,
+    rubric:["Identify mismatch between two-sided CI and one-sided test &mdash; <b>3 pts</b>","State the appropriate one-sided lower-bound shortcut &mdash; <b>3 pts</b>","Avoid claiming proof of the alternative &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Two-sided 95% intervals pair with two-sided 5% tests; one-sided 5% tests pair with one-sided 95% bounds."
+  },
+  {
+    id:"Ch 16 &mdash; Q19",
+    level:"medium",
+    tags:["P-value evidence","Scientific conclusion"],
+    src:"Based on slide 384.",
+    problem:String.raw`A first experiment gives \(P=0.041\) against \(H_0\). What would Fisher's later advice suggest reporting, and why is one significant result not usually enough for a broad scientific conclusion?`,
+    solution:String.raw`<p>Report the actual P-value, \(P=0.041\), and discuss the strength of evidence in context instead of reducing the result to "significant" or "not significant" only.</p><p>One significant result can occur by chance, can depend on modeling assumptions, and may not replicate. Fisher emphasized that multiple independent significant results provide stronger evidence that the null is actually false.</p>`,
+    rubric:["Say to quote the actual P-value &mdash; <b>2 pts</b>","Discuss case-by-case evidence rather than mechanical thresholding &mdash; <b>2 pts</b>","Mention need for independent replication or multiple significant tests &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"A P-value is a measure of evidence from one dataset, not a complete scientific verdict."
+  },
+  {
+    id:"Ch 16 &mdash; Q20",
+    level:"medium",
+    tags:["Bayes theorem","P-value vs posterior"],
+    src:"Based on slides 385&ndash;386.",
+    problem:String.raw`Let \(D\) denote data called "significant" by a test. Suppose \(P(D\mid H_0)=0.01\), \(P(D\mid \neg H_0)=0.80\), and \(P(H_0)=0.99\). Compute \(P(H_0\mid D)\). What does this show about interpreting P-values?`,
+    solution:String.raw`<p>Bayes's theorem gives</p><p>\[
+P(H_0\mid D)=\frac{P(D\mid H_0)P(H_0)}{P(D\mid H_0)P(H_0)+P(D\mid\neg H_0)P(\neg H_0)}.
+\]</p><p>Substitute the numbers:</p><p>\[
+P(H_0\mid D)=\frac{0.01(0.99)}{0.01(0.99)+0.80(0.01)}
+=\frac{0.0099}{0.0179}\approx0.553.
+\]</p><p>Even with a 1% P-value-like probability under \(H_0\), the posterior probability of \(H_0\) can remain large when the prior probability of \(H_0\) is very large.</p>`,
+    rubric:["Write or use Bayes's theorem correctly &mdash; <b>3 pts</b>","Compute numerator and denominator correctly &mdash; <b>2 pts</b>","Give \\(P(H_0\\mid D)\\approx0.553\\) &mdash; <b>1 pt</b>","Explain why P-values are not posterior probabilities &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"The posterior depends on the prior probability and the probability of the data under alternatives, neither of which is contained in a classical P-value."
+  },
+  {
+    id:"Ch 16 &mdash; Q21",
+    level:"medium",
+    tags:["Base rate","Interpretation"],
+    src:"Based on the base-rate caution on slide 390.",
+    problem:String.raw`A rare condition has prevalence \(1/1000\). A test has false positive probability \(0.005\) and true positive probability \(0.995\). If a randomly selected person tests positive, compute the probability they have the condition.`,
+    solution:String.raw`<p>Let \(C\) be the condition and \(+\) be a positive test. Then</p><p>\[
+P(C\mid +)=\frac{P(+\mid C)P(C)}{P(+\mid C)P(C)+P(+\mid C^c)P(C^c)}.
+\]</p><p>Substitute:</p><p>\[
+P(C\mid +)=\frac{0.995(0.001)}{0.995(0.001)+0.005(0.999)}
+=\frac{0.000995}{0.005990}\approx0.166.
+\]</p><p>Despite a very small false positive probability, most positives can still be false positives when the condition is rare.</p>`,
+    rubric:["Set up Bayes's theorem with base rate &mdash; <b>3 pts</b>","Use both sensitivity and false positive probability correctly &mdash; <b>2 pts</b>","Compute approximately 0.166 &mdash; <b>2 pts</b>","State the base-rate lesson &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"This is the same logical warning as the P-value warning: a small probability of data under one hypothesis is not automatically a small probability of that hypothesis."
+  },
+  {
+    id:"Ch 16 &mdash; Q22",
+    level:"medium",
+    tags:["Effect size","Large n"],
+    src:"Based on Tukey-style critique on slide 391.",
+    problem:String.raw`A huge study finds \(\bar x=100.02\), tests \(H_0:\mu=100\), and obtains \(P=0.0004\). Explain how this can be statistically significant but practically unimportant.`,
+    solution:String.raw`<p>With a very large sample size, the standard error can be extremely small, so even a tiny departure from the null value can produce a large test statistic and a small P-value.</p><p>The result gives evidence that \(\mu\neq100\) under the model, but the estimated effect size is only \(0.02\). Whether that difference matters depends on scientific or engineering context, not on the P-value alone.</p>`,
+    rubric:["Explain the role of large \\(n\\) and small standard error &mdash; <b>3 pts</b>","Distinguish statistical significance from practical importance &mdash; <b>3 pts</b>","Mention effect size/context &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Always report or inspect the effect size; P-values combine effect size with sample size."
+  },
+  {
+    id:"Ch 16 &mdash; Q23",
+    level:"medium",
+    tags:["Raw data","Z-test"],
+    src:"Original. Computation from observations.",
+    problem:String.raw`A known-\(\sigma\) normal model has \(\sigma=3\). For observations \(11,13,12,15,14,10,13,12,11\), test \(H_0:\mu\le11\) using the upper-tailed Fisher P-value.`,
+    solution:String.raw`<p>The sample size is \(n=9\) and \(\bar x=(11+13+12+15+14+10+13+12+11)/9=12.333\).</p><p>At the boundary \(\mu=11\), the standard error is \(3/\sqrt9=1\), so</p><p>\[
+z=\frac{12.333-11}{1}=1.333.
+\]</p><p>The upper-tail P-value is \(P(Z\ge1.33)\approx0.092\). This is not strong evidence at the 5% level.</p>`,
+    rubric:["Compute \\(\\bar x=12.333\\) &mdash; <b>2 pts</b>","Use boundary \\(\\mu=11\\) and SE 1 &mdash; <b>2 pts</b>","Compute \\(z\\approx1.33\\) &mdash; <b>1 pt</b>","Use upper-tail P-value and interpret &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"When raw data are given, compute the statistic first; do not test each observation separately."
+  },
+  {
+    id:"Ch 16 &mdash; Q24",
+    level:"medium",
+    tags:["Unknown sigma","Assumption pitfall"],
+    src:"Original. Bridge to later single-sample tests.",
+    problem:String.raw`A student uses \(Z=(\bar X-\mu_0)/(\sigma/\sqrt n)\) to test a mean, but the problem gives only \(s\), not a known \(\sigma\), and \(n=12\). Diagnose the issue and say what distribution would normally replace \(Z\) under a normal population assumption.`,
+    solution:String.raw`<p>The issue is that the Chapter 16 Z statistic assumes a known population standard deviation. Replacing \(\sigma\) by \(s\) in a small sample changes the sampling distribution.</p><p>Under a normal population assumption, the usual statistic is</p><p>\[
+T=\frac{\bar X-\mu_0}{S/\sqrt n}\sim t_{n-1}=t_{11}
+\]</p><p>under the null boundary/equality. This is covered more fully in the later single-sample testing chapter, but it is already a valid assumption warning here.</p>`,
+    rubric:["Identify that \\(\\sigma\\) is not known &mdash; <b>2 pts</b>","Say that substituting \\(s\\) changes the distribution &mdash; <b>2 pts</b>","Give the T statistic with \\(df=11\\) &mdash; <b>3 pts</b>"],
+    total:"7 pts",
+    tip:"If the denominator contains \(S\), expect a T distribution for small normal samples, not a standard normal distribution."
+  },
+  {
+    id:"Ch 16 &mdash; Q25",
+    level:"hard",
+    tags:["Final style","Full Fisher test"],
+    src:"Original. Comprehensive Chapter 16 Z-test.",
+    problem:String.raw`A supplier claims that its batteries last more than 50 hours on average. Assume battery lifetimes are normal with known \(\sigma=8\). A random sample of \(n=64\) batteries has \(\bar x=52.1\). Perform the Fisher test: write \(H_0\), choose the test statistic, compute the P-value, and give a careful conclusion.`,
+    solution:String.raw`<p>The claim is \(\mu>50\), so use</p><p>\[
+H_0:\mu\le50.
+\]</p><p>The evidence is in the upper tail. At the boundary \(\mu=50\),</p><p>\[
+Z=\frac{\bar X-50}{8/\sqrt{64}}\sim N(0,1),\qquad
+z=\frac{52.1-50}{1}=2.10.
+\]</p><p>The P-value is \(P(Z\ge2.10)\approx0.0179\). This is evidence against \(H_0\); one may reject at about the 1.8% level. The data support the claim that the mean lifetime exceeds 50 hours, assuming the normal known-\(\sigma\) model is appropriate.</p>`,
+    rubric:["Write \\(H_0:\\mu\\le50\\) &mdash; <b>2 pts</b>","Choose upper-tailed Z statistic &mdash; <b>2 pts</b>","Compute \\(z=2.10\\) &mdash; <b>2 pts</b>","Compute \\(P\\approx0.0179\\) &mdash; <b>2 pts</b>","Give assumption-aware conclusion &mdash; <b>2 pts</b>"],
+    total:"10 pts",
+    tip:"A final-exam answer should include setup, statistic, P-value, and conclusion. Arithmetic alone is not enough."
+  },
+  {
+    id:"Ch 16 &mdash; Q26",
+    level:"hard",
+    tags:["Diagnose error","Multiple mistakes"],
+    src:"Original. Diagnose-the-solution final style.",
+    problem:String.raw`A student solution says: "We want evidence that \(\mu<30\), so set \(H_0:\mu<30\). The sample gives \(z=-2.40\). The P-value is \(P(Z\ge2.40)=0.0082\), and because \(0.0082<0.05\), this proves \(\mu<30\)." Identify at least three errors or imprecisions and give the corrected conclusion.`,
+    solution:String.raw`<p>Errors/imprecisions:</p><ol><li>The null should include equality and the opposite side: \(H_0:\mu\ge30\), not \(H_0:\mu<30\).</li><li>The evidence is in the lower tail, so the P-value is \(P(Z\le-2.40)\). Numerically this equals \(0.0082\) by symmetry, but the written tail is conceptually wrong.</li><li>A small P-value does not prove \(\mu<30\); it gives evidence against \(H_0\).</li><li>The conclusion should mention model assumptions if relevant.</li></ol><p>Correct conclusion: \(P\approx0.0082\), so the data provide strong evidence that \(\mu<30\) under the assumed sampling model.</p>`,
+    rubric:["Correct the null hypothesis &mdash; <b>2 pts</b>","Correct the tail logic &mdash; <b>2 pts</b>","Reject 'proves' language &mdash; <b>2 pts</b>","Give a corrected evidence-based conclusion &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Sometimes a numerical P-value is right for the wrong reason. Diagnose both the arithmetic and the statistical logic."
+  },
+  {
+    id:"Ch 16 &mdash; Q27",
+    level:"hard",
+    tags:["Composite null","Proof"],
+    src:"Original. Reasoning from slides 375&ndash;377.",
+    problem:String.raw`Let \(X_1,\ldots,X_n\sim N(\mu,\sigma^2)\) with known \(\sigma\). For \(H_0:\mu\le\mu_0\), prove that \(P_\mu(\bar X\ge c)\le P_{\mu_0}(\bar X\ge c)\) for every \(c\), whenever \(\mu\le\mu_0\).`,
+    solution:String.raw`<p>Since \(\bar X\sim N(\mu,\sigma^2/n)\),</p><p>\[
+P_\mu(\bar X\ge c)=P\left(Z\ge\frac{c-\mu}{\sigma/\sqrt n}\right).
+\]</p><p>If \(\mu\le\mu_0\), then \(c-\mu\ge c-\mu_0\), so</p><p>\[
+\frac{c-\mu}{\sigma/\sqrt n}\ge \frac{c-\mu_0}{\sigma/\sqrt n}.
+\]</p><p>The standard normal upper-tail probability is decreasing in its cutoff. Therefore</p><p>\[
+P\left(Z\ge\frac{c-\mu}{\sigma/\sqrt n}\right)\le
+P\left(Z\ge\frac{c-\mu_0}{\sigma/\sqrt n}\right)=P_{\mu_0}(\bar X\ge c).
+\]</p><p>This proves that the boundary value gives the largest upper-tail probability under the composite null.</p>`,
+    rubric:["Write the normal tail probability for \\(\\bar X\\) &mdash; <b>2 pts</b>","Use \\(\\mu\\le\\mu_0\\) to order the standardized cutoffs &mdash; <b>3 pts</b>","Use monotonicity of the upper tail &mdash; <b>2 pts</b>","State the boundary-value implication &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"This proof is the mathematical reason one-sided Fisher tests use the null boundary."
+  },
+  {
+    id:"Ch 16 &mdash; Q28",
+    level:"hard",
+    tags:["Bayesian critique","Concept"],
+    src:"Based on slides 385&ndash;387.",
+    problem:String.raw`Use Bayes's theorem to explain why \(P(D\mid H_0)=0.01\) does not by itself determine \(P(H_0\mid D)\). Name the additional quantities needed.`,
+    solution:String.raw`<p>Bayes's theorem gives</p><p>\[
+P(H_0\mid D)=\frac{P(D\mid H_0)P(H_0)}
+{P(D\mid H_0)P(H_0)+P(D\mid\neg H_0)P(\neg H_0)}.
+\]</p><p>Thus knowing \(P(D\mid H_0)=0.01\) is not enough. We also need the prior probability \(P(H_0)\), the prior probability \(P(\neg H_0)=1-P(H_0)\), and the likelihood \(P(D\mid\neg H_0)\). Different choices of these quantities can produce very different posterior probabilities.</p>`,
+    rubric:["Write Bayes's theorem in the hypothesis/data form &mdash; <b>3 pts</b>","Identify need for prior probability of \\(H_0\\) &mdash; <b>2 pts</b>","Identify need for probability of data under alternatives &mdash; <b>2 pts</b>","State the implication for P-value interpretation &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"The P-value is one likelihood-like ingredient, not the whole Bayesian update."
+  },
+  {
+    id:"Ch 16 &mdash; Q29",
+    level:"hard",
+    tags:["Replication","Multiple tests"],
+    src:"Based on slide 384.",
+    problem:String.raw`Two independent experiments test the same null using the same valid model. Each experiment individually gives \(P=0.04\). Explain why this is stronger evidence than one experiment with \(P=0.04\), but also why it still does not literally prove \(H_0\) false.`,
+    solution:String.raw`<p>Independent replication reduces the chance that the original significant result was a one-off random fluctuation or modeling artifact. Two separate datasets both producing results unlikely under \(H_0\) are more persuasive than one such dataset.</p><p>However, even repeated small P-values are still probabilities of data under a model, not logical proof that \(H_0\) is false. The conclusion remains evidence-based and assumption-dependent. Model misspecification, selection effects, or dependence between experiments could also weaken the argument.</p>`,
+    rubric:["Explain why independent replication strengthens evidence &mdash; <b>3 pts</b>","State that small P-values still do not prove the null false &mdash; <b>2 pts</b>","Mention assumptions/independence or model validity &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Fisher valued repeated independent significant tests, but replication strengthens evidence rather than converting statistics into proof."
+  },
+  {
+    id:"Ch 16 &mdash; Q30",
+    level:"hard",
+    tags:["Final style","Mixed decisions"],
+    src:"Original. Comprehensive interpretation question.",
+    problem:String.raw`For each situation, state the appropriate Fisher conclusion in words.<ol type="i"><li>Upper-tailed test, \(P=0.003\).</li><li>Two-sided test, \(P=0.27\).</li><li>Lower-tailed test, \(P=0.049\), but the normality assumption is doubtful and \(n=8\).</li><li>Two-sided test, \(P=0.00001\), estimated effect size is practically negligible.</li></ol>`,
+    solution:String.raw`<p><b>(i)</b> Very strong evidence against \(H_0\) in the upper-tail direction; reject at conventional levels such as 5% or 1%.</p><p><b>(ii)</b> The data are not unusual under \(H_0\); fail to reject. Do not say \(H_0\) is true.</p><p><b>(iii)</b> Numerically this would be just significant at 5%, but the P-value may be unreliable because the small-sample model assumption is doubtful. Report the caveat instead of making a clean conclusion.</p><p><b>(iv)</b> There is overwhelming statistical evidence of a nonzero difference under the model, but the practical importance may be negligible. Report both P-value and effect size.</p>`,
+    rubric:["Part (i): strong evidence/reject wording &mdash; <b>2 pts</b>","Part (ii): fail to reject without proving null &mdash; <b>2 pts</b>","Part (iii): include assumption caveat &mdash; <b>3 pts</b>","Part (iv): separate statistical and practical significance &mdash; <b>3 pts</b>"],
+    total:"10 pts",
+    tip:"Final answers should combine the numerical P-value with direction, assumptions, and practical context."
+  },
+  {
+    id:"Ch 16 &mdash; Q31",
+    level:"hard",
+    tags:["Design critique","Tukey critique"],
+    src:"Based on slide 391.",
+    problem:String.raw`A researcher says: "I can always reject \(H_0:\mu=0\) if I choose a large enough sample size, unless the effect is exactly zero." Explain the statistical idea behind this claim and how a better analysis should respond.`,
+    solution:String.raw`<p>If the true mean differs from 0 by even a tiny amount, the standard error \(\sigma/\sqrt n\) shrinks as \(n\) grows, so the standardized statistic \((\bar X-0)/(\sigma/\sqrt n)\) tends to become large in magnitude. Thus a point null can become rejectable with enough data even when the difference is practically tiny.</p><p>A better analysis should report an effect estimate, confidence interval, and practical relevance threshold, not only a P-value for exact equality. In some settings, one-sided or equivalence-style questions are more meaningful than testing whether an exact equality is false.</p>`,
+    rubric:["Explain standard error shrinking with large \\(n\\) &mdash; <b>3 pts</b>","Connect this to rejection of point nulls &mdash; <b>2 pts</b>","Recommend effect sizes/confidence intervals/practical thresholds &mdash; <b>3 pts</b>"],
+    total:"8 pts",
+    tip:"A point null can be mathematically convenient but scientifically uninteresting if exact equality was never plausible."
+  },
+  {
+    id:"Ch 16 &mdash; Q32",
+    level:"hard",
+    tags:["Comprehensive","Method selection"],
+    src:"Original. Chapter 16 final-exam-style synthesis.",
+    problem:String.raw`A lab tests whether a calibration weight has mean measured mass different from 100 g. The instrument errors are approximately normal with known \(\sigma=0.20\) g. Ten measurements have mean \(100.11\) g.<ol type="a"><li>Write \(H_0\) and identify the test as one- or two-tailed.</li><li>Compute the test statistic and P-value.</li><li>State the relation to a matching confidence interval.</li><li>Name two pitfalls in interpreting the result.</li></ol>`,
+    solution:String.raw`<p><b>(a)</b> The question is whether the mean is different from 100, so \(H_0:\mu=100\), two-tailed.</p><p><b>(b)</b> The standard error is \(0.20/\sqrt{10}=0.06325\). Thus</p><p>\[
+z=\frac{100.11-100}{0.06325}=1.74.
+\]</p><p>The two-sided P-value is \(P=2P(Z\ge1.74)\approx2(0.0409)=0.0818\). This is not significant at the 5% level.</p><p><b>(c)</b> A matching 95% two-sided confidence interval for \(\mu\) would contain 100 exactly when this 5% two-sided test fails to reject.</p><p><b>(d)</b> Pitfalls include saying \(H_0\) is proved true, ignoring the known-\(\sigma\)/normality assumptions, treating \(P=0.0818\) as \(P(H_0\mid D)\), or ignoring whether a 0.11 g shift is practically meaningful.</p>`,
+    rubric:["Set up two-sided equality null &mdash; <b>2 pts</b>","Compute standard error and \\(z\\approx1.74\\) &mdash; <b>3 pts</b>","Compute two-sided \\(P\\approx0.082\\) and decision &mdash; <b>3 pts</b>","State matching CI duality &mdash; <b>2 pts</b>","Name two valid interpretation pitfalls &mdash; <b>2 pts</b>"],
+    total:"12 pts",
+    tip:"Comprehensive problems reward structure: setup, statistic, tail area, conclusion, and interpretation caveats."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>

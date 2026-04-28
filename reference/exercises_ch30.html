@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VE401 / ECE4010J &mdash; Exercise Bank: Chapter 30</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#f7f7f5;
+    --panel:#ffffff;
+    --ink:#1c1c1c;
+    --muted:#5f5f5f;
+    --accent:#1f4e79;
+    --accent2:#2a6e9c;
+    --rule:#dcdcdc;
+    --easy:#1f8a3a;
+    --med:#c08a00;
+    --hard:#b03030;
+    --rubric:#f3f0e3;
+    --rubric-rule:#c7b870;
+    --thought:#e9f1f7;
+    --thought-rule:#7fa8c8;
+    --soln:#fbfaf3;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Charter','Georgia','Cambria',serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:var(--accent);
+    color:#fff;
+    padding:.75em 1em;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  header.site h1{
+    margin:0 0 .25em 0;
+    font-size:1.15em;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  nav.tabs{ display:flex; gap:.4em; flex-wrap:wrap; }
+  nav.tabs button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid #fff;
+    padding:.4em .85em;
+    font:inherit;
+    font-size:.92em;
+    border-radius:4px;
+    font-weight:600;
+  }
+  main{
+    max-width:1080px;
+    margin:1em auto 6em auto;
+    padding:0 1em;
+  }
+  .chapter-header{
+    border-bottom:2px solid var(--accent);
+    margin:1em 0 1.2em 0;
+    padding-bottom:.5em;
+  }
+  .chapter-header h2{
+    margin:0 0 .25em 0;
+    color:var(--accent);
+    font-size:1.5em;
+  }
+  .chapter-header p{ margin:.3em 0; color:var(--muted); font-style:italic; }
+  .toolbar{
+    display:flex; gap:.6em; align-items:center; flex-wrap:wrap;
+    margin:.6em 0 1em 0;
+  }
+  .toolbar button{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent2);
+    padding:.35em .8em;
+    font:inherit; font-size:.9em;
+    border-radius:4px; cursor:pointer;
+  }
+  .toolbar button:hover{ background:var(--accent2); color:#fff; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--accent2);
+    border-radius:6px;
+    padding:1em 1.2em;
+    margin:1em 0;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-head{
+    display:flex; justify-content:space-between; align-items:center; gap:.6em;
+    margin-bottom:.4em;
+    flex-wrap:wrap;
+  }
+  .card-id{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.05em;
+  }
+  .badges{ display:flex; gap:.4em; flex-wrap:wrap; }
+  .badge{
+    display:inline-block;
+    font-size:.78em;
+    padding:.15em .55em;
+    border-radius:10px;
+    color:#fff;
+    font-family:'Helvetica','Arial',sans-serif;
+    letter-spacing:.02em;
+  }
+  .badge.easy{ background:var(--easy); }
+  .badge.med{ background:var(--med); }
+  .badge.hard{ background:var(--hard); }
+  .badge.tag{
+    background:#eef0f3;
+    color:#2a3a4a;
+    border:1px solid #c9cfd5;
+  }
+  .src{
+    font-size:.78em;
+    color:var(--muted);
+    font-style:italic;
+    margin-bottom:.5em;
+  }
+  .problem{ margin:.4em 0 .7em 0; }
+  details.solution{
+    margin-top:.6em;
+    background:var(--soln);
+    border:1px solid #d8d3b8;
+    border-radius:5px;
+    padding:.25em .9em;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--accent);
+    padding:.45em 0;
+    list-style:none;
+    user-select:none;
+  }
+  details.solution > summary::before{
+    content:"\25B8  ";
+    color:var(--accent2);
+  }
+  details.solution[open] > summary::before{ content:"\25BE  "; }
+  .soln-body{ padding:.2em 0 .8em 0; }
+  .rubric, .thought{
+    margin:.8em -.5em;
+    padding:.6em .9em;
+    border-radius:4px;
+    border-left:4px solid;
+  }
+  .rubric{
+    background:var(--rubric);
+    border-left-color:var(--rubric-rule);
+  }
+  .thought{
+    background:var(--thought);
+    border-left-color:var(--thought-rule);
+  }
+  .rubric .label, .thought .label{
+    display:inline-block;
+    font-family:'Helvetica','Arial',sans-serif;
+    font-weight:700;
+    font-size:.78em;
+    letter-spacing:.05em;
+    color:#fff;
+    padding:.15em .55em;
+    border-radius:3px;
+    margin-bottom:.4em;
+  }
+  .rubric .label{ background:#8a6f00; }
+  .thought .label{ background:#2a6e9c; }
+  .rubric ol{ margin:.3em 0 .3em 1.4em; padding:0; }
+  .rubric ol li{ margin-bottom:.25em; }
+  .rubric .total{
+    margin-top:.4em;
+    font-weight:600;
+    font-style:italic;
+    color:#5d4900;
+  }
+  table.data{
+    border-collapse:collapse;
+    margin:.6em 0;
+    font-size:.92em;
+    font-family:'Helvetica','Arial',sans-serif;
+  }
+  table.data th, table.data td{
+    border:1px solid #bbb;
+    padding:.25em .55em;
+    text-align:right;
+  }
+  table.data th{ background:#eef0f3; font-weight:600; }
+  blockquote{
+    border-left:3px solid #c0c0c0;
+    padding-left:.7em;
+    color:#444;
+    margin:.6em 0;
+  }
+  #toTop{
+    position:fixed;
+    bottom:1.4em; right:1.4em;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.55em .9em;
+    border-radius:50%;
+    font-size:1.1em;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.25);
+    z-index:60;
+  }
+  #toTop:hover{ background:var(--accent2); }
+  @media (max-width:600px){
+    main{ padding:0 .5em; }
+    .card{ padding:.8em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>VE401 / ECE4010J Spring 2026 &mdash; Exercise Bank: Chapter 30</h1>
+  <nav class="tabs">
+    <button>Ch 30 &mdash; Multiple Linear Regression III</button>
+  </nav>
+</header>
+
+<main>
+<section id="ch30" class="chapter active">
+  <div class="chapter-header">
+    <h2>Chapter 30 &mdash; Multiple Linear Regression III: Finding the Right Model</h2>
+    <p>Topics covered: categorical and indicator predictors, interaction indicators, separate versus combined regressions, partial \(F\)-tests, model selection, forward/backward/stepwise procedures, overfitting, multiple-testing traps, adjusted \(R^2\), validation thinking, PRESS / prediction sum of squares, and final-style model diagnosis. The main exam traps are interpreting dummy-variable intercepts incorrectly, forgetting hierarchy when interactions are present, selecting by ordinary \(R^2\) alone, trusting a model chosen after many unreported tests, and confusing in-sample residual error with prediction error.</p>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="expandAll('ch30')">Expand all solutions</button>
+    <button onclick="collapseAll('ch30')">Collapse all solutions</button>
+  </div>
+
+  <div id="cards"></div>
+</section>
+</main>
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+<script>
+const questions = [
+  {
+    id:"Ch 30 &mdash; Q1",
+    level:"easy",
+    tags:["Indicator predictor","Interpretation"],
+    src:"Original. Basic two-group indicator model.",
+    problem:String.raw`A wage model is fitted as \(\hat y=32.4+5.8D\), where \(D=1\) for workers with a certification and \(D=0\) otherwise. Interpret the intercept and the coefficient of \(D\). What are the fitted means for the two groups?`,
+    solution:String.raw`<p>For \(D=0\), \(\hat y=32.4\). The intercept is the fitted mean wage for workers without the certification.</p><p>For \(D=1\), \(\hat y=32.4+5.8=38.2\). The coefficient \(5.8\) is the fitted difference between certified and non-certified workers, holding no other predictors fixed because this model has only the group indicator.</p>`,
+    rubric:["Identify the \(D=0\) group as the baseline &mdash; <b>2 pts</b>","Compute the fitted mean for \(D=1\) &mdash; <b>2 pts</b>","Interpret the dummy coefficient as a group difference &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"A dummy coefficient is not the fitted value for that group. It is the change from the omitted baseline."
+  },
+  {
+    id:"Ch 30 &mdash; Q2",
+    level:"easy",
+    tags:["Categorical predictor","Reference category"],
+    src:"Original. Three-level factor coding.",
+    problem:String.raw`A regression uses machine type \(A,B,C\). Let \(D_B=1\) for type \(B\), \(D_C=1\) for type \(C\), with type \(A\) as the reference. The fitted model is \(\hat y=104-7D_B+11D_C\). Find the fitted mean for each type and state why there is no \(D_A\) column.`,
+    solution:String.raw`<p>Type \(A\): \(D_B=D_C=0\), so \(\hat y_A=104\).</p><p>Type \(B\): \(D_B=1,D_C=0\), so \(\hat y_B=104-7=97\).</p><p>Type \(C\): \(D_B=0,D_C=1\), so \(\hat y_C=104+11=115\).</p><p>There is no \(D_A\) column because the intercept already represents the reference category. Including \(D_A,D_B,D_C\) plus an intercept would make the columns linearly dependent since \(D_A+D_B+D_C=1\).</p>`,
+    rubric:["Compute all three fitted means &mdash; <b>3 pts</b>","Identify type \(A\) as the reference category &mdash; <b>1 pt</b>","Explain the dummy-variable trap / linear dependence &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"For a \(g\)-level categorical predictor with an intercept, use \(g-1\) indicators."
+  },
+  {
+    id:"Ch 30 &mdash; Q3",
+    level:"medium",
+    tags:["Continuous plus indicator","Parallel lines"],
+    src:"Original. Parallel regression lines.",
+    problem:String.raw`A combined model for yield is \(\hat y=18+2.4x-3.5D\), where \(x\) is temperature and \(D=1\) for process 2, \(D=0\) for process 1. Write the fitted line for each process. Does the model allow the temperature slope to differ by process?`,
+    solution:String.raw`<p>Process 1: \(D=0\), so \(\hat y=18+2.4x\).</p><p>Process 2: \(D=1\), so \(\hat y=18+2.4x-3.5=14.5+2.4x\).</p><p>The slopes are the same: both lines have slope \(2.4\). The model allows a vertical shift between processes but not a different temperature effect.</p>`,
+    rubric:["Write the \(D=0\) fitted line &mdash; <b>2 pts</b>","Write the \(D=1\) fitted line &mdash; <b>2 pts</b>","State that the slopes are constrained equal &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"An indicator main effect changes the intercept. An \(xD\) interaction changes the slope."
+  },
+  {
+    id:"Ch 30 &mdash; Q4",
+    level:"medium",
+    tags:["Interaction indicator","Different slopes"],
+    src:"Original. Indicator-by-continuous interaction.",
+    problem:String.raw`A model is \(\hat y=10+1.5x+4D-0.6xD\), where \(D=1\) for the treatment group and \(D=0\) for control. Write the fitted line for each group and interpret the interaction coefficient.`,
+    solution:String.raw`<p>Control: \(D=0\), so \(\hat y=10+1.5x\).</p><p>Treatment: \(D=1\), so \(\hat y=10+1.5x+4-0.6x=14+0.9x\).</p><p>The interaction coefficient \(-0.6\) is the difference in slopes: treatment slope minus control slope equals \(0.9-1.5=-0.6\). The treatment line starts 4 units higher at \(x=0\), but it rises more slowly with \(x\).</p>`,
+    rubric:["Derive the control line &mdash; <b>2 pts</b>","Derive the treatment line &mdash; <b>2 pts</b>","Interpret \(-0.6\) as a slope difference &mdash; <b>2 pts</b>","Mention the intercept difference at \(x=0\) &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"Do not interpret the main effect \(4D\) as the group difference at every \(x\). With interaction present, the group difference is \(4-0.6x\)."
+  },
+  {
+    id:"Ch 30 &mdash; Q5",
+    level:"medium",
+    tags:["Interaction indicator","Prediction"],
+    src:"Original. Numeric interaction evaluation.",
+    problem:String.raw`For the model \(\hat y=10+1.5x+4D-0.6xD\), compute the fitted values for control and treatment at \(x=5\) and \(x=12\). At what value of \(x\) do the two fitted lines cross?`,
+    solution:String.raw`<p>Control line: \(\hat y=10+1.5x\). Treatment line: \(\hat y=14+0.9x\).</p><p>At \(x=5\): control \(=17.5\), treatment \(=18.5\). At \(x=12\): control \(=28\), treatment \(=24.8\).</p><p>The lines cross when \(10+1.5x=14+0.9x\), so \(0.6x=4\) and \(x=6.667\). Below this \(x\), treatment is higher; above it, control is higher.</p>`,
+    rubric:["Use the correct group-specific lines &mdash; <b>2 pts</b>","Compute both fitted values at \(x=5\) &mdash; <b>2 pts</b>","Compute both fitted values at \(x=12\) &mdash; <b>2 pts</b>","Solve the crossing point &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Interactions can reverse the sign of a group comparison across the \(x\)-range. Always evaluate the comparison at the requested \(x\)."
+  },
+  {
+    id:"Ch 30 &mdash; Q6",
+    level:"easy",
+    tags:["Model hierarchy","Interaction"],
+    src:"Original. Principle of marginality.",
+    problem:String.raw`A student proposes the model \(Y=\beta_0+\beta_1x+\beta_2xD+\varepsilon\), omitting the indicator main effect \(D\). What restriction does this impose on the two group lines? Why is this usually a bad default when an interaction is present?`,
+    solution:String.raw`<p>For \(D=0\), the line is \(\mu=\beta_0+\beta_1x\). For \(D=1\), the line is \(\mu=\beta_0+(\beta_1+\beta_2)x\). The two groups are forced to have the same intercept at \(x=0\).</p><p>This is usually a bad default because interaction means the group effect may depend on \(x\), but it does not justify forcing the group difference to be zero at \(x=0\). The hierarchy principle says that if \(xD\) is included, the lower-order terms \(x\) and \(D\) should normally also be included.</p>`,
+    rubric:["Write the two implied lines &mdash; <b>3 pts</b>","State the forced common intercept restriction &mdash; <b>2 pts</b>","Explain the hierarchy principle &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Main effects can look individually nonsignificant after adding an interaction; that alone is not a good reason to delete them."
+  },
+  {
+    id:"Ch 30 &mdash; Q7",
+    level:"hard",
+    tags:["Separate vs combined","Partial F-test"],
+    src:"Original. Same slopes and intercepts test.",
+    problem:String.raw`Two groups can be fitted by separate simple regressions or by one combined regression. Separate fits use four parameters total and give \(\mathrm{SSE}_{sep}=84\). A combined common-line model \(Y=\beta_0+\beta_1x+\varepsilon\) uses two parameters and gives \(\mathrm{SSE}_{comb}=112\). There are \(n=40\) observations total. Test whether the two groups can share one common line at \(\alpha=0.05\), using \(F_{0.05,2,36}=3.26\).`,
+    solution:String.raw`<p>The common-line model is the reduced model. The separate-lines model is the full model. The restriction is that the two intercepts and two slopes are equal, so \(q=2\).</p><p>\[
+F=\frac{(\mathrm{SSE}_R-\mathrm{SSE}_F)/q}{\mathrm{SSE}_F/(n-p_F)}
+=\frac{(112-84)/2}{84/(40-4)}
+=\frac{14}{2.333}=6.00.
+\]</p><p>Since \(6.00>3.26\), reject the common-line model. There is evidence that the groups should not be represented by exactly the same regression line.</p>`,
+    rubric:["Identify reduced and full models correctly &mdash; <b>2 pts</b>","Use \(q=2\) restrictions and full-model df \(36\) &mdash; <b>2 pts</b>","Compute the partial \(F\) statistic &mdash; <b>3 pts</b>","Make the correct decision &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Separate regressions correspond to a combined model with both \(D\) and \(xD\). Testing common line versus separate lines uses two restrictions."
+  },
+  {
+    id:"Ch 30 &mdash; Q8",
+    level:"hard",
+    tags:["Separate vs combined","Interaction test"],
+    src:"Original. Parallel-lines versus separate-lines test.",
+    problem:String.raw`A full separate-lines model \(Y=\beta_0+\beta_1x+\beta_2D+\beta_3xD+\varepsilon\) has \(\mathrm{SSE}_F=84\) with \(n=40\). The reduced parallel-lines model \(Y=\beta_0+\beta_1x+\beta_2D+\varepsilon\) has \(\mathrm{SSE}_R=88\). Test whether the slopes differ by group at \(\alpha=0.05\), using \(F_{0.05,1,36}=4.11\).`,
+    solution:String.raw`<p>The reduced model removes only \(xD\), so the null hypothesis is \(H_0:\beta_3=0\), equal slopes. There is \(q=1\) restriction.</p><p>\[
+F=\frac{(88-84)/1}{84/(40-4)}
+=\frac{4}{2.333}=1.71.
+\]</p><p>Since \(1.71<4.11\), do not reject equal slopes. A parallel-lines model may be adequate even though the intercepts may differ.</p>`,
+    rubric:["State the correct null hypothesis \(H_0:\beta_3=0\) &mdash; <b>2 pts</b>","Use the correct full-model error df \(36\) &mdash; <b>2 pts</b>","Compute the partial \(F\) statistic &mdash; <b>3 pts</b>","Conclude not to reject equal slopes &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Common-line, parallel-lines, and separate-lines are three different questions. Do not collapse them into one test."
+  },
+  {
+    id:"Ch 30 &mdash; Q9",
+    level:"medium",
+    tags:["Extra sum of squares","Nested models"],
+    src:"Original. Partial regression contribution.",
+    problem:String.raw`A base model with predictors \(x_1,x_2\) gives \(\mathrm{SSE}=210\). Adding \(x_3,x_4,x_5\) gives \(\mathrm{SSE}=168\). The full model has \(p_F=6\) parameters including the intercept, and \(n=50\). Compute the partial \(F\) statistic for testing whether \(x_3,x_4,x_5\) add explanatory power given \(x_1,x_2\).`,
+    solution:String.raw`<p>The number of added predictors is \(q=3\). The full-model error df is \(n-p_F=50-6=44\).</p><p>\[
+F=\frac{(210-168)/3}{168/44}
+=\frac{14}{3.818}=3.67.
+\]</p><p>The test is \(H_0:\beta_3=\beta_4=\beta_5=0\) given the predictors already in the base model.</p>`,
+    rubric:["Identify the test as nested-model / extra-sum-of-squares &mdash; <b>2 pts</b>","Use \(q=3\) and df \(44\) &mdash; <b>2 pts</b>","Compute \(F=3.67\) &mdash; <b>3 pts</b>","State the conditional null hypothesis &mdash; <b>1 pt</b>"],
+    total:"8 pts",
+    tip:"Partial \(F\) tests ask whether a block helps after the variables already in the reduced model are kept."
+  },
+  {
+    id:"Ch 30 &mdash; Q10",
+    level:"easy",
+    tags:["Adjusted R-squared","Model comparison"],
+    src:"Original. Why ordinary \(R^2\) is not enough.",
+    problem:String.raw`Two models are fitted to the same response and same \(n=80\) observations. Model A uses \(p=4\) parameters and has \(R^2=0.710\). Model B uses \(p=10\) parameters and has \(R^2=0.725\). Explain why ordinary \(R^2\) alone should not decide the model, and name one better criterion.`,
+    solution:String.raw`<p>Ordinary \(R^2\) cannot decrease when predictors are added, even if the added predictors are noise. The larger \(R^2\) of Model B may simply reflect extra flexibility rather than better prediction or better scientific explanation.</p><p>A better criterion is adjusted \(R^2\), MSE / \(s^2\), a partial \(F\)-test for the added block, AIC/BIC if used in the course, or a validation criterion such as PRESS or test-set prediction error.</p>`,
+    rubric:["State that \(R^2\) never decreases when adding predictors &mdash; <b>2 pts</b>","Explain the risk of rewarding unnecessary complexity &mdash; <b>2 pts</b>","Name a valid complexity-aware or prediction-aware criterion &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"When the question says 'finding the right model', think tradeoff: fit, parsimony, diagnostics, and prediction."
+  },
+  {
+    id:"Ch 30 &mdash; Q11",
+    level:"medium",
+    tags:["Adjusted R-squared","Numerical"],
+    src:"Original. Compute and compare adjusted \(R^2\).",
+    problem:String.raw`For \(n=60\), Model A has \(\mathrm{SSE}=120\) and \(p=4\) parameters. Model B has \(\mathrm{SSE}=112\) and \(p=8\) parameters. The total sum of squares is \(\mathrm{SST}=500\). Compute adjusted \(R^2\) for each and choose by adjusted \(R^2\).`,
+    solution:String.raw`<p>Use \(R^2_{adj}=1-\dfrac{\mathrm{SSE}/(n-p)}{\mathrm{SST}/(n-1)}\).</p><p>Model A: \(\mathrm{MSE}=120/(60-4)=2.1429\), and \(\mathrm{SST}/(n-1)=500/59=8.4746\). Thus \(R^2_{adj,A}=1-2.1429/8.4746=0.747\).</p><p>Model B: \(\mathrm{MSE}=112/(60-8)=2.1538\). Thus \(R^2_{adj,B}=1-2.1538/8.4746=0.746\).</p><p>Although Model B has smaller SSE and larger ordinary \(R^2\), adjusted \(R^2\) slightly favors Model A.</p>`,
+    rubric:["Use the adjusted \(R^2\) formula with \(n-p\) &mdash; <b>2 pts</b>","Compute Model A correctly &mdash; <b>2 pts</b>","Compute Model B correctly &mdash; <b>2 pts</b>","Choose Model A and explain why &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Adjusted \(R^2\) increases only when the SSE reduction is large enough to pay for the lost degrees of freedom."
+  },
+  {
+    id:"Ch 30 &mdash; Q12",
+    level:"medium",
+    tags:["Forward selection","Algorithm"],
+    src:"Original. One step of forward selection.",
+    problem:String.raw`You are using forward selection. Starting from the intercept-only model, the best one-variable candidates have P-values \(x_1:0.018\), \(x_2:0.071\), \(x_3:0.004\), \(x_4:0.039\). The entry rule is \(\alpha_{in}=0.05\). Which variable enters first? What happens if the smallest P-value is \(0.063\) instead?`,
+    solution:String.raw`<p>The first variable to enter is \(x_3\), because it has the smallest P-value among the candidates and \(0.004<0.05\).</p><p>If the smallest P-value were \(0.063\), no variable would enter under the stated entry rule. The procedure would stop at the intercept-only model unless the analyst changed the rule before seeing the results.</p>`,
+    rubric:["Identify the smallest eligible P-value &mdash; <b>2 pts</b>","Apply \(\alpha_{in}=0.05\) correctly &mdash; <b>2 pts</b>","State the stopping rule when no candidate qualifies &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Forward selection chooses the best candidate among those not yet in the model, not the variable with the largest marginal correlation forever."
+  },
+  {
+    id:"Ch 30 &mdash; Q13",
+    level:"medium",
+    tags:["Backward elimination","Algorithm"],
+    src:"Original. One step of backward elimination.",
+    problem:String.raw`A backward elimination procedure starts with \(x_1,x_2,x_3,x_4,x_5\). Current partial P-values are \(x_1:0.012\), \(x_2:0.44\), \(x_3:0.081\), \(x_4:0.027\), \(x_5:0.19\). The removal rule is \(\alpha_{out}=0.10\). Which variable is removed first? What is checked next?`,
+    solution:String.raw`<p>Backward elimination removes the least significant current predictor if its P-value exceeds \(\alpha_{out}\). The largest P-value is \(0.44\) for \(x_2\), so \(x_2\) is removed first.</p><p>After removing \(x_2\), the model must be refitted and the P-values recomputed. The next removal decision uses the new partial P-values, not the old list.</p>`,
+    rubric:["Use the largest current P-value as the first removal candidate &mdash; <b>2 pts</b>","Apply the \(0.10\) removal rule &mdash; <b>2 pts</b>","State that the model must be refitted before the next decision &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Partial P-values change after each deletion because the meaning of each coefficient is conditional on the remaining predictors."
+  },
+  {
+    id:"Ch 30 &mdash; Q14",
+    level:"medium",
+    tags:["Stepwise selection","Algorithm"],
+    src:"Original. Forward with possible deletion.",
+    problem:String.raw`In stepwise selection, after adding \(x_4\), the current model contains \(x_1,x_3,x_4\). Refit P-values are \(x_1:0.031\), \(x_3:0.118\), \(x_4:0.009\). The rules are \(\alpha_{in}=0.05\), \(\alpha_{out}=0.10\). What should the algorithm do before considering the next entry candidate?`,
+    solution:String.raw`<p>Stepwise selection checks whether any current variable should be removed after each entry. Since \(x_3\) now has P-value \(0.118>0.10\), \(x_3\) should be removed before considering another entry.</p><p>The model is then refitted with \(x_1,x_4\), and the algorithm continues by reconsidering entry candidates and possible deletions under the same rules.</p>`,
+    rubric:["Recognize that stepwise checks deletion after entry &mdash; <b>2 pts</b>","Identify \(x_3\) as exceeding \(\alpha_{out}\) &mdash; <b>2 pts</b>","State that the model is refitted before continuing &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Stepwise is not pure forward selection. A variable can enter early and leave later."
+  },
+  {
+    id:"Ch 30 &mdash; Q15",
+    level:"hard",
+    tags:["Selection procedures","Path dependence"],
+    src:"Original. Compare forward and backward outcomes.",
+    problem:String.raw`Explain why forward selection and backward elimination can end with different final models, even when they use the same nominal significance level. Give one concrete statistical reason.`,
+    solution:String.raw`<p>They search the model space along different paths. Forward selection starts with no predictors and only evaluates variables as additions to the current small model. Backward elimination starts with the full model and evaluates variables conditional on all other included predictors.</p><p>A concrete reason is collinearity. Two correlated predictors may each look strong alone, but one may become nonsignificant after the other is included. Conversely, a predictor can look weak marginally but important after adjusting for a confounder. Because each procedure evaluates different conditional questions at different times, they can stop at different local choices.</p>`,
+    rubric:["State that the procedures follow different search paths &mdash; <b>2 pts</b>","Explain that P-values are conditional on the current model &mdash; <b>2 pts</b>","Give a concrete reason such as collinearity or suppression &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"Model-selection algorithms are heuristics, not guaranteed global optimizers of scientific truth."
+  },
+  {
+    id:"Ch 30 &mdash; Q16",
+    level:"hard",
+    tags:["Best subsets","Model selection"],
+    src:"Original. Candidate table selection.",
+    problem:String.raw`A best-subsets search gives the following candidates on the same data:
+<table class="data"><tr><th>Model</th><th>Predictors</th><th>\(p\)</th><th>\(\mathrm{SSE}\)</th><th>\(R^2_{adj}\)</th><th>PRESS</th></tr><tr><td>A</td><td>\(x_1,x_2\)</td><td>3</td><td>186</td><td>0.781</td><td>230</td></tr><tr><td>B</td><td>\(x_1,x_2,x_4\)</td><td>4</td><td>170</td><td>0.792</td><td>214</td></tr><tr><td>C</td><td>\(x_1,x_2,x_4,x_7\)</td><td>5</td><td>164</td><td>0.790</td><td>226</td></tr><tr><td>D</td><td>\(x_1,\ldots,x_8\)</td><td>9</td><td>148</td><td>0.772</td><td>310</td></tr></table>
+Which model is most defensible for prediction, and why is Model D not automatically best?`,
+    solution:String.raw`<p>Model B is most defensible for prediction from this table because it has the smallest PRESS and the highest adjusted \(R^2\) among the listed candidates, while remaining simpler than C and D.</p><p>Model D has the smallest in-sample SSE, but it uses many more parameters. Its adjusted \(R^2\) is lower and PRESS is much worse, indicating that the additional variables are likely fitting noise rather than improving out-of-sample prediction.</p>`,
+    rubric:["Choose Model B using the table evidence &mdash; <b>2 pts</b>","Use PRESS as a prediction criterion &mdash; <b>2 pts</b>","Use adjusted \(R^2\) / parsimony as supporting evidence &mdash; <b>2 pts</b>","Explain why lowest SSE alone is not decisive &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Best subsets gives a menu. The analyst still needs a criterion and a diagnostic check."
+  },
+  {
+    id:"Ch 30 &mdash; Q17",
+    level:"medium",
+    tags:["Overfitting","Training vs prediction"],
+    src:"Original. Conceptual overfitting diagnosis.",
+    problem:String.raw`A model with 18 predictors on \(n=30\) observations has \(R^2=0.94\), but its validation-set \(R^2\) is negative. Explain what likely happened. Does a high training \(R^2\) protect against poor prediction?`,
+    solution:String.raw`<p>This is a classic overfitting pattern. With many predictors relative to \(n\), the model can adapt to accidental noise in the training data. That lowers training SSE and raises training \(R^2\), but the fitted noise pattern does not repeat in new data.</p><p>A high training \(R^2\) does not protect against poor prediction. A negative validation \(R^2\) means the model predicts worse than simply using the validation mean as a predictor for the validation responses.</p>`,
+    rubric:["Identify overfitting &mdash; <b>2 pts</b>","Connect overfitting to high \(p/n\) and noise fitting &mdash; <b>2 pts</b>","Explain why training \(R^2\) is insufficient &mdash; <b>2 pts</b>","Interpret negative validation \(R^2\) &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Training fit answers 'how well did we interpolate the observed sample?' Prediction fit answers 'how well will we do next time?'"
+  },
+  {
+    id:"Ch 30 &mdash; Q18",
+    level:"medium",
+    tags:["Overfitting","Degrees of freedom"],
+    src:"Original. Residual degrees of freedom warning.",
+    problem:String.raw`A regression uses \(p=22\) parameters including the intercept with \(n=25\). The reported residual standard error is tiny, and many fitted values nearly equal the observed values. Give two reasons this model is unreliable for inference.`,
+    solution:String.raw`<p>First, the residual degrees of freedom are \(n-p=3\), so the estimate of \(\sigma^2\) is based on almost no information. Standard errors, T-tests, and confidence intervals will be unstable.</p><p>Second, the model has enough flexibility to nearly interpolate the sample. The small residual error may be an artifact of overfitting, not evidence that the true conditional mean is known accurately. Leverage and sensitivity to individual observations are also likely severe.</p>`,
+    rubric:["Compute or state residual df \(=3\) &mdash; <b>2 pts</b>","Explain instability of \(s^2\) and inference &mdash; <b>2 pts</b>","Explain overfitting / near interpolation &mdash; <b>2 pts</b>","Mention sensitivity or leverage as an additional concern &mdash; <b>1 pt</b>"],
+    total:"7 pts",
+    tip:"A model can fit the sample almost perfectly and still be useless. Always inspect \(n-p\)."
+  },
+  {
+    id:"Ch 30 &mdash; Q19",
+    level:"hard",
+    tags:["Overfitting","Polynomial model"],
+    src:"Original. Polynomial degree selection.",
+    problem:String.raw`For \(n=12\) data points, a degree-10 polynomial gives \(\mathrm{SSE}=0.8\), while a quadratic gives \(\mathrm{SSE}=7.4\). A student chooses the degree-10 model because the SSE is smaller. Diagnose the decision and name a better way to choose degree.`,
+    solution:String.raw`<p>The decision is not justified by SSE alone. A degree-10 polynomial uses 11 parameters including the intercept, leaving only \(1\) residual degree of freedom. It is close to interpolation and can oscillate badly between observed points.</p><p>A better choice should use validation error, cross-validation, PRESS, adjusted \(R^2\), AIC/BIC if allowed, and residual plots. If the scientific relationship is expected to be smooth and simple, the quadratic may be preferable despite larger training SSE.</p>`,
+    rubric:["State that SSE alone always favors more flexible models &mdash; <b>2 pts</b>","Compute or note only \(1\) residual df for degree 10 &mdash; <b>2 pts</b>","Explain interpolation / oscillation risk &mdash; <b>2 pts</b>","Name a better degree-selection criterion &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Polynomial regression is a model-selection problem. Degree is not chosen by making training SSE as small as possible."
+  },
+  {
+    id:"Ch 30 &mdash; Q20",
+    level:"medium",
+    tags:["Multiple testing","False positives"],
+    src:"Original. Familywise error calculation.",
+    problem:String.raw`A researcher screens 20 unrelated candidate predictors, each with a separate \(5\%\) significance test, and reports the one predictor with \(P=0.032\). If all null hypotheses are actually true and tests are independent, what is the probability of at least one false positive? Why is the report misleading?`,
+    solution:String.raw`<p>The probability of no false positives is \(0.95^{20}=0.358\). Therefore the probability of at least one false positive is \(1-0.95^{20}=0.642\).</p><p>The report is misleading because it presents the selected \(P=0.032\) as if it came from one planned test. After 20 searches, seeing at least one nominally significant result is not surprising under the global null.</p>`,
+    rubric:["Use the complement rule &mdash; <b>2 pts</b>","Compute \(1-0.95^{20}\approx0.642\) &mdash; <b>2 pts</b>","Explain the selected-test reporting problem &mdash; <b>2 pts</b>"],
+    total:"6 pts",
+    tip:"The P-value must be interpreted in the context of the search that produced it."
+  },
+  {
+    id:"Ch 30 &mdash; Q21",
+    level:"hard",
+    tags:["Multiple testing","Bonferroni"],
+    src:"Original. Adjusting a screening threshold.",
+    problem:String.raw`You plan to test 12 candidate predictors and want familywise error at most \(0.05\). Give a Bonferroni entry threshold. Which of the following marginal P-values survive: \(0.001,0.006,0.018,0.041\)?`,
+    solution:String.raw`<p>Bonferroni uses \(\alpha^\star=0.05/12=0.00417\) for each individual test.</p><p>Only \(0.001\) survives this threshold. The values \(0.006,0.018,0.041\) are below \(0.05\) but not below the Bonferroni-adjusted cutoff.</p>`,
+    rubric:["Compute \(0.05/12\) &mdash; <b>2 pts</b>","Apply the threshold correctly to all four P-values &mdash; <b>3 pts</b>","Explain why nominal \(0.05\) is too liberal after screening &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"Bonferroni is conservative, but it makes the multiple-testing issue explicit."
+  },
+  {
+    id:"Ch 30 &mdash; Q22",
+    level:"hard",
+    tags:["Selection bias","Post-selection inference"],
+    src:"Original. Data snooping diagnosis.",
+    problem:String.raw`A report says: "We tried logs, squares, pairwise interactions, and all subsets of 15 variables. The final model has three predictors, each with \(P<0.05\), so the effects are confirmed." Give a final-exam style critique.`,
+    solution:String.raw`<p>The conclusion is too strong. The final P-values are conditional on a model that was chosen after a large data-dependent search. Standard regression P-values assume the model was specified in advance, or at least that the selection process is not being ignored.</p><p>The search inflates false-positive risk and makes coefficients look more stable than they are. A defensible report should describe the selection process, use validation or cross-validation, consider multiplicity control, and ideally confirm the selected model on new data.</p>`,
+    rubric:["Identify post-selection inference as the issue &mdash; <b>2 pts</b>","Explain inflated false-positive risk &mdash; <b>2 pts</b>","State that ordinary P-values are not confirmatory after broad search &mdash; <b>2 pts</b>","Recommend validation or independent confirmation &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Exploratory model building can generate hypotheses. It does not automatically confirm them."
+  },
+  {
+    id:"Ch 30 &mdash; Q23",
+    level:"medium",
+    tags:["PRESS","Leverage"],
+    src:"Original. Direct PRESS calculation.",
+    problem:String.raw`For a fitted regression, the ordinary residuals and leverages are:
+<table class="data"><tr><th>i</th><th>\(e_i\)</th><th>\(h_{ii}\)</th></tr><tr><td>1</td><td>2.0</td><td>0.20</td></tr><tr><td>2</td><td>-1.5</td><td>0.10</td></tr><tr><td>3</td><td>0.8</td><td>0.50</td></tr><tr><td>4</td><td>-2.2</td><td>0.25</td></tr></table>
+Compute the PRESS residuals \(e_{(i)}=e_i/(1-h_{ii})\) and the PRESS statistic \(\sum e_{(i)}^2\).`,
+    solution:String.raw`<p>The deleted residuals are:</p><p>\(e_{(1)}=2.0/0.80=2.50\), \(e_{(2)}=-1.5/0.90=-1.667\), \(e_{(3)}=0.8/0.50=1.60\), \(e_{(4)}=-2.2/0.75=-2.933\).</p><p>Thus \[
+\mathrm{PRESS}=2.50^2+(-1.667)^2+1.60^2+(-2.933)^2
+=6.25+2.778+2.56+8.604=20.19.
+\]</p>`,
+    rubric:["Use \(e_i/(1-h_{ii})\) for each deleted residual &mdash; <b>3 pts</b>","Compute all four deleted residuals accurately &mdash; <b>3 pts</b>","Sum their squares for PRESS &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"High leverage inflates the deleted residual because the point helped fit itself."
+  },
+  {
+    id:"Ch 30 &mdash; Q24",
+    level:"medium",
+    tags:["PRESS","Prediction sum of squares"],
+    src:"Original. Interpret PRESS versus SSE.",
+    problem:String.raw`Model A has \(\mathrm{SSE}=90\) and \(\mathrm{PRESS}=130\). Model B has \(\mathrm{SSE}=82\) and \(\mathrm{PRESS}=105\). Which model is preferred for leave-one-out prediction? What does the gap between SSE and PRESS measure qualitatively?`,
+    solution:String.raw`<p>Model B is preferred for leave-one-out prediction because it has smaller PRESS.</p><p>SSE measures ordinary in-sample residual error: each point helps estimate the model that predicts it. PRESS estimates prediction error by predicting each observation from a model fit without that observation. A large gap between PRESS and SSE warns that the in-sample fit is too optimistic, often because of leverage, overfitting, or instability.</p>`,
+    rubric:["Choose by smaller PRESS for prediction &mdash; <b>2 pts</b>","Distinguish in-sample SSE from leave-one-out prediction error &mdash; <b>3 pts</b>","Explain what a large gap suggests &mdash; <b>2 pts</b>"],
+    total:"7 pts",
+    tip:"SSE is training error. PRESS is a cross-validation-style prediction error."
+  },
+  {
+    id:"Ch 30 &mdash; Q25",
+    level:"hard",
+    tags:["PRESS","High leverage"],
+    src:"Original. Leverage effect on deleted residuals.",
+    problem:String.raw`Two observations have the same ordinary residual \(e=1.0\). Observation A has \(h_{ii}=0.05\); observation B has \(h_{ii}=0.80\). Compute the two PRESS residuals and explain the lesson.`,
+    solution:String.raw`<p>For A, \(e_{(A)}=1/(1-0.05)=1.053\). For B, \(e_{(B)}=1/(1-0.80)=5.000\).</p><p>Even with the same ordinary residual, the high-leverage observation has a much larger deleted residual. It may have been fit well only because it exerted strong influence on the fitted model. PRESS exposes that instability.</p>`,
+    rubric:["Compute the low-leverage deleted residual &mdash; <b>2 pts</b>","Compute the high-leverage deleted residual &mdash; <b>2 pts</b>","Explain why high leverage can hide poor predictive performance &mdash; <b>3 pts</b>"],
+    total:"7 pts",
+    tip:"A small ordinary residual at a high-leverage point is not automatically reassuring."
+  },
+  {
+    id:"Ch 30 &mdash; Q26",
+    level:"hard",
+    tags:["PRESS","Model comparison"],
+    src:"Original. Competing criteria conflict.",
+    problem:String.raw`Three models are fitted to the same data:
+<table class="data"><tr><th>Model</th><th>\(p\)</th><th>SSE</th><th>PRESS</th><th>Residual plot</th></tr><tr><td>A</td><td>3</td><td>144</td><td>160</td><td>mild curve</td></tr><tr><td>B</td><td>5</td><td>118</td><td>128</td><td>random scatter</td></tr><tr><td>C</td><td>9</td><td>101</td><td>190</td><td>random scatter but two high-leverage points</td></tr></table>
+Choose a model for prediction and justify your decision. What additional check would you make before finalizing?`,
+    solution:String.raw`<p>Model B is the best prediction choice from the table. It has the smallest PRESS and a reasonable residual plot. Model A is simpler, but its residual curve suggests misspecification. Model C has the smallest SSE, but its much larger PRESS indicates poor leave-one-out prediction, likely driven by high leverage or overfitting.</p><p>Before finalizing, check diagnostics more carefully: leverage/influence plots, residuals versus each predictor, whether the high-leverage points are valid data, and ideally performance on an independent validation set.</p>`,
+    rubric:["Choose Model B &mdash; <b>2 pts</b>","Use PRESS as the main prediction evidence &mdash; <b>2 pts</b>","Address Model A's residual curve &mdash; <b>2 pts</b>","Address Model C's high PRESS / leverage risk &mdash; <b>2 pts</b>","Name a reasonable additional diagnostic &mdash; <b>1 pt</b>"],
+    total:"9 pts",
+    tip:"No single summary statistic overrules a clear diagnostic failure."
+  },
+  {
+    id:"Ch 30 &mdash; Q27",
+    level:"medium",
+    tags:["Final diagnosis","Categorical coding"],
+    src:"Original. Diagnose the fitted model statement.",
+    problem:String.raw`A dataset has four regions: North, South, East, West. A student fits a model with an intercept and four region indicators and says software dropped one column by accident. Diagnose the situation and explain how to interpret the remaining coefficients.`,
+    solution:String.raw`<p>The software did not necessarily make a mistake. With an intercept, the four region indicators sum to the intercept column, so the design matrix is singular. One region indicator must be omitted or a different coding scheme must be used.</p><p>The omitted region becomes the reference category. The intercept is the fitted mean for that reference region when other quantitative predictors are zero. Each remaining region coefficient is the difference between that region and the reference, holding other predictors fixed.</p>`,
+    rubric:["Identify exact linear dependence / singular design &mdash; <b>2 pts</b>","State that one category must be omitted with an intercept &mdash; <b>2 pts</b>","Interpret intercept and remaining coefficients relative to the reference &mdash; <b>3 pts</b>"],
+    total:"7 pts",
+    tip:"A dropped dummy column is often the software protecting you from the dummy-variable trap."
+  },
+  {
+    id:"Ch 30 &mdash; Q28",
+    level:"hard",
+    tags:["Final diagnosis","Interaction hierarchy"],
+    src:"Original. Diagnose an interaction model.",
+    problem:String.raw`A final report fits \(Y=\beta_0+\beta_1x+\beta_2D+\beta_3xD+\varepsilon\). The output shows \(P(\beta_2)=0.62\) and \(P(\beta_3)=0.01\). The student deletes \(D\) but keeps \(xD\), claiming the nonsignificant main effect is useless. Critique this choice.`,
+    solution:String.raw`<p>The deletion violates model hierarchy. When the interaction \(xD\) is retained, the lower-order terms \(x\) and \(D\) should normally remain even if one main-effect P-value is large.</p><p>Also, \(\beta_2\) is the group difference only at \(x=0\). If \(x=0\) is outside the data range or not scientifically meaningful, its P-value is not strong evidence that the group main effect is unimportant. A better approach is to keep the hierarchical model, center \(x\) if needed, and interpret group differences at meaningful \(x\) values.</p>`,
+    rubric:["State the hierarchy / marginality violation &mdash; <b>2 pts</b>","Explain that \(\beta_2\) is the difference at \(x=0\) only &mdash; <b>2 pts</b>","Explain why a large main-effect P-value does not justify deletion under interaction &mdash; <b>2 pts</b>","Suggest centering or meaningful contrasts &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"In interaction models, main-effect P-values often answer a narrow and unhelpful question."
+  },
+  {
+    id:"Ch 30 &mdash; Q29",
+    level:"hard",
+    tags:["Final diagnosis","Separate vs combined"],
+    src:"Original. Model strategy from scientific question.",
+    problem:String.raw`An analyst fits separate regressions for men and women, then compares the two fitted slopes informally by eye. Propose a single combined regression model and a formal test for whether the slopes differ. What is the advantage of the combined model?`,
+    solution:String.raw`<p>Use \(D=1\) for one group and \(D=0\) for the reference group. Fit
+\[
+Y=\beta_0+\beta_1x+\beta_2D+\beta_3xD+\varepsilon.
+\]
+The formal slope-difference test is \(H_0:\beta_3=0\), using a T-test for one interaction coefficient or an equivalent partial \(F\)-test with \(1\) numerator df.</p><p>The combined model gives one coherent error variance estimate, a direct parameter for the slope difference, standard errors for the comparison, and a way to test common-line, parallel-line, and separate-line hypotheses within one nested-model framework.</p>`,
+    rubric:["Write the combined interaction model &mdash; <b>3 pts</b>","State the formal slope-difference null \(H_0:\beta_3=0\) &mdash; <b>2 pts</b>","Name T or partial \(F\) as the test &mdash; <b>1 pt</b>","Explain advantages over visual comparison &mdash; <b>2 pts</b>"],
+    total:"8 pts",
+    tip:"Separate regressions are descriptive; a combined interaction model turns the comparison into an inferential question."
+  },
+  {
+    id:"Ch 30 &mdash; Q30",
+    level:"hard",
+    tags:["Final diagnosis","Model selection"],
+    src:"Original. Comprehensive model-selection critique.",
+    problem:String.raw`A student reports: "I used stepwise regression with \(\alpha_{in}=\alpha_{out}=0.05\). The selected model has adjusted \(R^2=0.86\). Therefore it is the true model." Give at least four criticisms or qualifications.`,
+    solution:String.raw`<p>Reasonable criticisms include: stepwise search is path-dependent; selected-model P-values ignore the search process; adjusted \(R^2\) measures in-sample penalized fit, not truth; correlated predictors can make the selected variables unstable; the model still needs residual diagnostics; important variables can be excluded if they are only jointly useful; validation or PRESS is needed for prediction; and scientific plausibility should matter.</p><p>A defensible conclusion is weaker: the selected model is a candidate model under the chosen procedure and should be checked with diagnostics and validation before being used for inference or prediction.</p>`,
+    rubric:["Mention path dependence or local-search nature &mdash; <b>2 pts</b>","Mention post-selection inference / multiple testing &mdash; <b>2 pts</b>","Mention adjusted \(R^2\) is not proof of truth &mdash; <b>2 pts</b>","Mention diagnostics or validation &mdash; <b>2 pts</b>","Give a properly qualified conclusion &mdash; <b>1 pt</b>"],
+    total:"9 pts",
+    tip:"The phrase 'true model' is a warning sign. Selection procedures produce candidates, not proof."
+  },
+  {
+    id:"Ch 30 &mdash; Q31",
+    level:"hard",
+    tags:["Final diagnosis","Case study"],
+    src:"Original. Full final-style model recommendation.",
+    problem:String.raw`A response \(Y\) is modeled using \(x\) and treatment \(D\). Four candidate models are available:
+<ol type="i"><li>\(Y=\beta_0+\beta_1x+\varepsilon\)</li><li>\(Y=\beta_0+\beta_1x+\beta_2D+\varepsilon\)</li><li>\(Y=\beta_0+\beta_1x+\beta_2D+\beta_3xD+\varepsilon\)</li><li>Separate regressions by treatment group</li></ol>
+The partial \(F\)-test for adding \(D\) to (i) gives \(P=0.002\). The partial \(F\)-test for adding \(xD\) to (ii) gives \(P=0.41\). Residual plots for (ii) look random. Recommend a model and interpret it.`,
+    solution:String.raw`<p>Model (ii), \(Y=\beta_0+\beta_1x+\beta_2D+\varepsilon\), is recommended. The evidence says treatment groups differ in intercept after adjusting for \(x\) (\(P=0.002\)), but there is no evidence that the slopes differ (\(P=0.41\)). The residual plots do not reveal an obvious violation for model (ii).</p><p>Interpretation: both treatment groups share the same \(x\)-slope \(\beta_1\), but the \(D=1\) group is shifted by \(\beta_2\) relative to the \(D=0\) baseline. Separate regressions would be more complex and are not supported by the interaction test.</p>`,
+    rubric:["Choose the parallel-lines model (ii) &mdash; <b>2 pts</b>","Use the significant \(D\) test to justify different intercepts &mdash; <b>2 pts</b>","Use the nonsignificant \(xD\) test to justify common slopes &mdash; <b>2 pts</b>","Mention residual diagnostics &mdash; <b>1 pt</b>","Interpret \(\beta_2\) and \(\beta_1\) correctly &mdash; <b>2 pts</b>"],
+    total:"9 pts",
+    tip:"Use the simplest model that answers the scientific comparison and survives diagnostics."
+  },
+  {
+    id:"Ch 30 &mdash; Q32",
+    level:"hard",
+    tags:["Final diagnosis","Comprehensive"],
+    src:"Original. Exam-style diagnose-and-repair.",
+    problem:String.raw`A final project model has these features: 10 predictors were selected from 70 candidates by stepwise regression; two retained coefficients have \(P=0.04\); \(R^2=0.91\); adjusted \(R^2=0.78\); PRESS is twice the SSE; residuals versus fitted values show a funnel; and one retained predictor is a 5-level categorical variable coded with five dummies plus an intercept. Write a concise diagnosis and repair plan.`,
+    solution:String.raw`<p>Diagnosis: the model is not ready for inference or prediction. The broad stepwise search creates multiple-testing and post-selection bias, so \(P=0.04\) is weak evidence. The large drop from \(R^2\) to adjusted \(R^2\), and PRESS twice SSE, suggest overfitting or unstable prediction. The funnel residual plot suggests heteroscedasticity. The 5-level categorical predictor is incorrectly coded with five dummies plus an intercept, producing linear dependence.</p><p>Repair plan: recode the categorical predictor with four indicators or another full-rank contrast system; address nonconstant variance with a transformation, weighted least squares, or heteroscedasticity-aware methods if allowed; reduce the model using a predeclared criterion or domain knowledge; evaluate prediction with validation/PRESS; and treat final coefficient tests as exploratory unless confirmed on new data.</p>`,
+    rubric:["Identify multiple testing / post-selection bias &mdash; <b>2 pts</b>","Identify overfitting from adjusted \(R^2\) and PRESS evidence &mdash; <b>2 pts</b>","Identify heteroscedasticity from funnel residuals &mdash; <b>2 pts</b>","Identify incorrect dummy coding &mdash; <b>2 pts</b>","Give practical repair steps &mdash; <b>3 pts</b>"],
+    total:"11 pts",
+    tip:"Comprehensive diagnosis questions reward organized triage: coding, assumptions, selection bias, prediction, and interpretation."
+  }
+];
+
+function badgeClass(level){
+  return level === "easy" ? "easy" : (level === "medium" ? "med" : "hard");
+}
+
+function titleCase(level){
+  return level.charAt(0).toUpperCase()+level.slice(1);
+}
+
+function renderQuestions(){
+  const cards = document.getElementById("cards");
+  cards.innerHTML = questions.map(q => `
+    <article class="card">
+      <div class="card-head">
+        <div class="card-id">${q.id}</div>
+        <div class="badges">
+          <span class="badge ${badgeClass(q.level)}">${titleCase(q.level)}</span>
+          ${q.tags.map(t => `<span class="badge tag">${t}</span>`).join("")}
+        </div>
+      </div>
+      <div class="src">${q.src}</div>
+      <div class="problem">${q.problem}</div>
+      <details class="solution"><summary>Reveal solution</summary>
+        <div class="soln-body">
+          ${q.solution}
+          <div class="rubric">
+            <span class="label">Grading rubric &mdash; minimum points to mention</span>
+            <ol>${q.rubric.map(r => `<li>${r}</li>`).join("")}</ol>
+            <div class="total">Total: ${q.total}</div>
+          </div>
+          <div class="thought">
+            <span class="label">Exam strategy &mdash; common pitfalls</span>
+            <p>${q.tip}</p>
+          </div>
+        </div>
+      </details>
+    </article>
+  `).join("");
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function expandAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = true);
+}
+
+function collapseAll(secId){
+  document.querySelectorAll('#'+secId+' details.solution').forEach(d => d.open = false);
+}
+
+renderQuestions();
+</script>
+
+</body>
+</html>
