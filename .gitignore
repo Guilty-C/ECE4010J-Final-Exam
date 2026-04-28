@@ -1,0 +1,49 @@
+# Raw source PDFs / HTMLs / TeX (kept in parent dir, not in repo)
+data/raw/
+*.pdf
+*.tex
+*.aux
+*.log
+*.toc
+*.out
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Tokenized / training artifacts (regenerable)
+data/tokenized/
+checkpoints/*/optimizer.pt
+checkpoints/*/scheduler.pt
+checkpoints/*/training_args.bin
+checkpoints/*/global_step*/
+checkpoints/*/rng_state*.pth
+
+# Model base weights — never check in
+checkpoints/base/
+*.bin
+*.pt
+*.gguf
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Secrets
+.env
+*.pem
+*.key
+
+# Misc
+*.tmp
+*.bak
