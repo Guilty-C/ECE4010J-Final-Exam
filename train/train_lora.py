@@ -104,49 +104,38 @@ def _build_dataset(records: List[Dict[str, Any]], tokenizer, max_seq_length: int
 
     def _tokenize_one(rec: Dict[str, Any]) -> Dict[str, List[int]]:
         messages = rec["messages"]
-        # Try return_assistant_tokens_mask (transformers >= 4.40). It
-        # gives a 0/1 list aligned with input_ids: 1 inside any assistant
-        # turn (excluding the surrounding <|im_start|>...<|im_end|>).
-        try:
-            enc = tokenizer.apply_chat_template(
-                messages,
-                tokenize=True,
-                add_generation_prompt=False,
-                return_assistant_tokens_mask=True,
-                return_dict=True,
-                truncation=True,
-                max_length=max_seq_length,
-            )
-            input_ids = list(enc["input_ids"])
-            assistant_mask = list(enc["assistant_masks"])
-        except (TypeError, KeyError):
-            # Fallback: tokenise full text + the prefix-without-final-
-            # assistant separately and mask everything before the prefix
-            # boundary.
-            full = tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=False,
-            )
-            prefix_msgs = messages[:-1]
-            prefix = tokenizer.apply_chat_template(
-                prefix_msgs,
-                tokenize=False,
-                add_generation_prompt=True,
-            )
-            input_ids = tokenizer(
-                full, truncation=True, max_length=max_seq_length, add_special_tokens=False
-            )["input_ids"]
-            prefix_ids = tokenizer(
-                prefix, truncation=True, max_length=max_seq_length, add_special_tokens=False
-            )["input_ids"]
-            cut = min(len(prefix_ids), len(input_ids))
-            assistant_mask = [0] * cut + [1] * (len(input_ids) - cut)
-
-        labels = [
-            tok if mask == 1 else -100
-            for tok, mask in zip(input_ids, assistant_mask)
-        ]
+        # Strategy: tokenise the full conversation, then tokenise the
+        # prefix (everything except the final assistant turn, with a
+        # generation-prompt marker so the boundary is identical to the
+        # one in the full string). Mask the prefix to -100. We do NOT
+        # rely on apply_chat_template's return_assistant_tokens_mask
+        # because Qwen2.5's stock chat template lacks the
+        # {% generation %} markers and therefore returns all-zero masks
+        # silently.
+        full = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=False,
+        )
+        prefix = tokenizer.apply_chat_template(
+            messages[:-1],
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+        input_ids = tokenizer(
+            full,
+            truncation=True,
+            max_length=max_seq_length,
+            add_special_tokens=False,
+        )["input_ids"]
+        prefix_ids = tokenizer(
+            prefix,
+            truncation=True,
+            max_length=max_seq_length,
+            add_special_tokens=False,
+        )["input_ids"]
+        cut = min(len(prefix_ids), len(input_ids))
+        labels = [-100] * cut + list(input_ids[cut:])
         attention_mask = [1] * len(input_ids)
         return {
             "input_ids": input_ids,
