@@ -12,6 +12,7 @@
         {"rx": "known\\s+to\\s+have\\s+(?:a\\s+)?(?:standard\\s+deviation|variance|sigma|σ)", "w": 6, "label": "known to have stddev"},
         {"rx": "(?:standard\\s+deviation|variance|sigma|σ)\\s+is\\s+known", "w": 6, "label": "stddev is known"},
         {"rx": "known\\s+(?:standard\\s+deviation|variance|sigma|σ)\\s*(?:of|=|is)?\\s*\\d", "w": 5, "label": "known stddev numeric"},
+        {"rx": "with\\s+known\\s+(?:standard\\s+deviation|variance|sigma|σ)", "w": 5, "label": "with known stddev"},
         {"rx": "(?:long\\s+experience|past\\s+records|previous\\s+studies?).{0,80}(?:variability|standard\\s+deviation|variance|sigma).{0,40}(?:stable|known|fixed|constant)", "w": 4, "label": "stable variability"},
         {"rx": "test\\s+(?:the\\s+)?(?:hypothesis|null\\s+hypothesis|claim).{0,80}(?:mean|μ|average)", "w": 2, "label": "test mean"},
         {"rx": "true\\s+mean\\s+\\w+\\s+(?:equals|is|differs|exceeds)", "w": 2, "label": "true mean tested"},
@@ -30,6 +31,7 @@
       "slide_refs": [445],
       "patterns": [
         {"rx": "sample\\s+standard\\s+deviation\\s*(?:of|=)?\\s*\\d", "w": 5, "label": "sample SD numeric"},
+        {"rx": "sample\\s+standard\\s+deviation\\b", "w": 3, "label": "sample SD lenient"},
         {"rx": "\\bs\\s*=\\s*\\d", "w": 2, "label": "s = numeric"},
         {"rx": "(?:T|t)[\\s-]?test|student'?s?\\s*t", "w": 3, "label": "T-test mention"},
         {"rx": "test.*(?:mean|μ|average)", "w": 1, "label": "mean test"},
@@ -214,7 +216,9 @@
         {"rx": "chi[\\s-]?squared?\\s+goodness", "w": 8, "label": "chi-square GoF"},
         {"rx": "follows?\\s+a.{0,30}distribution", "w": 5, "label": "follows distribution"},
         {"rx": "(?:fits|fit)\\s+(?:the|a)\\s+\\w+\\s+distribution", "w": 5, "label": "fit distribution"},
-        {"rx": "test.*(?:poisson|normal|chi[\\s-]?squared|exponential|uniform|binomial|geometric)\\s+distribution", "w": 5, "label": "test named distribution"}
+        {"rx": "test.*(?:poisson|normal|chi[\\s-]?squared|exponential|uniform|binomial|geometric)\\s+distribution", "w": 5, "label": "test named distribution"},
+        {"rx": "\\d+\\s*:\\s*\\d+(?:\\s*:\\s*\\d+)+\\s*ratio", "w": 7, "label": "k:k:k ratio"},
+        {"rx": "(?:fit|fits|follows?)\\s+(?:the\\s+)?(?:predicted|expected|hypothesi[sz]ed)\\s+(?:\\d+\\s*:\\s*\\d+(?:\\s*:\\s*\\d+)*\\s*)?ratio", "w": 5, "label": "fit predicted ratio"}
       ]
     },
     {

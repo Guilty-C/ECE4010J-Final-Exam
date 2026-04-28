@@ -12,7 +12,7 @@ Given a natural-language exam-style question, the system identifies its test typ
 | B — external open corpora | DONE | 2026-04-28 | 3,597 deduped corpus records (OpenIntro 385, OpenStax 1,679, Hendrycks 1,245) |
 | C — triage classifier | DONE | 2026-04-28 | 14/14 sample-final questions accepted top-1, 13/14 top-3 |
 | D — retriever | DONE | 2026-04-28 | every card (25/25) recalls ≥ 1 template; 5/5 canonical queries surface VE401-local in top-3; 1.3 ms/query warm |
-| E — template fill + render | not started | — | — |
+| E — template fill + render | DONE | 2026-04-28 | 5-section Markdown for all 25 cards; numeric eval for Z / T / χ²-variance / paired-T / χ²-GoF; 3/3 smoke tests green; Phase C regression unchanged |
 | F — CLI + end-to-end test | not started | — | MVP gate |
 | H — infra (git/ssh/Qwen probe) | not started | — | — |
 | I — LoRA training (remote) | not started | — | — |
@@ -25,12 +25,29 @@ python -m tests.test_extractors   # Phase A — JSONL schema, volume, sentinels
 python -m tests.test_corpus       # Phase B — corpus volume, dedup, source mix
 python -m tests.test_triage       # Phase C — 14 sample-final main questions
 python -m tests.test_retriever    # Phase D — 25/25 cards retrievable + 5 smoke queries
+python -m tests.test_render       # Phase E — Z / T / chi-square GoF end-to-end
 ```
 
 See `progress.md` for full per-phase write-ups.
 
-**Next**: Phase E (template renderer). Phase H (git push + remote model
-probe) is independent and can be parallelised.
+**Next**: Phase F (CLI + 16-question end-to-end MVP gate). Phase H (git
+push + remote model probe) is independent and can be parallelised.
+
+### Try the solver end-to-end
+
+```python
+from solver import solve
+res = solve(
+    "A bottling line is calibrated so that the fill volume is normally "
+    "distributed with known standard deviation sigma = 2.0 mL. The "
+    "target mean is mu_0 = 25 mL. A random sample of n = 25 bottles "
+    "gives x_bar = 24.3 mL. At alpha = 0.05, test H_0: mu = 25 versus "
+    "the two-sided alternative."
+)
+print(res.card_id)            # 'card01'
+print(res.statistic_value)    # -1.75
+print(res.markdown)           # five-segment Markdown answer
+```
 
 ## Project layout
 

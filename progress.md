@@ -585,3 +585,186 @@ Phase E is the last piece before the MVP CLI in Phase F. Phase H (git
 push + remote Qwen probe) remains independent and can still be
 parallelised.
 
+---
+
+## 2026-04-28 — Phase E: template fill + render (DONE)
+
+### What shipped
+
+A pure-stdlib solver that turns a free-form question into a five-segment
+Markdown answer (Setup / Hypotheses / Statistic / Computation /
+Decision) following the VE401 slide conventions.
+
+| File | Lines | Role |
+|---|---|---|
+| `solver/extract_givens.py` | 200 | LaTeX-aware regex extractor for `n`, `x_bar`, `s`, `sigma`, `mu_0`, `alpha`, two-sample subscripts, `d_bar`, GoF observed counts, tail direction |
+| `solver/templates.py` | 540 | per-card 5-segment template DB (all 25 cards) plus `math`-only numerical evaluators for the canonical core families (Z, T, χ²-variance, paired-T, χ²-GoF) |
+| `solver/render.py` | 240 | orchestrator: classify → extract givens → look up template → fill → emit Markdown; exposes `solve()` and `render_markdown()` |
+| `solver/__init__.py` | 18 | public re-exports (`solve`, `render_markdown`, `extract_givens`, `Givens`, `SolveResult`) |
+| `tests/test_render.py` | 160 | three end-to-end smoke tests across Z / T / χ²-GoF |
+
+### Pipeline
+
+```
+question (LaTeX OK)
+        │
+        ▼
+solver/extract_givens.normalise_text   # strip \(...\), \\sigma → sigma, x̄ → x_bar, ...
+        │
+        ├──▶ classifier.classify(normalised)         # Phase C — top-K cards
+        │
+        └──▶ solver/extract_givens.extract_givens    # numeric pull: n, x_bar, s, sigma, mu_0, alpha,
+                                                      #   tail, observed_counts, ...
+                            │
+                            ▼
+                    solver/templates.get(card_id)
+                            │
+                            ▼
+                solver/render.render_markdown(card_id, givens)
+                            │
+                            ▼
+              5-segment Markdown + slide refs + classifier top-3
+```
+
+Run order:
+
+```bash
+python -m tests.test_render        # 3 end-to-end smoke tests
+python -m tests.test_triage        # Phase C regression — still 14/14 acceptable
+```
+
+### Acceptance criteria (plan §6 step E4 / DoD §12.1 #2)
+
+| Criterion | Target | Actual | Pass |
+|---|---|---|---|
+| Z-test end-to-end (card01) | 5 sections + slide ref + numeric z | z = -1.75 (matches slide 436 worked example to 1e-6) | ✓ |
+| One-sample T-test (card02) | 5 sections + slide ref + numeric t | t = -1.925, slide-worked rounds to -1.92 | ✓ |
+| Chi-square GoF (card15) | 5 sections + slide ref + observed counts surfaced | observed_counts = [90, 35, 25], chi^2 symbolic (no expected vec) | ✓ |
+| Phase C regression | top-1 acceptable >= 75%, top-3 inclusive >= 90% | 14/14 = 100.0%, 13/14 = 92.9% — no degradation | ✓ |
+| Markdown contains canonical 5 section headers | yes | yes (Setup, Hypotheses, Statistic, Computation, Decision) | ✓ |
+
+### Notable design decisions
+
+* **Pure stdlib, no scipy.** Plan §6 step E2 marked `numerical_eval.py`
+  as optional. Skipping it kept the renderer dependency-free; numerical
+  evaluation uses `math.sqrt` only and computes the test statistic
+  directly. Critical values and exact p-values are quoted symbolically
+  (`z_{alpha/2}`, `chi^2_{alpha,k-1-m}`) — Phase F (CLI) or a follow-up
+  iteration can layer scipy on top without touching the templates.
+* **Single LaTeX normaliser shared between givens-extractor and
+  classifier.** The classifier's regex triggers were tuned against
+  records that shipped with `\(\sigma=2.0\)` style markup. When a user
+  types the same content the wrappers are noise to the patterns, so
+  `solver.extract_givens.normalise_text` strips them and the renderer
+  passes the normalised string into both `classify()` and
+  `extract_givens()`. Aligning the two stages on identical text avoids
+  the "givens extracted but card not classified" failure mode.
+* **Three small permissive triggers added to the taxonomy.** The
+  bottling-line phrasing "with known standard deviation σ = 2.0" did
+  not fire any of card01's existing triggers because every positive
+  pattern required either "is known" word-order or a digit immediately
+  after the keyword. Three lenient rules — card01 `with known sigma`
+  (w=5), card02 `sample standard deviation` bare-phrase (w=3), card15
+  `k:k:k ratio` (w=7) — now fire on the natural phrasing without
+  changing existing scores. Phase C regression confirms no-op on the
+  14-question gold set; card01 / card02 / card15 already had
+  comfortable margins on those.
+* **Templates DB hand-authored for 5 core cards, skeleton-only for the
+  other 20.** Per the "ship smallest usable thing first" rule, the five
+  cards exercised by E4 (card01, card02, card03, card12, card15) plus
+  card15 / card12 numeric paths are fully fleshed out; the other 20
+  cards have correct names, slide refs, and 5-section structure but
+  leave Computation symbolic. This satisfies DoD §12.1 #2 (skeleton
+  consistency >= 12/14 — every card emits the canonical 5 segments) and
+  defers numeric evaluation for the regression / ANOVA / post-hoc
+  families to a follow-up iteration.
+* **Defensive missing-givens behaviour.** A `_safe_format` defaultdict
+  surfaces missing keys as the literal `?` so the user sees what they
+  forgot to supply rather than a confidently wrong fabricated value.
+  Numerical evaluators (`compute` callables in `templates.py`) return
+  `None` when a required given is absent, and the renderer prints
+  "(insufficient givens)" instead of a number.
+* **GoF count extraction guards.** Naive
+  `\b(\d+)\s+([A-Za-z]+)\b` pair-finding over "the predicted 9:3:4
+  ratio" picked up "(4, ratio)" as a fourth observed count, polluting
+  the χ² input. Two pre-cleans block this: colon-separated ratios
+  (`9:3:4`) are wiped from the text before pair-matching, and a
+  stop-list (`ratio`, `data`, `categories`, …) is consulted at every
+  step including the initial triple.
+
+### Sample render (Z-test on the bottling-line question)
+
+```
+# One-sample Z-test (sigma known)  *(card card01, ch19)*
+*Slide refs:* slide 436
+
+*Classifier top-3:* card01 (5)
+
+## Setup
+Random sample from a normal population, **sigma is known**
+→ a one-sample Z-test is appropriate [slide 436].
+
+## Hypotheses
+H_0: mu = 25  vs.  H_1: mu != 25    (two-sided).
+
+## Statistic
+Under H_0,   Z = (X_bar - mu_0) / (sigma / sqrt(n))  ~  N(0, 1).
+
+## Computation
+z = (24.3 - 25) / (2 / sqrt(25)) = -1.75
+
+## Decision
+Reject H_0 if |z| > z_{alpha/2} (using a critical value at alpha = 0.05).
+The p-value is computed from the standard normal CDF in the appropriate tail.
+```
+
+### Known limitations
+
+* **Numeric evaluation is core-only.** SLR / MLR / ANOVA / post-hoc
+  cards emit symbolic Computation segments. Plugging scipy.stats in (or
+  hand-rolling F / Tukey criticals) is the natural follow-up.
+* **GoF expected-counts inference is manual.** The user must hand the
+  expected vector to the renderer (`g.expected_counts`) for a numeric
+  χ². Auto-parsing "9:3:4 ratio" → expected proportions is feasible but
+  deferred — the test confirms the *symbolic* path renders correctly
+  with observed counts surfaced.
+* **Two-sample subscripts (`n_1`, `x_bar_2`) are recognised in
+  `extract_givens` but not yet wired through to `_z_two_sample` /
+  `_pooled_t` / `_welch_t` evaluators.** The two-sample templates
+  (card09, card10, card11) emit symbolic Computation strings; this is
+  the highest-value Phase F follow-up after the CLI is in place.
+* **`solve()` does not load the corpus by default** (so no Phase D 2.7 s
+  cold start). Pass `related_records=N` to opt in; it imports
+  `retriever.retrieve` lazily.
+
+### Files added
+
+```
+ve401_solver/
+├── solver/
+│   ├── __init__.py
+│   ├── extract_givens.py
+│   ├── templates.py
+│   └── render.py
+└── tests/test_render.py
+```
+
+Taxonomy edits (additive, no patterns removed):
+
+```
+classifier/tag_taxonomy.json
+  card01: + "with known stddev"           (w=5)
+  card02: + "sample SD lenient"           (w=3)
+  card15: + "k:k:k ratio"                 (w=7)
+          + "fit predicted ratio"         (w=5)
+```
+
+No new third-party dependencies. `math` (stdlib) is the only numeric
+package used by the templates.
+
+### Next up
+
+Plan §6 calls for **Phase F** (CLI + end-to-end test on the 16-question
+sample-final). Phase E now exposes the `solve()` entry point Phase F
+will wrap. Phase H (git push + remote Qwen probe) remains independent.
+
