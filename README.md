@@ -10,6 +10,7 @@ Given a natural-language exam-style question, the system identifies its test typ
 |---|---|---|---|
 | A — local material extraction | DONE | 2026-04-28 | 208 ve401 + 80 crash-course records, slide-ref coverage 84% |
 | B — external open corpora | DONE | 2026-04-28 | 3,597 deduped corpus records (OpenIntro 385, OpenStax 1,679, Hendrycks 1,245) |
+| B' — corpus cleaning | DONE | 2026-04-28 | **2,352** records (-1,245 hendrycks_math dropped, off-topic for VE401); 6 artifact patterns audited & cleaned on openintro + openstax; ve401_local + crash_course byte-identical pre/post; all Phase A–F regressions green |
 | C — triage classifier | DONE | 2026-04-28 | 14/14 sample-final questions accepted top-1, 13/14 top-3 |
 | D — retriever | DONE | 2026-04-28 | every card (25/25) recalls ≥ 1 template; 5/5 canonical queries surface VE401-local in top-3; 1.3 ms/query warm |
 | E — template fill + render | DONE | 2026-04-28 | 5-section Markdown for all 25 cards; numeric eval for Z / T / χ²-variance / paired-T / χ²-GoF; 3/3 smoke tests green; Phase C regression unchanged |
@@ -21,12 +22,13 @@ Given a natural-language exam-style question, the system identifies its test typ
 Acceptance test cheatsheet:
 
 ```bash
-python -m tests.test_extractors   # Phase A — JSONL schema, volume, sentinels
-python -m tests.test_corpus       # Phase B — corpus volume, dedup, source mix
-python -m tests.test_triage       # Phase C — 14 sample-final main questions
-python -m tests.test_retriever    # Phase D — 25/25 cards retrievable + 5 smoke queries
-python -m tests.test_render       # Phase E — Z / T / chi-square GoF end-to-end
-python -m tests.test_end_to_end   # Phase F MVP gate — sample-final card+skeleton+latency
+python -m tests.test_extractors    # Phase A — JSONL schema, volume, sentinels
+python -m tests.test_corpus        # Phase B — corpus volume, dedup, source mix
+python -m tests.test_corpus_clean  # Phase B' — post-clean artifact-zero, 4-source set, ve401_local untouched
+python -m tests.test_triage        # Phase C — 14 sample-final main questions
+python -m tests.test_retriever     # Phase D — 25/25 cards retrievable + 5 smoke queries
+python -m tests.test_render        # Phase E — Z / T / chi-square GoF end-to-end
+python -m tests.test_end_to_end    # Phase F MVP gate — sample-final card+skeleton+latency
 ```
 
 See `progress.md` for full per-phase write-ups.

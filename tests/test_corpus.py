@@ -1,6 +1,7 @@
-"""Smoke tests for Phase B — the unified ``data/corpus.jsonl``.
+"""Smoke tests for Phase B (and post Phase B') — the unified ``data/corpus.jsonl``.
 
-Run from the project root:
+Run from the project root::
+
     python -m tests.test_corpus
 
 Plan §6 acceptance criteria for Phase B:
@@ -9,11 +10,19 @@ Plan §6 acceptance criteria for Phase B:
 * schema consistency 100% (every record validates)
 * no duplicate questions (fingerprint collisions resolved by merge)
 
+Phase B' (corpus cleaning + Hendrycks removal) added these tightenings:
+
+* the corpus must contain exactly the four expected sources
+  (``ve401_local``, ``crash_course``, ``openintro``, ``openstax``);
+  ``hendrycks_math`` was dropped as off-topic for the VE401 syllabus
+* the priority-1 partition is unchanged
+  (``ve401_local`` + ``crash_course``)
+
 Additional sanity checks we add here:
 
 * every Phase A source is still represented in the corpus (i.e. the
   merge did not silently drop a partition)
-* every external Phase B source contributed at least one record
+* the external Phase B sources still meet the volume floor
 * ``source_priority`` is bounded to {1, 2, 3} and obeys plan §5.3
   (priority 1 = ve401_local + crash_course)
 """
@@ -80,16 +89,35 @@ def main() -> int:
     assert by_source.get("crash_course", 0) > 0, "crash_course missing"
     print("[ok] Phase A sources still present after Phase B merge")
 
-    # 5. external source contribution. At least one of the three external
-    # corpora should have landed; the plan §6 acceptance threshold of
-    # 1,200 records cannot be hit from the local 288 records alone.
+    # 5. external source contribution. As of Phase B' the corpus comprises
+    # 4 sources: ve401_local + crash_course (priority 1) and openintro +
+    # openstax (priority 2). The Hendrycks MATH slice was dropped in
+    # Phase B' (off-topic for the VE401 syllabus); we explicitly assert
+    # its absence here so a regression that re-merges Hendrycks fails
+    # this gate loudly. The plan §6 acceptance threshold of 1,200 records
+    # cannot be hit from the local 288 records alone, so we keep the
+    # external floor.
+    assert by_source.get("hendrycks_math", 0) == 0, (
+        "hendrycks_math should have been dropped by Phase B' clean_corpus"
+    )
     ext_total = (
         by_source.get("openintro", 0)
         + by_source.get("openstax", 0)
-        + by_source.get("hendrycks_math", 0)
     )
     assert ext_total >= 900, f"external contribution too low: {ext_total}"
-    print(f"[ok] external corpora contributed {ext_total} records")
+    print(
+        f"[ok] external corpora (openintro+openstax) contributed "
+        f"{ext_total} records"
+    )
+
+    # Source set should be exactly the four expected names — anything
+    # else means a new corpus snuck in without test coverage.
+    expected_sources = {"ve401_local", "crash_course", "openintro", "openstax"}
+    assert set(by_source) == expected_sources, (
+        f"unexpected source set: got {set(by_source)}, "
+        f"expected {expected_sources}"
+    )
+    print(f"[ok] source set matches expected: {sorted(expected_sources)}")
 
     # 6. source_priority bounded and consistent with plan §5.3.
     by_priority = Counter(r["source_priority"] for r in records)

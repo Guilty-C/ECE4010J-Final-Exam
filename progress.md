@@ -945,3 +945,243 @@ training-side work in Phases I and J can start. Phase H is independent
 of everything shipped so far and is the natural next step to lock in
 the MVP DoD #6 (clone-and-run reproducibility).
 
+---
+
+## 2026-04-28 — Phase B': corpus cleaning (DONE)
+
+### What shipped
+
+A read-only artifact auditor, an idempotent cleaner, and a regression
+test. The Hendrycks MATH slice (off-topic for the VE401 syllabus) was
+dropped at the user's explicit instruction, and six classes of PDF /
+HTML extraction artifacts were normalised on the remaining external
+sources.
+
+| File | Lines | Role |
+|---|---|---|
+| `extractors/audit_corpus.py` | 220 | read-only auditor; counts artifact-pattern hits per source/field |
+| `extractors/clean_corpus.py` | 300 | idempotent regex cleaner; drops `hendrycks_math`, normalises decimal-as-colon, ASCII-not-equal, distribution-bracket semicolons, pdfminer cid stubs, OpenStax `<link/>` residuals, spaced test-name hyphens |
+| `tests/test_corpus_clean.py` | 160 | post-clean assertions: total count, artifact-zero on cleanable subset, schema, source set, byte-identity of protected sources |
+| `tests/test_corpus.py` | (edit) | tightened to assert exact 4-source set + Hendrycks absence |
+| `data/audit_before.json` | n/a | pre-clean artifact tally |
+| `data/audit_after.json`  | n/a | post-clean artifact tally |
+| `data/corpus.jsonl`      | (rewritten) | 3,597 → 2,352 records |
+
+### Pipeline
+
+```
+data/corpus.jsonl (3,597, pre-clean)
+        │
+        ├──▶ extractors/audit_corpus.py   →  data/audit_before.json
+        │
+        ▼
+extractors/clean_corpus.py
+   • drop source == "hendrycks_math"        (-1,245)
+   • skip records where source ∈ {ve401_local, crash_course}
+   • for openintro / openstax records:
+       1. decimal_colon : (?<!\d:)(\d):(\d{2,})  → \1.\2
+       2. not_equal     : \b6=                    → !=
+       3. dist_semicolon: in N(...)/Bin(...)/...  → ; → ,
+       4. cid_token     : \(cid:\d+\)             → ""
+       5. link_residual : <link.../?>             → [Table/Figure]
+       6. test_spacing  : T-space-test variants   → T-test
+   • iterate clean_string until fixed-point (cascade timestamps need 2 passes)
+        │
+        ▼
+data/corpus.jsonl (2,352, post-clean)  ──▶ data/audit_after.json
+```
+
+Run order:
+
+```bash
+python -m extractors.audit_corpus      # writes data/audit_before.json
+python -m extractors.clean_corpus      # rewrites data/corpus.jsonl in place
+python -m extractors.audit_corpus      # writes data/audit_after.json (auto-named)
+python -m tests.test_corpus_clean      # post-clean acceptance gate
+```
+
+### Audit-before vs audit-after summary
+
+Counts are total hits across all corpus records (the auditor scans
+question + every solution_steps content + final_answer +
+trail_of_thought). The "cleanable" column shows hits inside non-protected,
+non-dropped records — those are the only ones the cleaner is allowed
+to touch.
+
+| Pattern | before total | before by source (cleanable + protected + dropped) | cleanable hits cleaned | after total | after by source |
+|---|---:|---|---:|---:|---|
+| decimal_colon  | 284 | hendrycks=61, openintro=3, openstax=7, ve401_local=213 | 10 → 0 | 213 | ve401_local=213 |
+| not_equal      |  44 | hendrycks=39, ve401_local=5                            | 0 → 0  | 5   | ve401_local=5   |
+| dist_semicolon |   2 | ve401_local=2                                          | 0 → 0  | 2   | ve401_local=2   |
+| cid_token      |   0 | (none observed)                                        | 0 → 0  | 0   | -               |
+| link_residual  |   0 | (none observed; OpenStax extractor already substitutes) | 0 → 0  | 0   | -               |
+| test_spacing   |  12 | openstax=5, ve401_local=7                              | 5 → 0  | 7   | ve401_local=7   |
+
+Net cleanable replacements: **15** (10 decimal_colon, 5 test_spacing).
+
+The 213 + 5 + 2 + 7 = **227 residual hits all sit inside `ve401_local`
+records**, which the cleaner deliberately does not touch (HTML-sourced
+records relied on by Phase E for exact-text formula matches; the
+auditor reports them but `tests/test_corpus_clean.py` enforces zero
+hits on the cleanable subset only). Hendrycks records contained 100
+hits; all 1,245 of those records were dropped, so those hits are gone
+too.
+
+### Cleaning rules (in order)
+
+1. `decimal_colon` — `(?<!\d:)(\d):(\d{2,})` → `\1.\2`. The negative
+   lookbehind prevents cascade matches inside timestamps. Cascade
+   timestamps like `1:22:28` still need two passes to fully resolve
+   (`1:22:28` → `1.22:28` → `1.22.28`); `clean_string` iterates to
+   fixed-point, capped at 8 passes for safety.
+2. `not_equal` — `\b6=` → `!=`. Zero impact on the current corpus
+   (after Hendrycks drop) because the only true-positive hits sit in
+   `ve401_local` (skipped). The rule is retained for completeness and
+   would activate if a future external corpus reintroduces the glyph.
+3. `dist_semicolon` — implemented as a two-pass scan: locate every
+   `N(...)`, `Bin(...)`, `Poisson(...)`, `Exp(...)`, `chi^2(...)`,
+   `t(...)`, `F(...)`, `Geom(...)`, `HG(...)`, `U(...)` span, then
+   `replace(';', ',')` only inside that span. This handles N parameters
+   with N semicolons cleanly; a naive single-pass regex would drop all
+   but the first.
+4. `cid_token` — `\(cid:\d+\)` → empty. Zero hits in current corpus.
+5. `link_residual` — `<link[^>]*?/?>` → `[Table/Figure]`. Zero hits;
+   the OpenStax extractor already substitutes during extraction.
+6. `test_spacing` — only when whitespace surrounds the hyphen. The
+   compiled pattern uses two alternations (`\s+-\s*` OR `\s*-\s+`) and
+   captures the leading letter so the replacement preserves the test
+   family.
+
+### Records before vs after
+
+| Stage | Records | Notes |
+|---|---:|---|
+| Phase B (pre-clean)            | 3,597 | as written by `merge_corpus.py` |
+| Phase B' (post-clean) | **2,352** | -1,245 hendrycks_math; cleaner does not dedup further |
+
+Per-source breakdown change:
+
+| Source | Phase B | Phase B' | Δ |
+|---|---:|---:|---:|
+| ve401_local    | 208   | 208   | 0    |
+| crash_course   | 80    | 80    | 0    |
+| openintro      | 385   | 385   | 0    |
+| openstax       | 1,679 | 1,679 | 0    |
+| hendrycks_math | 1,245 | 0     | -1,245 |
+| **total**      | **3,597** | **2,352** | **-1,245** |
+
+`data/extracted/hendrycks_math.jsonl` is left on disk untouched — only
+the merged corpus was rewritten, per the user's instruction to keep the
+extracted JSONLs as a backup.
+
+### Acceptance criteria (this sprint)
+
+| Criterion | Target | Actual | Pass |
+|---|---|---|---|
+| total record count | ≈ 2,352 | **2,352** | ✓ |
+| every artifact pattern → 0 hits in cleanable records | yes | **6/6 patterns clean** across 2,064 cleanable records | ✓ |
+| schema validation passes | yes | yes | ✓ |
+| no `hendrycks_math` records | true | true | ✓ |
+| ve401_local + crash_course byte-identical pre/post | yes | **288/288 records** match | ✓ |
+
+### Phase A–F regression observations (no drift)
+
+All five downstream-phase tests report identical headline numbers:
+
+| Test | Pre-Phase B' | Post-Phase B' |
+|---|---|---|
+| `test_extractors`  | passes              | passes              |
+| `test_corpus`      | passes (5 sources) | passes (4 sources) |
+| `test_triage`      | top-1 acceptable 14/14, top-3 inclusive 13/14 | **14/14, 13/14** |
+| `test_retriever`   | 25/25 cards, 5/5 canonical queries           | **25/25, 5/5**    |
+| `test_render`      | ALL 3 TESTS PASSED                            | **ALL 3 TESTS PASSED** |
+| `test_end_to_end`  | card-id 14/14, skeleton 14/14, max ~5.8 ms   | **14/14, 14/14, max ~5.5 ms** |
+
+Side effect worth noting: `card22` ("Model selection / PRESS / adj-R^2 /
+AIC") had 264 records in its top-1 retrieval bucket pre-clean and **44**
+post-clean. The 220 vanished records were Hendrycks combinatorics
+problems being mis-classified by the keyword tagger as card22; dropping
+them is a quality improvement (less noise in card22 retrievals) but did
+not change the headline metric because no Hendrycks record was ever
+preferred over a VE401-local one in the canonical-query tests.
+
+### Notable design decisions
+
+* **Idempotent via fixed-point loop.** `clean_string` runs all six
+  rules then repeats up to 8 times until a pass produces zero
+  replacements. Most strings converge in one pass; cascade timestamps
+  like `1:22:28` need two. The 8-pass cap is a safety net — every
+  current rule strictly *removes* artifact patterns from the text, so
+  termination is guaranteed; the cap turns a rule-bug into an explicit
+  `AssertionError` rather than an infinite loop.
+* **Protected sources skipped, not patched.** The cleaner does not
+  attempt to "fix" `ve401_local` records even where the same
+  pdfminer-extraction artifacts are present. Phase E renders use the
+  `ve401_local` formulae as exact-text references; mutating them would
+  risk breaking slide-numbered citation matches. The auditor still
+  reports `ve401_local` artifacts so a future contributor can tackle
+  them in a properly-scoped sprint (which would also need a Phase E
+  regression run).
+* **Two-pass `dist_semicolon`.** Implemented as locate-spans-then-
+  replace-inside rather than a single regex. The single-pass form
+  `r'\b(N|Bin|...)\(([^)]*?);([^)]*?)\)'` mishandles N>1 semicolons and
+  has subtle non-greedy edge cases. The two-pass version is more
+  obviously correct and easier to extend if more distribution names
+  are added later.
+* **Auditor's pre/post output naming.** The auditor writes
+  `audit_before.json` if the corpus still contains any `hendrycks_math`
+  records, otherwise `audit_after.json`. This single state-bit lets the
+  same script be the auditor for both phases without an explicit CLI
+  flag, and the output filenames remain stable across re-runs.
+* **Test scopes artifact-zero assertion to cleanable records.** The
+  user's spec asked for "all 6 patterns count == 0", but this is in
+  tension with the higher-priority "do NOT modify ve401_local" rule.
+  The test resolves the tension by asserting zero hits across the 2,064
+  records the cleaner is contractually allowed to touch
+  (`openintro` + `openstax`) and reporting the protected-source
+  residual as info-level output.
+
+### Files added / modified
+
+```
+ve401_solver/
+├── extractors/
+│   ├── audit_corpus.py                # NEW
+│   └── clean_corpus.py                # NEW
+├── tests/
+│   ├── test_corpus.py                 # MODIFIED — Hendrycks-absent + 4-source set
+│   └── test_corpus_clean.py           # NEW
+└── data/
+    ├── corpus.jsonl                   # REWRITTEN — 3,597 → 2,352
+    ├── audit_before.json              # NEW
+    └── audit_after.json               # NEW
+```
+
+`data/extracted/hendrycks_math.jsonl` is unchanged on disk.
+
+### Known limitations
+
+* **`ve401_local` artifacts persist.** 213 decimal_colon, 5 not_equal,
+  2 dist_semicolon, 7 test_spacing hits remain in 28-ish ve401_local
+  records (mostly the homework PDFs, see Phase A's notes on the cid /
+  ligature drops in `extract_ve401_pdf.py`). Cleaning these would need
+  a dedicated sprint that includes a Phase E exact-text regression.
+* **`decimal_colon` mangles times-of-day.** Strings like `1:22:28`
+  (a race time in two openintro records) get rewritten to `1.22.28`.
+  The negative lookbehind catches cascading digit-colon-digit but
+  cannot distinguish "decimal that lost its dot" from "colon-separated
+  time". Spec accepts this trade-off; affected records: 2 of 385
+  openintro records.
+* **`card22` bucket shrank.** As noted above, card22's top-1 retrieval
+  bucket dropped from 264 to 44. This is a noise-reduction win but
+  reduces the candidate-pool for card22-specific retrievals; if the
+  retriever's bar 1 ever flakes on card22, the most likely cause is a
+  classifier change that orphans previously-card22-classified records.
+
+### Next up
+
+Plan §6 still calls for **Phase H** (git init + push + SSH probe). The
+corpus is now smaller and entirely on-syllabus; pushing it through the
+LFS/git boundary in Phase H will be slightly cheaper (~1.2 MB less),
+but the Phase H sequence itself is unchanged.
+
