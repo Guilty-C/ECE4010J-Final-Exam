@@ -89,3 +89,161 @@ Dependencies installed (subset of `requirements.txt`): `beautifulsoup4`, `lxml`,
 ### Next up
 
 Plan §6 says the next stage is **Phase B** (external open corpora — OpenIntro / OpenStax / Hendrycks MATH). Phase B is independent of Phase A and can be parallelised with **Phase C** (classifier) if desired.
+
+---
+
+## 2026-04-28 — Phase B: external open corpora (DONE)
+
+### What shipped
+
+Three new per-source JSONL files plus the merged corpus:
+
+| File | Records | Source | Priority |
+|---|---|---|---|
+| `data/extracted/openintro.jsonl`     | **385**   | OpenIntro Statistics 4e (LaTeX source) | 2 |
+| `data/extracted/openstax.jsonl`      | **1,811** | OpenStax Introductory Statistics 2e (CNXML) | 2 |
+| `data/extracted/hendrycks_math.jsonl`| **1,245** | Hendrycks MATH, Counting & Probability slice | 3 |
+| **`data/corpus.jsonl`** (merged)     | **3,597** | union of all five JSONLs, fingerprint-deduped | 1/2/3 |
+
+### Pipeline
+
+```
+data/raw/                                                # gitignored
+├── hendrycks_math/competition_math.parquet              # HF mirror
+├── openintro/openintro-statistics-master/               # codeload zip
+└── openstax/osbooks-introductory-statistics-bundle-main/  # codeload zip
+
+extractors/extract_hendrycks.py     # parquet → jsonl   →  1,245 records
+extractors/extract_openintro.py     # \eoce{...}{} TeX  →    385 records
+extractors/extract_openstax.py      # CNXML XML walk    →  1,811 records
+extractors/merge_corpus.py          # union+dedupe      →  3,597 records
+```
+
+Run order:
+
+```bash
+# (one-time downloads — see "Source acquisition" below)
+python -m extractors.extract_hendrycks
+python -m extractors.extract_openintro
+python -m extractors.extract_openstax
+python -m extractors.merge_corpus
+python -m tests.test_corpus    # smoke test, all asserts pass
+python -m tests.test_extractors # Phase A regression, still green
+```
+
+### Acceptance criteria (plan §6)
+
+| Criterion | Target | Actual | Pass |
+|---|---|---|---|
+| `corpus.jsonl` size | ≥ 1,200 | **3,597** | ✓ |
+| schema consistency 100% | yes | yes (every record validates) | ✓ |
+| no duplicate questions | 0 | 0 (132 collisions deduped during merge) | ✓ |
+
+Cross-cuts that exceeded plan estimates: OpenStax 2e turned out to ship
+solutions inline for 889 problems (49% of its records) — the plan
+assumed pure problem-only — so the corpus has a 65% `solution_steps`
+non-empty rate overall.
+
+### Source acquisition
+
+GitHub `github.com` was intermittently unreachable from this machine
+(connect timeouts on port 443) but `codeload.github.com` and
+`api.github.com` were reachable, so we fetched both repos via the
+codeload zip endpoint instead of `git clone`. The HuggingFace primary
+was unreachable; we used the `hf-mirror.com` mirror for the Hendrycks
+parquet.
+
+| Asset | URL used |
+|---|---|
+| Hendrycks MATH | `https://hf-mirror.com/datasets/qwedsacf/competition_math/resolve/main/data/train-00000-of-00001-7320a6f3aba8ebd2.parquet` |
+| OpenIntro Statistics 4e | `https://codeload.github.com/OpenIntroStat/openintro-statistics/zip/refs/heads/master` |
+| OpenStax Intro Stats 2e | `https://codeload.github.com/openstax/osbooks-introductory-statistics-bundle/zip/refs/heads/main` |
+
+The `data/raw/` tree stays out of git per `.gitignore`; each end re-runs
+the curls.
+
+### Notable extractor decisions
+
+* **Hendrycks** is filtered to `type == "Counting & Probability"` only
+  (1,245 / 12,500). The plan §2.2 also lists "Prealgebra/Statistics" but
+  on inspection the Prealgebra bucket is dominated by arithmetic word
+  problems, not statistics; the crash-course corpus already covers
+  descriptive statistics. Final-answer is recovered from the last
+  `\boxed{...}` group in the solution prose (Hendrycks convention).
+* **OpenIntro 4e** ships problems but not solutions in the public LaTeX
+  source — the solution manual is sold separately. Every OpenIntro
+  record therefore has `solution_steps=[]`. The `\eoce{problem}{}` macro
+  is parsed with a hand-rolled brace walker rather than a regex because
+  the body contains arbitrary nested LaTeX environments. The `\qt{Title
+  \label{slug}}` title is promoted to the front of the question text so
+  retrieval can match on it.
+* **OpenStax 2e** is parsed via `xml.etree`. The collection XML
+  (`introductory-statistics-2e.collection.xml`) is read once to map
+  module IDs → chapter slug. Each `<exercise><problem>` body is
+  flattened to plain text; MathML is dropped (surrounding prose
+  preserves enough signal for the retriever); empty self-closing
+  `<link target-id="..." />` cross-references are substituted with
+  the literal `[Table/Figure]` so sentences like "From `<link/>`, find
+  the percentage" don't degenerate into ungrammatical "From , find …".
+* **Merge** dedupes by SHA-1 fingerprint of normalised question text;
+  on collision the lower `source_priority` (= higher quality) wins.
+  132 collisions were resolved this way (mostly OpenIntro/OpenStax
+  cross-borrowed problems).
+
+### Coverage breakdown of `corpus.jsonl` (3,597 records)
+
+* By source: ve401_local 208, crash_course 80, openintro 385,
+  openstax 1,679 (down from 1,811 raw because of inter-source dupes),
+  hendrycks_math 1,245.
+* By priority: 1 → 288 (VE401 gold), 2 → 2,064 (OpenIntro+OpenStax),
+  3 → 1,245 (Hendrycks).
+* By type: exercise 3,517, card 25, trap 30, drill 25.
+* `solution_steps` non-empty: 2,323 / 3,597 (65%).
+* `slide_refs` non-empty: 222 / 3,597 (6%) — only VE401 sources cite
+  slide pages; this is expected.
+* `rubric` non-empty: 155 / 3,597 (4%) — VE401 HTML exercises only.
+
+### Known limitations
+
+* `openintro` records are problem-only. Phase E (template renderer) and
+  Phase I (LoRA fine-tune) will mostly draw their solution-style signal
+  from the VE401 local + OpenStax + Hendrycks records that DO have
+  solutions; OpenIntro contributes question-phrasing variety only.
+* OpenStax MathML fragments are dropped; question text is therefore
+  slightly impoverished where a problem hinges on a typeset formula.
+  Spot-checks suggest the prose carries enough context for retrieval —
+  this can be revisited if the classifier struggles on math-heavy
+  questions.
+* Inter-source duplicate handling is fingerprint-only; near-duplicates
+  (same problem with reworded surface) are not merged. Acceptable for
+  this dataset size; revisit if the trainer reports memorisation
+  artifacts.
+
+### Files added
+
+```
+ve401_solver/
+├── extractors/
+│   ├── extract_hendrycks.py
+│   ├── extract_openintro.py
+│   ├── extract_openstax.py
+│   └── merge_corpus.py
+├── data/
+│   ├── extracted/
+│   │   ├── hendrycks_math.jsonl     # 1,245
+│   │   ├── openintro.jsonl          #   385
+│   │   └── openstax.jsonl           # 1,811
+│   └── corpus.jsonl                 # 3,597 (deduped union)
+└── tests/test_corpus.py
+```
+
+Dependencies added: `pandas`, `pyarrow` (for the Hendrycks parquet);
+everything else (xml.etree, hashlib, re) was already in the standard
+library or `requirements.txt`.
+
+### Next up
+
+Plan §6 says **Phase C** (classifier) and **Phase D** (retriever) are
+the next pieces — both run against `data/corpus.jsonl`. Phase H
+(infrastructure: git push, ssh, remote model probe) is independent and
+can be parallelised.
