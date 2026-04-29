@@ -13,6 +13,28 @@
       "assumptions": ["known_sigma", "normal_or_large_sample"]
     },
     {
+      "id": "known_sigma_mean_sample_size",
+      "label": "Known-sigma sample size for a mean interval",
+      "method_family": "interval_estimation",
+      "procedure": "one_sample_z_mean",
+      "task_type": "sample_size",
+      "parameter": "mu",
+      "keywords": ["known sigma", "known standard deviation", "half-width", "margin no more than", "required sample size", "sample size for a normal mean"],
+      "regex": ["known\\s+sigma", "sigma\\s*=\\s*\\d", "half[-\\s]width", "margin\\s+(?:of\\s+error\\s+)?(?:no\\s+more\\s+than|at\\s+most)", "required\\s+sample\\s+size"],
+      "assumptions": ["known_sigma", "normal_or_large_sample"]
+    },
+    {
+      "id": "mean_ci_interpretation",
+      "label": "Confidence-interval coverage interpretation for a mean",
+      "method_family": "interval_estimation",
+      "procedure": "mean_interval",
+      "task_type": "interpretation",
+      "parameter": "mu",
+      "keywords": ["confidence interval for a mean", "confidence interval for a normal mean", "repeated-sampling interpretation", "wrong probability interpretation", "mean is reported"],
+      "regex": ["confidence\\s+interval\\s+for\\s+a\\s+mean", "mean\\s+is\\s+reported\\s+as\\s+\\[", "repeated[-\\s]sampling\\s+interpretation", "wrong\\s+probability\\s+interpretation"],
+      "assumptions": []
+    },
+    {
       "id": "known_variance_mean_z_test",
       "label": "Known-variance Z test for one mean",
       "method_family": "single_sample_tests",
@@ -31,7 +53,7 @@
       "task_type": "confidence_interval",
       "parameter": "mu",
       "keywords": ["unknown sigma", "sample standard deviation", "t interval", "t test", "normal population", "xbar", "two-sided alternative"],
-      "regex": ["t_\\{?\\\\alpha/2", "\\\\bar\\s*x\\s*\\\\pm\\s*t", "s/\\\\sqrt\\s*\\{?n\\}?", "df\\s*=\\s*n\\s*-\\s*1", "\\bxbar\\b.*\\bs\\b", "\\bs\\b.*\\bxbar\\b"],
+      "regex": ["t_\\{?\\\\alpha/2", "\\\\bar\\s*x\\s*\\\\pm\\s*t", "s/\\\\sqrt\\s*\\{?n\\}?", "df\\s*=\\s*n\\s*-\\s*1", "\\bxbar\\b.*\\bs\\b", "\\bs\\b.*\\bxbar\\b", "sample\\s+mean.*sample\\s+standard\\s+deviation", "lower\\s+confidence\\s+bound\\s+for\\s+the\\s+population\\s+mean"],
       "assumptions": ["unknown_sigma", "normal_population_or_large_sample"]
     },
     {
@@ -119,7 +141,7 @@
       "task_type": "hypothesis_test",
       "parameter": "p_difference",
       "keywords": ["two proportions", "two population proportions", "two defect proportions", "defect proportions differ", "two independent surveys", "pooled proportion", "difference in proportions", "p1 - p2", "p_1-p_2", "two independent production lines"],
-      "regex": ["\\\\hat\\s*p_1\\s*-\\s*\\\\hat\\s*p_2", "pooled\\s+proportion", "p_?1\\s*-\\s*p_?2", "two\\s+independent\\s+.*(?:lines|groups|samples|surveys).*proportions?", "\\d+\\s+(?:yes\\s+responses|defects?)\\s+(?:out\\s+of|among)\\s+\\d+.*\\d+\\s+(?:yes\\s+responses|defects?)\\s+(?:out\\s+of|among)\\s+\\d+"],
+      "regex": ["\\\\hat\\s*p_1\\s*-\\s*\\\\hat\\s*p_2", "pooled\\s+proportion", "p_?1\\s*(?:-|minus)\\s*p_?2", "two\\s+independent\\s+.*(?:lines|groups|samples|surveys).*proportions?", "x1\\s*=\\s*\\d+.*n1\\s*=\\s*\\d+.*x2\\s*=\\s*\\d+.*n2\\s*=\\s*\\d+", "\\d+\\s+(?:yes\\s+responses|defects?)\\s+(?:out\\s+of|among)\\s+\\d+.*\\d+\\s+(?:yes\\s+responses|defects?)\\s+(?:out\\s+of|among)\\s+\\d+"],
       "assumptions": ["independent_samples", "large_sample_success_failure"]
     },
     {
@@ -140,8 +162,8 @@
       "procedure": "pooled_t_test",
       "task_type": "hypothesis_test",
       "parameter": "mu_difference",
-      "keywords": ["pooled", "equal variances", "common variance", "similar variability", "student t-test", "two means", "independent samples", "independent normal groups", "population means"],
-      "regex": ["s_p\\^2", "pooled\\s+variance", "\\\\bar\\s*x_1\\s*-\\s*\\\\bar\\s*x_2"],
+      "keywords": ["pooled", "pooled assumptions", "equal variances", "equality of variances", "common variance", "similar variability", "student t-test", "two means", "independent samples", "independent normal groups", "population means", "sp squared"],
+      "regex": ["s_p\\^2", "sp\\s+squared", "pooled\\s+variance", "equality\\s+of\\s+variances", "assumptions\\s+about\\s+independence.*normality.*equality\\s+of\\s+variances", "\\\\bar\\s*x_1\\s*-\\s*\\\\bar\\s*x_2"],
       "assumptions": ["independent_samples", "normal_populations", "equal_variance"]
     },
     {
@@ -272,8 +294,8 @@
       "procedure": "model_selection_indicator_press",
       "task_type": "model_selection",
       "parameter": "beta",
-      "keywords": ["indicator variable", "dummy variable", "material type", "interaction", "different slopes", "different intercepts", "slopes and intercepts differ", "stepwise", "forward selection", "backward elimination", "PRESS", "overfitting"],
-      "regex": ["indicator", "dummy\\s+variable", "material\\s+type", "interaction", "different\\s+slopes", "different\\s+intercepts", "slopes\\s+and\\s+intercepts\\s+differ", "stepwise", "PRESS", "overfitting"],
+      "keywords": ["indicator variable", "dummy variable", "material type", "interaction", "different slopes", "different intercepts", "slopes and intercepts differ", "stepwise", "forward selection", "backward elimination", "PRESS", "deleted observations", "prediction model selection", "smaller press", "overfitting"],
+      "regex": ["indicator", "dummy\\s+variable", "material\\s+type", "interaction", "different\\s+slopes", "different\\s+intercepts", "slopes\\s+and\\s+intercepts\\s+differ", "stepwise", "PRESS", "deleted\\s+observations", "smaller\\s+PRESS", "model\\s+selection\\s+and\\s+prediction", "overfitting"],
       "assumptions": ["model_selection_uncertainty"]
     }
   ]

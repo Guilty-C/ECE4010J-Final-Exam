@@ -90,6 +90,27 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
     if qreg.startswith("simple_regression") and dreg.startswith("multiple_regression"):
         score -= 2.0
         reasons["regression_level_penalty"] = "multiple_candidate_for_simple_query"
+
+    qtask = query_features.get("task_type")
+    dtask = doc_features.get("task_type")
+    if qtask == "confidence_interval" and dtask == "hypothesis_test":
+        score -= 1.8
+        reasons["task_mismatch_penalty"] = "test_candidate_for_interval_query"
+    if qtask == "sample_size" and dtask != "sample_size":
+        score -= 1.0
+        reasons["task_mismatch_penalty"] = "non_sample_size_candidate"
+    if qproc == "two_proportion_z" and dproc == "one_proportion_z":
+        score -= 4.0
+        reasons["proportion_level_penalty"] = "one_proportion_candidate_for_two_proportion_query"
+    if qproc == "one_proportion_z" and dproc == "two_proportion_z":
+        score -= 2.0
+        reasons["proportion_level_penalty"] = "two_proportion_candidate_for_one_proportion_query"
+    if qproc == "pooled_t_test" and dproc == "welch_t_test":
+        score -= 2.0
+        reasons["variance_assumption_penalty"] = "welch_candidate_for_pooled_query"
+    if qproc == "model_selection_indicator_press" and dproc == "overall_or_partial_f_test":
+        score -= 3.5
+        reasons["model_selection_penalty"] = "inference_candidate_for_model_selection_query"
     return score, reasons
 
 
