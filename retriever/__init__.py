@@ -1,16 +1,20 @@
-"""Phase D — template retrieval over data/corpus.jsonl."""
-from retriever.retrieve import (
-    Retriever,
-    RetrievalHit,
-    get_retriever,
-    retrieve,
-    retrieve_for_card,
-)
+"""Retrieval helpers for VE401 exercises."""
 
-__all__ = [
-    "Retriever",
-    "RetrievalHit",
-    "get_retriever",
-    "retrieve",
-    "retrieve_for_card",
-]
+try:
+    from retriever.retrieve import (
+        Retriever,
+        RetrievalHit,
+        get_retriever,
+        retrieve,
+        retrieve_for_card,
+    )
+except ModuleNotFoundError:
+    __all__ = []
+else:
+    __all__ = [
+        "Retriever",
+        "RetrievalHit",
+        "get_retriever",
+        "retrieve",
+        "retrieve_for_card",
+    ]

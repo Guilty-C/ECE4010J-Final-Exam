@@ -1,0 +1,280 @@
+{
+  "version": 2,
+  "patterns": [
+    {
+      "id": "known_variance_mean_z",
+      "label": "Known-variance Z inference for one mean",
+      "method_family": "interval_estimation",
+      "procedure": "one_sample_z_mean",
+      "task_type": "confidence_interval",
+      "parameter": "mu",
+      "keywords": ["known standard deviation", "known variance", "known sigma", "long-run calibration", "long-run sigma", "z interval", "population standard deviation", "interval estimate for the process mean", "confidence interval for the true mean"],
+      "regex": ["z_\\{?\\\\alpha/2", "\\\\bar\\s*x\\s*\\\\pm\\s*z", "sigma/\\\\sqrt\\s*\\{?n\\}?", "\\\\sigma/\\\\sqrt\\s*\\{?n\\}?", "known\\s+population\\s+standard\\s+deviation", "sigma\\s*=\\s*\\d+(?:\\.\\d+)?.*long[-\\s]run", "long[-\\s]run\\s+calibration", "interval\\s+estimate\\s+for\\s+the\\s+process\\s+mean"],
+      "assumptions": ["known_sigma", "normal_or_large_sample"]
+    },
+    {
+      "id": "known_variance_mean_z_test",
+      "label": "Known-variance Z test for one mean",
+      "method_family": "single_sample_tests",
+      "procedure": "one_sample_z_mean",
+      "task_type": "hypothesis_test",
+      "parameter": "mu",
+      "keywords": ["known standard deviation", "known variance", "known sigma", "population standard deviation", "z test", "known population standard deviation"],
+      "regex": ["known\\s+population\\s+standard\\s+deviation", "population\\s+standard\\s+deviation\\s+is\\s+known", "\\bsigma\\b.*known", "test\\s+.*mean\\s+is\\s+(?:larger|smaller|different|not)"],
+      "assumptions": ["known_sigma", "normal_or_large_sample"]
+    },
+    {
+      "id": "unknown_variance_mean_t",
+      "label": "Unknown-variance T inference for one mean",
+      "method_family": "interval_estimation",
+      "procedure": "one_sample_t_mean",
+      "task_type": "confidence_interval",
+      "parameter": "mu",
+      "keywords": ["unknown sigma", "sample standard deviation", "t interval", "t test", "normal population", "xbar", "two-sided alternative"],
+      "regex": ["t_\\{?\\\\alpha/2", "\\\\bar\\s*x\\s*\\\\pm\\s*t", "s/\\\\sqrt\\s*\\{?n\\}?", "df\\s*=\\s*n\\s*-\\s*1", "\\bxbar\\b.*\\bs\\b", "\\bs\\b.*\\bxbar\\b"],
+      "assumptions": ["unknown_sigma", "normal_population_or_large_sample"]
+    },
+    {
+      "id": "chi_square_variance_pivot",
+      "label": "Chi-square variance or standard-deviation inference",
+      "method_family": "single_sample_tests",
+      "procedure": "chi_square_variance",
+      "task_type": "hypothesis_test",
+      "parameter": "sigma_squared",
+      "keywords": ["chi-square", "chi square", "test variance", "test sigma", "test whether sigma", "standard deviation", "sample standard deviation", "sample variance", "s squared", "one-sided test", "spread is below", "variability requirement"],
+      "regex": ["\\\\chi\\^2", "\\(n\\s*-\\s*1\\)\\s*s\\^2", "sigma_?0\\^2", "\\\\sigma\\^2", "s\\^2\\s*=\\s*\\d", "s\\s+squared\\s+\\d", "sigma\\s+is\\s+greater", "sigma\\s*>", "standard\\s+deviation\\s+is\\s+at\\s+most", "sample\\s+standard\\s+deviation"],
+      "assumptions": ["normal_population"]
+    },
+    {
+      "id": "fisher_p_value_test",
+      "label": "Fisher significance test and P-value evidence",
+      "method_family": "fisher_test",
+      "procedure": "fisher_significance_test",
+      "task_type": "hypothesis_test",
+      "parameter": "unknown",
+      "keywords": ["fisher", "p-value", "p value", "evidence against", "null hypothesis", "significance test"],
+      "regex": ["P\\s*<\\s*0\\.05", "p-?value", "H_0", "reject\\s+H_0"],
+      "assumptions": []
+    },
+    {
+      "id": "neyman_pearson_power",
+      "label": "Neyman-Pearson critical region, beta, and power",
+      "method_family": "neyman_pearson",
+      "procedure": "critical_region_power",
+      "task_type": "critical_region",
+      "parameter": "unknown",
+      "keywords": ["neyman", "pearson", "type i", "type ii", "power", "power at a larger mean", "oc curve", "critical region", "beta", "choose a cutoff", "chosen before seeing data", "before data are collected", "probability of rejecting under alternative", "missing a practically important shift", "probability of missing"],
+      "regex": ["\\\\beta", "1\\s*-\\s*\\\\beta", "critical\\s+region", "type\\s+i", "cutoff\\s+(?:chosen\\s+)?before\\s+(?:seeing\\s+)?data", "power\\s+at\\s+a\\s+larger\\s+mean", "probability\\s+of\\s+rejecting\\s+under\\s+(?:the\\s+)?alternative", "missing\\s+a\\s+.*shift"],
+      "assumptions": []
+    },
+    {
+      "id": "nhst_interpretation",
+      "label": "NHST interpretation and P-value misuse",
+      "method_family": "nhst",
+      "procedure": "nhst_decision",
+      "task_type": "interpretation",
+      "parameter": "unknown",
+      "keywords": ["nhst", "fail to reject", "statistically significant", "practically significant", "practical importance", "tiny difference", "huge sample", "p-hacking", "multiple testing", "many tests", "only the significant", "misleading", "null is probably true", "null is probably false"],
+      "regex": ["fail\\s+to\\s+reject", "statistical\\s+significance", "practical\\s+(?:importance|significance)", "tiny\\s+difference", "huge\\s+sample", "p-?hacking", "many\\s+tests", "only\\s+the\\s+significant", "null\\s+is\\s+probably\\s+(?:true|false)"],
+      "assumptions": []
+    },
+    {
+      "id": "sign_test_binomial",
+      "label": "Sign test for a median",
+      "method_family": "nonparametric_median",
+      "procedure": "sign_test",
+      "task_type": "hypothesis_test",
+      "parameter": "median",
+      "keywords": ["sign test", "median", "binomial", "positive signs", "negative signs", "claimed center", "typical value", "above it", "below it", "very skewed"],
+      "regex": ["Binomial", "X\\s*~\\s*Bin", "median", "above\\s+it.*below\\s+it", "claimed\\s+center"],
+      "assumptions": ["independent_sample", "continuous_or_no_ties"]
+    },
+    {
+      "id": "wilcoxon_signed_rank",
+      "label": "Wilcoxon signed-rank test",
+      "method_family": "nonparametric_median",
+      "procedure": "wilcoxon_signed_rank",
+      "task_type": "hypothesis_test",
+      "parameter": "median",
+      "keywords": ["wilcoxon signed rank", "signed-rank", "signed rank", "roughly symmetric", "symmetric differences", "rank absolute", "rank absolute differences", "W+", "W-"],
+      "regex": ["W\\+|W-", "signed[-\\s]rank", "rank\\s+\\|D_i\\|", "roughly\\s+symmetric", "symmetric\\s+.*differences?", "rank\\s+absolute\\s+differences?"],
+      "assumptions": ["symmetric_distribution", "paired_or_one_sample_differences"]
+    },
+    {
+      "id": "one_proportion_z",
+      "label": "One-proportion Z inference",
+      "method_family": "proportion_inference",
+      "procedure": "one_proportion_z",
+      "task_type": "hypothesis_test",
+      "parameter": "p",
+      "keywords": ["one proportion", "sample proportion", "successes", "binomial", "conservative p=1/2"],
+      "regex": ["\\\\hat\\s*p", "p_0", "p\\(1-p\\)/n", "success"],
+      "assumptions": ["independent_trials", "large_sample_success_failure"]
+    },
+    {
+      "id": "two_proportion_z",
+      "label": "Two-proportion Z inference",
+      "method_family": "proportion_inference",
+      "procedure": "two_proportion_z",
+      "task_type": "hypothesis_test",
+      "parameter": "p_difference",
+      "keywords": ["two proportions", "two population proportions", "two defect proportions", "defect proportions differ", "two independent surveys", "pooled proportion", "difference in proportions", "p1 - p2", "p_1-p_2", "two independent production lines"],
+      "regex": ["\\\\hat\\s*p_1\\s*-\\s*\\\\hat\\s*p_2", "pooled\\s+proportion", "p_?1\\s*-\\s*p_?2", "two\\s+independent\\s+.*(?:lines|groups|samples|surveys).*proportions?", "\\d+\\s+(?:yes\\s+responses|defects?)\\s+(?:out\\s+of|among)\\s+\\d+.*\\d+\\s+(?:yes\\s+responses|defects?)\\s+(?:out\\s+of|among)\\s+\\d+"],
+      "assumptions": ["independent_samples", "large_sample_success_failure"]
+    },
+    {
+      "id": "variance_ratio_f",
+      "label": "F test and interval for a variance ratio",
+      "method_family": "two_variance_comparison",
+      "procedure": "variance_ratio_f_test",
+      "task_type": "hypothesis_test",
+      "parameter": "sigma_ratio",
+      "keywords": ["f-test", "f distribution", "variance ratio", "two variances", "ratio of their population variances", "population variances", "reciprocal identity", "s1^2/s2^2", "s1 squared", "s2 squared"],
+      "regex": ["F_\\{", "S_1\\^2\\s*/\\s*S_2\\^2", "s_1\\^2\\s*/\\s*s_2\\^2", "variance\\s+ratio", "ratio\\s+of\\s+.*population\\s+variances", "s1\\s+squared.*s2\\s+squared"],
+      "assumptions": ["independent_samples", "normal_populations"]
+    },
+    {
+      "id": "pooled_two_sample_t",
+      "label": "Pooled two-sample T inference for means",
+      "method_family": "two_mean_comparison",
+      "procedure": "pooled_t_test",
+      "task_type": "hypothesis_test",
+      "parameter": "mu_difference",
+      "keywords": ["pooled", "equal variances", "common variance", "similar variability", "student t-test", "two means", "independent samples", "independent normal groups", "population means"],
+      "regex": ["s_p\\^2", "pooled\\s+variance", "\\\\bar\\s*x_1\\s*-\\s*\\\\bar\\s*x_2"],
+      "assumptions": ["independent_samples", "normal_populations", "equal_variance"]
+    },
+    {
+      "id": "welch_two_sample_t",
+      "label": "Welch two-sample T inference for means",
+      "method_family": "two_mean_comparison",
+      "procedure": "welch_t_test",
+      "task_type": "hypothesis_test",
+      "parameter": "mu_difference",
+      "keywords": ["welch", "unequal variances", "unequal sample sizes", "different sample standard deviations", "different sample variances", "without a common variance assumption", "common variance assumption", "do not assume equal spreads", "satterthwaite", "do not pool"],
+      "regex": ["Welch", "Satterthwaite", "unequal\\s+variances", "unequal\\s+sample\\s+sizes", "different\\s+sample\\s+standard\\s+deviations", "without\\s+(?:a\\s+)?common\\s+variance\\s+assumption", "without\\s+assuming\\s+equal\\s+spreads", "n\\s*=\\s*\\d+.*s\\s*=\\s*\\d+(?:\\.\\d+)?.*n\\s*=\\s*\\d+.*s\\s*=\\s*\\d+(?:\\.\\d+)?"],
+      "assumptions": ["independent_samples", "normal_populations_or_large_sample"]
+    },
+    {
+      "id": "paired_t",
+      "label": "Paired T inference for mean differences",
+      "method_family": "paired_nonparametric_correlation",
+      "procedure": "paired_t",
+      "task_type": "hypothesis_test",
+      "parameter": "mu_difference",
+      "keywords": ["paired", "before and after", "before-after", "same patient", "same patients", "same machine", "same machines", "mean change", "observational unit", "matched pairs", "differences", "within-subject"],
+      "regex": ["\\\\bar\\s*D", "s_D/\\\\sqrt\\s*\\{?n\\}?", "paired\\s+t", "before\\s+and\\s+after", "same\\s+(?:patient|patients|machine|machines|subject|subjects)", "mean\\s+change", "observational\\s+unit"],
+      "assumptions": ["paired_data", "normal_differences_or_large_sample"]
+    },
+    {
+      "id": "wilcoxon_rank_sum",
+      "label": "Wilcoxon rank-sum comparison",
+      "method_family": "paired_nonparametric_correlation",
+      "procedure": "wilcoxon_rank_sum",
+      "task_type": "hypothesis_test",
+      "parameter": "location",
+      "keywords": ["rank-sum", "rank sum", "mann-whitney", "independent small samples", "ordinal", "normality is doubtful", "using ranks", "rather than raw measurements", "sum of ranks"],
+      "regex": ["rank[-\\s]sum", "Mann[-\\s]Whitney", "sum\\s+of\\s+ranks", "independent\\s+small\\s+samples", "normality\\s+is\\s+doubtful", "using\\s+ranks", "rather\\s+than\\s+the\\s+raw"],
+      "assumptions": ["independent_samples", "ordinal_or_continuous_data"]
+    },
+    {
+      "id": "fisher_correlation_z",
+      "label": "Fisher transformation for correlation",
+      "method_family": "paired_nonparametric_correlation",
+      "procedure": "fisher_correlation_z",
+      "task_type": "confidence_interval",
+      "parameter": "rho",
+      "keywords": ["correlation", "rho", "fisher transformation", "artanh", "fisher z"],
+      "regex": ["Artanh", "atanh", "\\\\rho", "correlation\\s+coefficient"],
+      "assumptions": ["bivariate_normal"]
+    },
+    {
+      "id": "chi_square_gof",
+      "label": "Chi-square goodness-of-fit test",
+      "method_family": "categorical_data",
+      "procedure": "chi_square_gof",
+      "task_type": "hypothesis_test",
+      "parameter": "categorical_probabilities",
+      "keywords": ["goodness-of-fit", "goodness of fit", "expected counts", "observed counts", "estimated parameters"],
+      "regex": ["\\(O_i\\s*-\\s*E_i\\)\\^2\\s*/\\s*E_i", "goodness[-\\s]of[-\\s]fit"],
+      "assumptions": ["independent_counts", "large_expected_counts"]
+    },
+    {
+      "id": "chi_square_independence",
+      "label": "Chi-square independence test",
+      "method_family": "categorical_data",
+      "procedure": "chi_square_independence",
+      "task_type": "hypothesis_test",
+      "parameter": "association",
+      "keywords": ["independence", "independent", "contingency table", "cross-classifies", "categorical variables", "row total", "column total", "expected count"],
+      "regex": ["contingency\\s+table", "cross[-\\s]classif", "categorical\\s+variables", "row\\s+total", "column\\s+total"],
+      "assumptions": ["independent_counts", "large_expected_counts"]
+    },
+    {
+      "id": "simple_regression_slope_t",
+      "label": "Simple linear regression slope inference",
+      "method_family": "simple_regression_i",
+      "procedure": "slope_t_test",
+      "task_type": "regression_modeling",
+      "parameter": "beta",
+      "keywords": ["simple linear regression", "least squares", "slope", "slope is zero", "intercept", "Sxx", "Sxy", "SSE", "R^2"],
+      "regex": ["simple\\s+linear\\s+regression", "slope\\s+is\\s+zero", "b_1", "S_{?xx", "SSE", "R\\^2", "\\\\hat\\s*y"],
+      "assumptions": ["linear_mean", "independent_errors", "constant_variance", "normal_errors_for_inference"]
+    },
+    {
+      "id": "simple_regression_lack_of_fit",
+      "label": "Simple regression lack-of-fit test",
+      "method_family": "simple_regression_ii",
+      "procedure": "lack_of_fit",
+      "task_type": "regression_modeling",
+      "parameter": "model_adequacy",
+      "keywords": ["lack of fit", "lack-of-fit", "pure error", "repeated observations", "repeated y observations", "straight line is adequate"],
+      "regex": ["lack[-\\s]of[-\\s]fit", "pure\\s+error", "repeated\\s+(?:y\\s+)?observations", "straight\\s+line\\s+is\\s+adequate"],
+      "assumptions": ["linear_mean", "independent_errors", "constant_variance", "replicated_x_levels"]
+    },
+    {
+      "id": "simple_regression_prediction_interval",
+      "label": "Simple regression confidence or prediction interval",
+      "method_family": "simple_regression_ii",
+      "procedure": "regression_prediction_interval",
+      "task_type": "regression_modeling",
+      "parameter": "prediction",
+      "keywords": ["prediction interval", "future response", "one future response", "new observation", "x star", "wider than the mean-response interval", "mean response", "confidence band", "prediction band", "extrapolation"],
+      "regex": ["prediction\\s+interval", "future\\s+response", "one\\s+future\\s+response", "new\\s+observation", "x\\s*star", "wider\\s+than\\s+.*mean[-\\s]response", "mean\\s+response"],
+      "assumptions": ["linear_mean", "independent_errors", "constant_variance"]
+    },
+    {
+      "id": "multiple_regression_matrix",
+      "label": "Multiple regression model matrix and normal equations",
+      "method_family": "multiple_regression_i",
+      "procedure": "model_matrix_least_squares",
+      "task_type": "regression_modeling",
+      "parameter": "beta",
+      "keywords": ["model matrix", "X^T X", "hat matrix", "normal equations", "polynomial regression"],
+      "regex": ["X\\^T\\s*X", "\\(X\\^T\\s*X\\)\\^-1", "hat\\s+matrix", "polynomial"],
+      "assumptions": ["linear_in_parameters"]
+    },
+    {
+      "id": "multiple_regression_overall_f",
+      "label": "Multiple regression overall or partial F inference",
+      "method_family": "multiple_regression_ii",
+      "procedure": "overall_or_partial_f_test",
+      "task_type": "regression_modeling",
+      "parameter": "beta",
+      "keywords": ["multiple regression", "regression anova table", "anova table", "overall f", "overall f statistic", "all predictors", "partial f", "extra sum of squares", "reduced model", "full model", "one predictor contributes", "after adjusting", "significance of regression", "regression is significant", "coefficient t-test", "covariance matrix", "r squared"],
+      "regex": ["multiple\\s+regression", "regression\\s+ANOVA\\s+table", "\\bANOVA\\s+table", "all\\s+predictors", "extra\\s+sum\\s+of\\s+squares", "reduced\\s+.*full\\s+model|full\\s+.*reduced\\s+model", "one\\s+predictor\\s+contributes", "after\\s+adjusting", "SSR\\s*/\\s*p", "partial\\s+F", "overall\\s+F", "regression\\s+is\\s+significant", "R\\s+squared", "R\\^2", "n\\s*-\\s*p\\s*-\\s*1"],
+      "assumptions": ["linear_mean", "independent_normal_errors", "constant_variance"]
+    },
+    {
+      "id": "model_selection_indicator_press",
+      "label": "Model selection, indicators, interactions, and PRESS",
+      "method_family": "multiple_regression_iii",
+      "procedure": "model_selection_indicator_press",
+      "task_type": "model_selection",
+      "parameter": "beta",
+      "keywords": ["indicator variable", "dummy variable", "material type", "interaction", "different slopes", "different intercepts", "slopes and intercepts differ", "stepwise", "forward selection", "backward elimination", "PRESS", "overfitting"],
+      "regex": ["indicator", "dummy\\s+variable", "material\\s+type", "interaction", "different\\s+slopes", "different\\s+intercepts", "slopes\\s+and\\s+intercepts\\s+differ", "stepwise", "PRESS", "overfitting"],
+      "assumptions": ["model_selection_uncertainty"]
+    }
+  ]
+}

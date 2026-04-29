@@ -623,6 +623,28 @@ const questions = [
     rubric:["Identify failure of the large-sample condition &mdash; <b>2 pts</b>","Explain why zero sample events do not imply \(p=0\) &mdash; <b>2 pts</b>","Reject the zero-width interval as misleading &mdash; <b>2 pts</b>","Mention an exact upper bound or rare-event method &mdash; <b>1 pt</b>"],
     total:"7 pts",
     tip:"Boundary estimates \(\hat p=0\) or \(\hat p=1\) are especially dangerous for the usual Wald interval."
+  },
+  {
+    id:"Ch 21 &mdash; Q33",
+    level:"medium",
+    tags:["Two proportions","Hypothesis test"],
+    src:"Original. Two independent proportions with pooled standard error.",
+    problem:String.raw`Two independent production lines are monitored for defects. Line A has \(18\) defective parts among \(150\), and Line B has \(31\) defective parts among \(170\). Test \(H_0:p_A-p_B=0\) against \(H_1:p_A-p_B\ne0\) at \(\alpha=0.05\) using the large-sample two-proportion \(z\)-test.`,
+    solution:String.raw`<p>The sample proportions are \(\hat p_A=18/150=0.120\) and \(\hat p_B=31/170=0.182\). Under \(H_0:p_A=p_B\), use the pooled estimate \[\hat p=\frac{18+31}{150+170}=\frac{49}{320}=0.1531.\]</p><p>The null standard error is \[\sqrt{\hat p(1-\hat p)\left(\frac1{150}+\frac1{170}\right)}=\sqrt{0.1531(0.8469)(0.01255)}=0.0403.\]</p><p>Thus \[z=\frac{0.120-0.182}{0.0403}=-1.54.\] The two-sided P-value is about \(2P(Z\le-1.54)=0.124\). Since \(0.124>0.05\), do not reject \(H_0\). The data do not give significant evidence that the two defect proportions differ.</p>`,
+    rubric:["Identify this as a two-proportion \(z\)-test &mdash; <b>2 pts</b>","Compute both sample proportions and the pooled null estimate &mdash; <b>2 pts</b>","Use the pooled standard error under \(H_0\) &mdash; <b>2 pts</b>","Compute the test statistic and two-sided P-value/decision &mdash; <b>3 pts</b>"],
+    total:"9 pts",
+    tip:"For a two-proportion test of equality, the standard error uses the pooled proportion; confidence intervals use the unpooled standard error."
+  },
+  {
+    id:"Ch 21 &mdash; Q34",
+    level:"hard",
+    tags:["Two proportions","Method selection"],
+    src:"Original. Distinguish one- and two-proportion inference.",
+    problem:String.raw`For each setting, choose one-proportion inference, two-proportion inference, or explain why the usual large-sample method is not justified. Do not compute final numeric answers.<ol type="i"><li>One sample has \(x=42\) successes in \(n=300\), and the null claim is \(p=0.10\).</li><li>Two independent samples have \(x_1=64,n_1=400\) and \(x_2=51,n_2=420\), and the question asks whether \(p_1-p_2=0\).</li><li>Two independent samples have \(x_1=2,n_1=80\) and \(x_2=9,n_2=90\), and the question asks whether their proportions differ.</li></ol>`,
+    solution:String.raw`<p><b>(i)</b> This is one-proportion inference because there is one binomial sample and one null value \(p_0=0.10\). Use \[z=\frac{\hat p-p_0}{\sqrt{p_0(1-p_0)/n}}\] if the null success-failure counts are adequate.</p><p><b>(ii)</b> This is two-proportion inference with independent samples. For a test of \(H_0:p_1-p_2=0\), use the pooled proportion and the two-proportion \(z\)-statistic.</p><p><b>(iii)</b> The intended method is two-proportion inference, but the usual large-sample \(z\)-test is questionable because one sample has only \(x_1=2\) successes. An exact or alternative method would be preferable if available.</p>`,
+    rubric:["Classify case (i) as one-proportion inference &mdash; <b>2 pts</b>","Classify case (ii) as two-proportion inference and mention pooling for the equality test &mdash; <b>3 pts</b>","Classify case (iii) as two-proportion but flag the large-sample condition failure &mdash; <b>3 pts</b>","State the independence requirement for comparing two proportions &mdash; <b>1 pt</b>"],
+    total:"9 pts",
+    tip:"The phrase 'two samples' is not enough; check whether the response is binary and whether each group has enough successes and failures."
   }
 ];
 

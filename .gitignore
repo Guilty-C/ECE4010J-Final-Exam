@@ -10,6 +10,7 @@ data/raw/
 # Python
 .venv/
 venv/
+.cache/
 __pycache__/
 *.pyc
 *.pyo
@@ -26,7 +27,7 @@ checkpoints/*/training_args.bin
 checkpoints/*/global_step*/
 checkpoints/*/rng_state*.pth
 
-# Model base weights — never check in
+# Model base weights - never check in
 checkpoints/base/
 *.bin
 *.pt
