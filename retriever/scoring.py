@@ -52,6 +52,7 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
 
     for key, weight in (
         ("formula_patterns", 2.0),
+        ("intent_flags", 2.5),
         ("assumptions", 0.8),
         ("symbols", 0.2),
     ):
@@ -111,6 +112,33 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
     if qproc == "model_selection_indicator_press" and dproc == "overall_or_partial_f_test":
         score -= 3.5
         reasons["model_selection_penalty"] = "inference_candidate_for_model_selection_query"
+
+    qflags = set(query_features.get("intent_flags", []) or [])
+    dflags = set(doc_features.get("intent_flags", []) or [])
+    if qflags and qflags & dflags:
+        score += 2.5 * len(qflags & dflags)
+        reasons["intent_exact_boost"] = sorted(qflags & dflags)[:10]
+
+    flag_penalties = {
+        "known_sigma": {"one_sample_t_mean", "pooled_t_test", "critical_region"},
+        "unknown_sigma": {"sign_test", "one_sample_z_mean"},
+        "variance_target": {"one_sample_z_mean", "one_sample_t_mean", "mean_interval"},
+        "sign_test_cue": {"one_sample_t_mean", "chi_square_gof", "fisher_significance_test"},
+        "variance_ratio_cue": {"fisher_significance_test", "one_sample_z_mean", "prediction_interval", "pooled_t_test"},
+        "two_independent_binary": {"one_proportion_z", "chi_square_gof", "chi_square_independence"},
+        "signed_rank_cue": {"wilcoxon_rank_sum", "paired_t", "sign_test"},
+        "rank_sum_cue": {"paired_t", "wilcoxon_signed_rank"},
+        "welch_cue": {"pooled_t_test", "variance_ratio_f_test", "chi_square_variance"},
+        "slr_diagnostics": {"critical_region_power", "model_selection_indicator_press"},
+        "mlr_cue": {"slope_t_test", "regression_prediction_interval"},
+        "mlr_inference_cue": {"slope_t_test", "model_selection_indicator_press"},
+        "model_selection_cue": {"overall_or_partial_f_test", "slope_t_test"},
+        "indicator_cue": {"slope_t_test", "overall_or_partial_f_test"},
+    }
+    for flag, conflicting_procs in flag_penalties.items():
+        if flag in qflags and dproc in conflicting_procs and flag not in dflags:
+            score -= 3.0
+            reasons.setdefault("intent_conflict_penalty", []).append(flag)
     return score, reasons
 
 
