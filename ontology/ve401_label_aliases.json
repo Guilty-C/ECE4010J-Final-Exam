@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "aliases": {
+    "one_sample_t_test": ["one_sample_t_mean"],
+    "t_distribution_mean_unknown_variance": ["one_sample_t_mean"],
+    "sample_variance_chi_square": ["chi_square_variance"],
+    "standard_deviation_confidence_interval": ["chi_square_variance"],
+    "variance_confidence_interval": ["chi_square_variance"],
+    "proportion_confidence_interval": ["one_proportion_z"],
+    "paired_difference_interval": ["paired_t"],
+    "two_sample_mean_interval": ["pooled_t_test", "welch_t_test", "two_sample_z_mean"],
+    "regression_slope_interval": ["slope_t_test"],
+    "regression_mean_response_interval": ["regression_prediction_interval"],
+    "multiple_regression_coefficient_test": ["slope_t_test", "overall_or_partial_f_test"],
+    "p_value_interpretation": ["fisher_significance_test", "nhst_decision"],
+    "type_i_type_ii_error": ["critical_region_power"],
+    "fail_to_reject_interpretation": ["nhst_decision"]
+  }
+}

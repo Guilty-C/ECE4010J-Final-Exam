@@ -7,7 +7,7 @@
   "collection": "ve401_exercises",
   "formula_ontology": "ontology\\ve401_formula_patterns.json",
   "input": "reference",
-  "item_count": 512,
+  "item_count": 626,
   "method_taxonomy": "ontology\\ve401_method_taxonomy.json",
   "schema": "ve401_formula_method_index_v1"
 }

@@ -10,7 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from retriever.query_exercise_index import query_index
+from retriever.query_exercise_index import ExerciseIndex
+
+ALIASES_PATH = ROOT / "ontology" / "ve401_label_aliases.json"
 
 
 def iter_cases(path: Path) -> list[dict[str, Any]]:
@@ -20,6 +22,21 @@ def iter_cases(path: Path) -> list[dict[str, Any]]:
             if line.strip():
                 cases.append(json.loads(line))
     return cases
+
+
+def load_label_aliases(path: Path = ALIASES_PATH) -> dict[str, list[str]]:
+    if not path.exists():
+        return {}
+    with path.open("r", encoding="utf-8") as fh:
+        data = json.load(fh)
+    return {str(key): [str(item) for item in value] for key, value in data.get("aliases", {}).items()}
+
+
+def expand_expected(labels: list[str], aliases: dict[str, list[str]]) -> set[str]:
+    expanded = set(str(label) for label in labels)
+    for label in list(expanded):
+        expanded.update(aliases.get(label, []))
+    return expanded
 
 
 def main() -> None:
@@ -38,17 +55,22 @@ def main() -> None:
 
     top1 = top3 = top5 = 0
     misses = []
+    aliases = load_label_aliases()
+    exercise_index = ExerciseIndex(Path(args.index), backend=args.backend)
     for case in cases:
-        hits = query_index(
+        hits = exercise_index.query(
             str(case["query"]),
-            Path(args.index),
             top_k=args.top_k,
             pool_size=args.pool_size,
-            backend=args.backend,
         )
-        expected = set(case["expected"])
+        expected_raw = [str(label) for label in case["expected"]]
+        expected = expand_expected(expected_raw, aliases)
         procs = [hit["features"].get("procedure") for hit in hits]
-        rank = next((idx + 1 for idx, proc in enumerate(procs) if proc in expected), None)
+        hit_label_sets = [
+            {str(hit["features"].get("procedure", "")), *[str(tag) for tag in hit["features"].get("concept_tags", []) or []]}
+            for hit in hits
+        ]
+        rank = next((idx + 1 for idx, labels in enumerate(hit_label_sets) if labels & expected), None)
         top1 += rank == 1
         top3 += bool(rank and rank <= 3)
         top5 += bool(rank and rank <= 5)
@@ -58,7 +80,9 @@ def main() -> None:
                     "id": case["id"],
                     "rank": rank,
                     "expected": sorted(expected),
+                    "expected_raw": sorted(expected_raw),
                     "top": procs,
+                    "top_labels": [sorted(labels) for labels in hit_label_sets],
                     "hit_ids": [hit["id"] for hit in hits],
                 }
             )

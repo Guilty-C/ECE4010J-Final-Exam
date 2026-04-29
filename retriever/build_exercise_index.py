@@ -55,6 +55,7 @@ def _chroma_metadata(doc: Dict[str, Any]) -> Dict[str, str | int | float]:
         "parameter": str(features.get("parameter", "")),
         "formula_patterns": "|".join(features.get("formula_patterns", []) or []),
         "assumptions": "|".join(features.get("assumptions", []) or []),
+        "concept_tags": "|".join(features.get("concept_tags", []) or []),
         "source_file": str(doc.get("source_file", "")),
         "source_line": int(doc.get("source_line", 0)),
     }
@@ -65,7 +66,9 @@ def build_index(input_path: Path, output_path: Path, *, model_name: str = DEFAUL
     method_taxonomy = load_json(TAXONOMY_PATH)
     records = list(iter_jsonl_records(input_path))
     if not records:
-        raise SystemExit(f"No exercises_ch15.jsonl through exercises_ch30.jsonl records found under {input_path}")
+        raise SystemExit(
+            f"No exercises_ch15.jsonl through exercises_ch30.jsonl or *_anchor_retrieval.jsonl records found under {input_path}"
+        )
 
     docs: List[Dict[str, Any]] = []
     raw_terms = []
@@ -154,7 +157,11 @@ def build_index(input_path: Path, output_path: Path, *, model_name: str = DEFAUL
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build a VE401 formula/method exercise index.")
-    parser.add_argument("--input", default="reference", help="Directory containing exercises_ch15.jsonl ... exercises_ch30.jsonl")
+    parser.add_argument(
+        "--input",
+        default="reference",
+        help="Directory containing exercises_ch15.jsonl ... exercises_ch30.jsonl and optional *_anchor_retrieval.jsonl files",
+    )
     parser.add_argument("--output", default="data/exercise_index", help="Output index directory")
     parser.add_argument("--model", default=DEFAULT_MODEL, help="SentenceTransformers model name for dense Chroma indexing")
     parser.add_argument("--backend", default="auto", choices=["auto", "dense", "tfidf"], help="Index backend")

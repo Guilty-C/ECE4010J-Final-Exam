@@ -43,6 +43,12 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
         ("procedure", 2.5),
         ("task_type", 1.5),
         ("parameter", 1.5),
+        ("target_parameter", 3.0),
+        ("sample_structure", 3.0),
+        ("inference_action", 2.0),
+        ("distribution_family", 1.5),
+        ("assumption_profile", 2.0),
+        ("model_structure", 2.5),
     ):
         qv = query_features.get(key)
         dv = doc_features.get(key)
@@ -53,6 +59,7 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
     for key, weight in (
         ("formula_patterns", 2.0),
         ("intent_flags", 2.5),
+        ("concept_tags", 0.25),
         ("assumptions", 0.8),
         ("symbols", 0.2),
     ):
@@ -80,6 +87,74 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
     if qpatterns and qpatterns & dpatterns:
         score += 3.0
         reasons["formula_exact_boost"] = sorted(qpatterns & dpatterns)[:10]
+
+    qtarget = str(query_features.get("target_parameter") or "")
+    dtarget = str(doc_features.get("target_parameter") or "")
+    qsample = str(query_features.get("sample_structure") or "")
+    dsample = str(doc_features.get("sample_structure") or "")
+    qaction = str(query_features.get("inference_action") or "")
+    daction = str(doc_features.get("inference_action") or "")
+    qassumption = str(query_features.get("assumption_profile") or "")
+    dassumption = str(doc_features.get("assumption_profile") or "")
+    qmodel = str(query_features.get("model_structure") or "")
+    dmodel = str(doc_features.get("model_structure") or "")
+
+    if qtarget and qtarget != "unknown" and dtarget and dtarget != "unknown" and qtarget != dtarget:
+        severe_pairs = {
+            ("mean", "variance"),
+            ("variance", "mean"),
+            ("proportion", "mean"),
+            ("mean", "proportion"),
+            ("categorical_distribution", "categorical_association"),
+            ("categorical_association", "categorical_distribution"),
+            ("correlation", "regression_slope"),
+            ("regression_slope", "correlation"),
+            ("regression_model", "regression_slope"),
+        }
+        penalty = 5.0 if (qtarget, dtarget) in severe_pairs else 2.0
+        score -= penalty
+        reasons["target_conflict_penalty"] = f"{qtarget}_query_vs_{dtarget}_candidate"
+
+    if qsample and qsample != "unknown" and dsample and dsample != "unknown" and qsample != dsample:
+        severe_pairs = {
+            ("paired", "two_independent"),
+            ("two_independent", "paired"),
+            ("one_sample", "two_independent"),
+            ("two_independent", "one_sample"),
+            ("categorical_table", "one_sample"),
+            ("one_sample", "categorical_table"),
+            ("simple_regression", "multiple_regression"),
+            ("multiple_regression", "simple_regression"),
+            ("paired_quantitative", "simple_regression"),
+        }
+        penalty = 4.5 if (qsample, dsample) in severe_pairs else 2.0
+        score -= penalty
+        reasons["sample_structure_penalty"] = f"{qsample}_query_vs_{dsample}_candidate"
+
+    if qaction == "confidence_interval" and daction == "hypothesis_test":
+        score -= 1.8
+        reasons["action_penalty"] = "test_candidate_for_interval_query"
+    if qaction == "power" and daction not in {"power", "sample_size"}:
+        score -= 2.0
+        reasons["action_penalty"] = "non_power_candidate_for_power_query"
+
+    if qassumption == "known_sigma" and dproc in {"one_sample_t_mean", "pooled_t_test", "welch_t_test"}:
+        score -= 3.5
+        reasons["assumption_penalty"] = "estimated_sigma_candidate_for_known_sigma_query"
+    if qassumption == "unknown_sigma" and dproc == "one_sample_z_mean":
+        score -= 3.0
+        reasons["assumption_penalty"] = "known_sigma_candidate_for_unknown_sigma_query"
+    if qassumption == "equal_variance" and dproc == "welch_t_test":
+        score -= 3.5
+        reasons["assumption_penalty"] = "welch_candidate_for_equal_variance_query"
+    if qassumption == "unequal_variance" and dproc == "pooled_t_test":
+        score -= 4.0
+        reasons["assumption_penalty"] = "pooled_candidate_for_unequal_variance_query"
+
+    if qmodel and qmodel not in {"none", "unknown"} and dmodel and dmodel not in {"none", "unknown"} and qmodel != dmodel:
+        if qmodel in {"model_selection", "matrix_least_squares", "overall_partial_f"}:
+            score -= 3.0
+            reasons["model_structure_penalty"] = f"{qmodel}_query_vs_{dmodel}_candidate"
 
     # Keep simple-regression and multiple-regression procedures from
     # dominating each other when the query carries a clear regression level.
@@ -112,6 +187,12 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
     if qproc == "model_selection_indicator_press" and dproc == "overall_or_partial_f_test":
         score -= 3.5
         reasons["model_selection_penalty"] = "inference_candidate_for_model_selection_query"
+    if qproc == "nhst_decision" and dproc in {"fisher_significance_test", "critical_region_power"}:
+        score -= 3.0
+        reasons["decision_penalty"] = f"{dproc}_candidate_for_nhst_decision_query"
+    if qproc == "fisher_significance_test" and dproc == "nhst_decision":
+        score -= 1.5
+        reasons["decision_penalty"] = "decision_candidate_for_fisher_evidence_query"
 
     qflags = set(query_features.get("intent_flags", []) or [])
     dflags = set(doc_features.get("intent_flags", []) or [])
@@ -119,21 +200,37 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
         score += 2.5 * len(qflags & dflags)
         reasons["intent_exact_boost"] = sorted(qflags & dflags)[:10]
 
+    qconcepts = set(query_features.get("concept_tags", []) or [])
+    dconcepts = set(doc_features.get("concept_tags", []) or [])
+    if qconcepts and qconcepts & dconcepts:
+        score += 0.25 * len(qconcepts & dconcepts)
+        reasons["concept_exact_boost"] = sorted(qconcepts & dconcepts)[:10]
+
     flag_penalties = {
         "known_sigma": {"one_sample_t_mean", "pooled_t_test", "critical_region"},
         "unknown_sigma": {"sign_test", "one_sample_z_mean"},
-        "variance_target": {"one_sample_z_mean", "one_sample_t_mean", "mean_interval"},
+        "variance_target": {"one_sample_z_mean", "one_sample_t_mean", "mean_interval", "pooled_t_test", "welch_t_test", "paired_t"},
+        "mean_target": {"chi_square_variance", "variance_ratio_f_test"},
         "sign_test_cue": {"one_sample_t_mean", "chi_square_gof", "fisher_significance_test"},
         "variance_ratio_cue": {"fisher_significance_test", "one_sample_z_mean", "prediction_interval", "pooled_t_test"},
+        "nhst_decision_cue": {"fisher_significance_test", "critical_region_power"},
+        "one_proportion_cue": {"one_sample_z_mean", "chi_square_gof", "chi_square_independence"},
         "two_independent_binary": {"one_proportion_z", "chi_square_gof", "chi_square_independence"},
+        "gof_cue": {"one_proportion_z", "two_proportion_z", "chi_square_independence", "slope_t_test"},
+        "independence_cue": {"one_proportion_z", "two_proportion_z", "chi_square_gof"},
+        "paired_design": {"pooled_t_test", "welch_t_test", "wilcoxon_rank_sum"},
+        "independent_groups": {"paired_t", "wilcoxon_signed_rank"},
         "signed_rank_cue": {"wilcoxon_rank_sum", "paired_t", "sign_test"},
         "rank_sum_cue": {"paired_t", "wilcoxon_signed_rank"},
         "welch_cue": {"pooled_t_test", "variance_ratio_f_test", "chi_square_variance"},
+        "pooled_cue": {"welch_t_test"},
         "slr_diagnostics": {"critical_region_power", "model_selection_indicator_press"},
         "mlr_cue": {"slope_t_test", "regression_prediction_interval"},
+        "mlr_matrix_cue": {"slope_t_test", "regression_prediction_interval", "overall_or_partial_f_test"},
         "mlr_inference_cue": {"slope_t_test", "model_selection_indicator_press"},
         "model_selection_cue": {"overall_or_partial_f_test", "slope_t_test"},
         "indicator_cue": {"slope_t_test", "overall_or_partial_f_test"},
+        "correlation_cue": {"slope_t_test", "regression_prediction_interval"},
     }
     for flag, conflicting_procs in flag_penalties.items():
         if flag in qflags and dproc in conflicting_procs and flag not in dflags:
@@ -143,7 +240,7 @@ def overlap_score(query_features: Dict[str, Any], doc_features: Dict[str, Any]) 
 
 
 def final_score(vector_score: float, overlap: float) -> float:
-    return (0.50 * vector_score) + (0.50 * min(max(overlap, 0.0) / 24.0, 1.0))
+    return (0.35 * vector_score) + (0.65 * min(max(overlap, 0.0) / 28.0, 1.0))
 
 
 def rerank(
